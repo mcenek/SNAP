@@ -1,0 +1,52 @@
+* on each page place the controls (buttons) on the top of the page (under the parameter printout above the list of files)
+
+* Download button should download all selected files as .zip or similar archive
+
+* progress bar on all pages to indicate the processing progress
+
+* multithread the following pages (one thread per document/article): NLP processing, network generation, (and possibly network analysis)
+
+* change frequency cutoffs to a real value not an int
+
+* include cancel button on each page (will stop all threads or processes for given user for given job)
+	when starting a java processing job on the server, cash user's unique ID+projectID, and use "java -Dname=ID+projectID ..."  when starting java process.
+	when cancel is pressed, get get java processes w/ ID+projectID to be killed
+	jps -v
+	java -Dname=myApp -cp  myApp.jar some.client.main.MainFrame
+	
+* include multiple NLP pre-processing frameworks
+
+* if in browser visualization is too slow, stry sigma js libraries for the graph visualization
+
+* make a configuration file specific to a user+project rather then one global project config file
+
+* make and show a histogram of unique tokens after NLP processing so user know what thresholds to apply (alternatively with each txt file, show (inline, basic statistics of text processing on it such as number of tokens, in each doc etc etc
+
+* a "do it all" or "I feel lucky" button at the front page that will process all text automatically for the user w/o user having to go through each step of the framework
+
+* write a config file used to process data into .cf file (as comments if possible) or export and show on the website as .conf file
+
+* the frequency based removal: scale the count of words w/ respect to the size of each article, map the values to 0-1 range, rework how nodes are filtered from php to java app.
+//input min_cutoff, and max_cutoff in range [0,1]
+for each token in article
+  insert tokens into hash dictionary
+  count occurrence of each token as they are inserted to the hash
+  remember token with max count
+  remember token with min count
+  count all tokens
+
+min_bound = min count / count all tokens
+max_bound = (min count / count all tokens) - min_bound 
+for each token in article
+  retrieve token from dict
+  scaled_normalized = (token count / count all tokens) - min_bound) / max_bound
+  if (scaled_normalized < min_cutoff or scaled_normalized>max_cutoff)
+    remove token
+
+
+
+* php error when 0 files selected and requested download
+
+* fix the window size, a noodle has to be at least X "time steps" (or whatever the time window is) long before it is drawn
+
+* circular layout check how communities of circles are created and why is there an overlap!

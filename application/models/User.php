@@ -3,7 +3,7 @@
 class User extends CI_Model{
 	public $status;
 	public $roles;
-	
+
 	public function __construct(){
 		parent::__construct();
 		$this->status = $this->config->item('status');
@@ -40,7 +40,7 @@ class User extends CI_Model{
 			'user_id' => $user_id,
 			'created' => $date
 		);
-		$query = $this->db->insert_string('tokens', $string); 
+		$query = $this->db->insert_string('tokens', $string);
 		$this->db->query($query);
 		return $token;
 	}
@@ -57,7 +57,7 @@ class User extends CI_Model{
 			$now = time();
 			$now_time = strtotime($now);
 			$time_diff = ($now_time - $created_time)/60/60;
-			
+
 			if($time_diff >= 24){
 				return false;
 			}
@@ -175,7 +175,7 @@ class User extends CI_Model{
 		if($user_info){
 			//if(!$this->password->validate_password($login_info['password'], $user_info->password)){
 			if(!password_verify($login_info['password'], $user_info->password)){
-				error_log('Incorrect password ('.$login_info['email'].')'); 
+				error_log('Incorrect password ('.$login_info['email'].')');
 				return false;
 			}
 
@@ -192,5 +192,5 @@ class User extends CI_Model{
 		return;
 	}
 
-}	
+}
 ?>

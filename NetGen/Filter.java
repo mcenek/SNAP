@@ -3,7 +3,7 @@
 //
 // All source code is released under the terms of the MIT License.
 // See LICENSE for more information.
-// Contributions from: 
+// Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
 package netgen;
@@ -30,21 +30,21 @@ public class Filter {
     	String[] split = input.split("\\s+");
     	boolean inNE = false;
     	String namedEntity = "";
-    	
+
     	for(String s : split) {
     		for(int i = s.length()-1; i > 0; i--) {
     			//System.out.println(s);
     			if(s.startsWith("(NE")) {
     				inNE = true;
     				namedEntity = "";
-					System.out.println("Starts with NE: "+namedEntity);
+					//System.out.println("Starts with NE: "+namedEntity);
     				break;
     			}
     			else if(s.startsWith("<") || s.endsWith(">")){}
     			else if(s.startsWith("(S")){}
     			else if(inNE) {
     				if(s.endsWith(")")) {
-						System.out.println("end: "+namedEntity);
+						//System.out.println("end: "+namedEntity);
     					if(s.charAt(i) == '/') {
         					inNE = false;
         					String firstChar = String.valueOf(s.charAt(0));
@@ -52,7 +52,7 @@ public class Filter {
         					if(s.length()>1){
         						namedEntity += s.substring(1, i);
         					}
-    						System.out.println("ends with NE: "+namedEntity);
+    						//System.out.println("ends with NE: "+namedEntity);
     						stringList.add(namedEntity);
     						break;
     					}
@@ -63,7 +63,7 @@ public class Filter {
     					if(s.length()>1){
     						namedEntity += s.substring(1, i);
     					}
-						System.out.println("Concate NE: "+namedEntity);
+						//System.out.println("Concate NE: "+namedEntity);
     					break;
     				}
     			}
@@ -79,18 +79,17 @@ public class Filter {
         for(String s : stringList) {
         	output += s + " ";
         }
-    	
+
     	//System.out.println(IO.concatenateAll(output));
 		return output;
     }
-	
+
     //Filters out everything but spaces, letters
     //Trims and converts letters to lower-case
     public static String removeNonpermittedCharacters(String input) {
-        //return input.replaceAll("[^a-zA-Z ]", "").toLowerCase().trim();
         return input.replaceAll("[^a-zA-Z\\.!? ]", "").trim();
     }
-    
+
     //Get stopword list
     public static ArrayList<String> getStopWords(String fileName) {
     	ArrayList<String> stopList = new ArrayList<>();
@@ -110,10 +109,10 @@ public class Filter {
         while (inFile.hasNextLine()) {
             stopList.add(inFile.nextLine());
         }
-        System.out.println("stoplist: "+stopList.toString());
+        //System.out.println("stoplist: "+stopList.toString());
         return stopList;
     }
-    
+
     //Filters out the stopwords from the input using the stopword arraylist
     public static String filterStopWords(ArrayList<String> stopList, String input) {
     	String output = "";
@@ -127,11 +126,11 @@ public class Filter {
         for(String s : stringList) {
         	output += s + " ";
         }
-    	
+
     	//System.out.println(IO.concatenateAll(output));
 		return output;
     }
-    
+
     //Filters out everything but spaces, letters
     //Trims and converts to lower-case
     public static ArrayList<String> removeNonpermittedCharacters(ArrayList<String> input) {
@@ -141,36 +140,42 @@ public class Filter {
         }
         return output;
     }
-    
-    // Frequency
-    // Sorts the document according to the frequency of the token.
+
+    // Sorts tokens by frequency WITHIN A SENTENCE(?), filters out those above max or below min frequency threshold
     public static ArrayList<String> setFrequency(ArrayList<String> tokens, double min, double max) {
     	HashMap<String, Integer> hm = new HashMap<String, Integer>();
     	LinkedHashMap<String, Integer> lhm = new LinkedHashMap<String, Integer>();
     	ArrayList<ArrayList<String>> sentences;
     	sentences = filterSentence(tokens);
-    	
-    	for(ArrayList<String> sentence: sentences){
+
+    	// retrieve a count of the number of times each token is seen
+    	// as well as a min count, and a max count
+    	int minCount = 1;
+    	int maxCount = 0;
+    	for(ArrayList<String> sentence: sentences) {
 	        for(String s : sentence) {
-	        	System.out.println(s);
-	        		hm.put(s, hm.getOrDefault(s, 0)+1);
+        		hm.put(s, hm.getOrDefault(s, 0)+1);
+        		int currCount = hm.get(s);
+        		if(currCount < minCount)
+        			minCount = currCount;
+        		else if(currCount > maxCount)
+        			maxCount = currCount;
 	        }
     	}
-    	for(ArrayList<String> sentence: sentences){
+
+    	// put everything into a linked hm...
+    	for(ArrayList<String> sentence: sentences) {
     		sentence = sortByFreq(sentence, hm);
-    		for(String s: sentence){
+    		for(String s: sentence) {
     			lhm.put(s, hm.get(s));
     		}
     	}
-        removeMinMaxHm(lhm, min, max);
-        ArrayList<String> array = hmToArrayList(lhm);
-        System.out.println("Array:");
-        for(int i = 0; i < array.size(); i++){
-        	System.out.println(array.get(i)+ " : " + hm.get(array.get(i)));
-        }
+
+    	// remove those tokens outside the min and max bounds
+        removeMinMaxHm(lhm, min, max, minCount, maxCount);
         return hmToArrayList(lhm);
     }
-    
+
     public static ArrayList<String> sortByFreq(ArrayList<String> sentence, HashMap<String, Integer> hm){
     	for(int i = 0; i < sentence.size(); i++){
     		for(int j = i+1; j < sentence.size(); j++){
@@ -185,14 +190,13 @@ public class Filter {
     	}
     	return sentence;
     }
-    
-    // fileterSentence
+
+    // filterSentence
     public static ArrayList<ArrayList<String>> filterSentence(ArrayList<String> tokens){
     	ArrayList<ArrayList<String>> sentences = new ArrayList<ArrayList<String>>();
 		ArrayList<String> sentence = new ArrayList<String>();
     	for(String s: tokens){
     		if(s.equals(".")){
-    			System.out.println("HELLLOOOOOOO");
     			ArrayList<String> temp = (ArrayList<String>) sentence.clone();
     			sentences.add(temp);
     			sentence.clear();
@@ -204,61 +208,29 @@ public class Filter {
     	sentences.add(sentence);
 		return sentences;
     }
-    
-    // Removes the frequecies from the hash map that are not within the min max threshhold
-    private static void removeMinMaxHm(HashMap<String, Integer> hm, double min, double max) {
-		Set<Entry<String, Integer>> set = hm.entrySet();
-		Iterator<Map.Entry<String, Integer>> i = set.iterator();
-		
-		/*
-		// Removes Min and Max by number of times the token is used
-		while(i.hasNext())
-		{
-			Map.Entry<String, Integer> me = (Map.Entry<String, Integer>)i.next();			
-			if(me.getValue() < min || me.getValue() > max)
-			{
-				i.remove();
-			}
-		}
-		*/
-		
-		// Removes Min and Max by the inverse percentage usage (1/n). So a token used 4 times is at 25% and a token used 20 times is 5% 
-		while(i.hasNext()) {
-			Map.Entry<String, Integer> me = (Map.Entry<String, Integer>)i.next();
-			double value = me.getValue();
-			if((1/value) > (min/100) || (1/value) < (max/100)) {
-				//System.out.println("Remove: " + me.getKey());
-				i.remove();
-			}
-		}
-	}
-    
-    @SuppressWarnings("unchecked")
-	private static HashMap<String, Integer> sortHashMapByValue(HashMap<String, Integer> map) { 
-    	List list = new LinkedList(map.entrySet());
-    	HashMap sortedHashMap = new LinkedHashMap();
-    	
-    	// Defined Custom Comparator here
-    	Collections.sort(list, new Comparator() {
-    		public int compare(Object o1, Object o2) {
-    			return ((Comparable)((Map.Entry)(o1)).getValue()).compareTo(((Map.Entry)(o2)).getValue());
-    		}
-    	});
 
-    	for (Iterator i = list.iterator(); i.hasNext();) {
-    		Map.Entry entry = (Map.Entry) i.next();
-    		sortedHashMap.put(entry.getKey(), entry.getValue());
-    	}
-    	for(Iterator i = list.iterator(); i.hasNext();) {
-			Map.Entry e = (Map.Entry)i.next();
-			//System.out.println(e.getKey().toString());
-		}
-    	System.out.println("sortedFrequencyHashMap: "+sortedHashMap.toString());
-    	return sortedHashMap;
+    // Removes the frequecies from the hash map that are not within the min max threshhold
+    private static void removeMinMaxHm(HashMap<String, Integer> hm, double min, double max, int minCount, int maxCount) {
+    	Iterator<Map.Entry<String, Integer>> i = hm.entrySet().iterator();
+    	int tokenCount = 0, removeCount = 0;
+
+    	while(i.hasNext()) {
+    		Map.Entry<String, Integer> m = i.next();
+			double normalCount = ((double)m.getValue() - minCount) / (maxCount - minCount);
+			if(normalCount < min || normalCount > max) {
+				//System.out.println("Removing:\ttoken="+m.getKey()+"\trawCount="+m.getValue()+" minCount="+minCount+" maxCount="+maxCount+" normalCount="+normalCount);
+				i.remove();
+				removeCount++;
+			} else {
+				//System.out.println("Within Bounds:\ttoken="+m.getKey()+"\trawCount="+m.getValue()+" minCount="+minCount+" maxCount="+maxCount+" normalCount="+normalCount);
+			}
+			tokenCount++;
+		};
+		System.out.println("Token Count="+tokenCount+" Removed="+removeCount);
 	}
-    
+
     private static ArrayList<String> hmToArrayList(LinkedHashMap<String, Integer> hmap) {
-    	Set keySet = hmap.keySet();
+    	Set<String> keySet = hmap.keySet();
     	ArrayList<String> tokens = new ArrayList<String>(keySet);
     	return tokens;
     }

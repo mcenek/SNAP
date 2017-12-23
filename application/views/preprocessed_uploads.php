@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
-
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
 		<title>Preprocessed Uploads</title>
@@ -25,7 +25,7 @@
 			<H3>Network Generation</H3>
 			<p>This page takes the .txt processed by the provided Natural Language Processing toolkits and generates Undirected Graph Data Structure .dl files representing the network of words in processed files.</p>
 			<ul>
-				<p class="current_val">Current Use Frequency Setting: 
+				<p class="current_val">Current Use Frequency Setting:
 						<?php $use_freq= $this->session->userdata('use_freq');
 						if($use_freq == 1)
 						{
@@ -40,7 +40,7 @@
 				</p>
 				<p class="current_val">Current Set Frequency Threshold Lower Bound: <?php echo $this->session->userdata('freq_lower_bound'); ?></p>
 				<p class="current_val">Current Set Frequency Threshold Upper Bound: <?php echo $this->session->userdata('freq_upper_bound'); ?></p><br>
-					
+
 			</ul>
 
 
@@ -77,7 +77,6 @@
 		</div>
 	</body>
 
-	
+
 
 </html>
-

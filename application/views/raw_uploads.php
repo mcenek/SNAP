@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/active_preprocess.js"></script>
-		<link rel="stylesheet" href="/website_stuff/assets/css/menuStyle.css" type="text/css" />
+		<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
 		<title>Raw Uploads</title>
@@ -29,7 +29,7 @@
 			This date is used as time stamp to later represent the the file's nodes as a layer in 3D space.</p>
 			<br />
 
-			<?php 
+			<?php
 			echo $error;
 			$message = $this->session->flashdata();
 			if(!empty($message['flash_message'])){
@@ -43,7 +43,7 @@
 			?>
 
 			<?php echo form_open_multipart('raw_uploads/upload_text'); ?>
-			<div id="upload_area"> 
+			<div id="upload_area">
 				<div class="upload_form" id="upload_form">
 					<input  type="file" name="raw_files[]" id="raw_files[]" multiple="multiple" accept="text/plain"/>
 					<input class="btn btn-primary" type="submit" value="Upload" name="submit"/>
@@ -51,7 +51,7 @@
 			</div>
 			</form>
 
-			<?php 
+			<?php
 				echo '<ul>';
 				echo '<form id="checkbox_form" name="checkbox_form" method="post" action="raw_uploads/submit_files" >';
 				//echo '<form id="checkbox_form" name="checkbox_form" method="post" action="/submit_files">';
@@ -74,16 +74,16 @@
 				}
 
 				echo '<br/>';
-				 
+
 				// <div>
 				// 	<ul>
 				// 		<li>Stemming</li><li>Tokenization</li><li>Sentence Splitting</li><li>POS Tagging</li><li>Lemmatization</li><li>Name-Entity-Recogition</li>
 				// 	</ul>
 				// </div>
-				
-				
+
+
 				echo '<button class="btn btn-primary" name="file_action" value="batch_preprocess"  type="submit">Preprocess</button>';
-				
+
 				echo form_dropdown('stemming',
 					array(
 						'' => 'Stemming',

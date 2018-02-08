@@ -13,7 +13,7 @@
 	when cancel is pressed, get get java processes w/ ID+projectID to be killed
 	jps -v
 	java -Dname=myApp -cp  myApp.jar some.client.main.MainFrame
-	
+
 * include multiple NLP pre-processing frameworks
 
 * if in browser visualization is too slow, stry sigma js libraries for the graph visualization
@@ -36,7 +36,7 @@ for each token in article
   count all tokens
 
 min_bound = min count / count all tokens
-max_bound = (min count / count all tokens) - min_bound 
+max_bound = (min count / count all tokens) - min_bound
 for each token in article
   retrieve token from dict
   scaled_normalized = (token count / count all tokens) - min_bound) / max_bound
@@ -50,3 +50,22 @@ for each token in article
 * fix the window size, a noodle has to be at least X "time steps" (or whatever the time window is) long before it is drawn
 
 * circular layout check how communities of circles are created and why is there an overlap!
+
+* Basically all the main pages should be cleaned up somewhat:
+	- Home
+	- NLP
+	- Network Gen
+	- Network Analysis
+	- Network Visualization
+	- Settings
+
+* User file storage path should be kept in a config file, that can be changed
+	from machine to machine, then referenced rather than hard coded
+
+* In Browser Visualization Updates:
+	- transfer file retrieval to controller
+	- make scene load by project
+	- add timestamp or other identifier to files
+	- Add search and selection functionality
+
+* (Potential) Migrate these Bugs and Upgrades to the github "Issues" feature

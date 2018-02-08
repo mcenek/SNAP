@@ -7,7 +7,7 @@
 		<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
 		<script language="javascript">
 			$('#project_selector').on('change', function() {
-    			$('#delete_btn'.prop('disabled', true).siblings().prop('disabled', false);
+    			$('#delete_btn').prop('disabled', true).siblings().prop('disabled', false);
 			});
 		</script>
 		<title>Settings</title>
@@ -59,10 +59,26 @@
 
 						 ?>
 					</p>
-					<input type="number"  name="freq_upper" value="<?php echo $this->session->userdata('freq_upper_bound');?>">  Frequency Threshold Upper Bound <p class="current_val">Current Set Upper Bound: <?php echo $this->session->userdata('freq_upper_bound'); ?></p>
-					<br><br>
-					<input type="number" name="freq_lower" value="<?php echo $this->session->userdata('freq_lower_bound');?>">  Frequency Threshold Lower Bound  <p class="current_val">Current Set Lower Bound: <?php echo $this->session->userdata('freq_lower_bound'); ?></p>
-					<button class="btn btn-primary" name="file_action" value="net_gen_set" type="submit">Save</button>
+
+					<input type="decimal" name="freq_upper" value="<?php echo $this->session->userdata('freq_upper_bound');?>">
+					Frequency Threshold Upper Bound
+					<p class="current_val">
+						Current Set Upper Bound:
+						<?php echo $this->session->userdata('freq_upper_bound'); ?>
+					</p>
+
+					<br />
+					
+					<input type="decimal" name="freq_lower" value="<?php echo $this->session->userdata('freq_lower_bound');?>">
+					Frequency Threshold Lower Bound
+					<p class="current_val">
+						Current Set Lower Bound:
+						<?php echo $this->session->userdata('freq_lower_bound'); ?>
+					</p>
+
+					<button class="btn btn-primary" name="file_action" value="net_gen_set" type="submit">
+						Save
+					</button>
 				</form>
 			</ul>
 

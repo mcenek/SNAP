@@ -309,8 +309,6 @@
 		</script>
 	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/three.js"></script>
 	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/OrbitControls.js"></script>
-	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/Detector.js"></script>
-	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/stats.min.js"></script>
 	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextTexture/THREE.TextTexture.js"></script>
 	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextSprite/THREE.TextSprite.js"></script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/visualize.js"></script>

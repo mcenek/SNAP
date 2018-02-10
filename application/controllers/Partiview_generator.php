@@ -24,7 +24,7 @@ class Partiview_generator extends CI_Controller{
 	{
 		if($this->session->userdata('logged_in'))
 		{
-			$files = array_filter(scandir($this->file_dir . '/partiview_generator'), 
+			$files = array_filter(scandir($this->file_dir . '/partiview_generator'),
 		    function($item)
 			{
 				return !is_dir($this->file_dir.'/' . $item);
@@ -44,7 +44,7 @@ class Partiview_generator extends CI_Controller{
 		$cmd='';
 		$gexf_file='';
 		$file_dates='';
-		
+
 		$files=scandir($this->file_dir.'/partiview_generator/');
 		foreach ($files as $file) //Set gexf and timestamp files for partiview
 		{
@@ -66,7 +66,7 @@ class Partiview_generator extends CI_Controller{
 		$skew_z= $this->session->userdata('skew_x');
 		$shape= $this->session->userdata('shape');
 		$cmd='java'. ' -jar '. $partiview_path. $gexf_file  . $file_dates . " ". $date_range . " ". $skew_x . " ". $skew_y . " ". $skew_z . " " . $shape ;
-		
+
 		// if($date_range!="NULL"){
 		// 	$cmd='java'. ' -jar '. $partiview_path. $gexf_file  . $file_dates . " ". $date_range . " ". $skew_x . " ". $skew_y . " ". $skew_z . " " . $shape ;
 		// }
@@ -74,8 +74,8 @@ class Partiview_generator extends CI_Controller{
 		// 	$cmd='java'. ' -jar '. $partiview_path. $gexf_file  . $file_dates . " 90";
 
 		// }
-		
-		
+
+
 		$output=shell_exec($cmd);
 		if($output=='')
 		{
@@ -85,11 +85,52 @@ class Partiview_generator extends CI_Controller{
 		redirect('partiview_generator', 'refresh');
 	}
 
+	// TODO create a threejsFileGeneration function
+
+	// TODO create function to pass threejs files to client
+	public function pass_threejs_files($projectName)
+	{
+		// this should be called via ajax, and pass back the contents of the
+		// threejs files
+	}
+
+	public function get_colors()
+	{
+		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
+		echo file_get_contents($this->file_dir.'/partiview_generator/'
+												.$curr_proj
+												.'_meta-colors.three.txt');
+	}
+
+	public function get_layers()
+	{
+		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
+		echo file_get_contents($this->file_dir.'/partiview_generator/'
+												.$curr_proj
+												.'_layers.three.txt');
+	}
+
+	public function get_edges()
+	{
+		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
+		echo file_get_contents($this->file_dir.'/partiview_generator/'
+												.$curr_proj
+												.'_edges.three.txt');
+	}
+
+	public function get_noodles()
+	{
+		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
+		echo file_get_contents($this->file_dir.'/partiview_generator/'
+												.$curr_proj
+												.'_noodles.three.txt');
+	}
+
 	public function display_file()
 	{
 		$file = $this->uri->segment(3);
 		$file_path = $this->file_dir . "/partiview_generator/" . $file;
-		
+
 		echo nl2br(file_get_contents($file_path));
 		exit;
 	}
@@ -143,7 +184,7 @@ class Partiview_generator extends CI_Controller{
 	                header('Cache-Control: must-revalidate');
 	                header('Pragma: public');
 	                header('Content-Length: ' . filesize($file_path));
-	                
+
 	                readfile($file_path);
 	                // exit;
 	            }

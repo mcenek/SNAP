@@ -52,3 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'login';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+$route['threejs']['colors'] = 'partiview_generator/get_colors';
+$route['threejs']['layers'] = 'partiview_generator/get_layers';
+$route['threejs']['edges'] = 'partiview_generator/get_edges';
+$route['threejs']['noodles'] = 'partiview_generator/get_noodles';

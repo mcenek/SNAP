@@ -36,38 +36,41 @@ class Semantic_networks extends CI_Controller
 	public function transfer()//Transfer .dl files to Semantic Networks
 	{
 		$post=$this->input->post();
-		$files=scandir('/Applications/MAMP/htdocs/SNAP');//--output randomly goes to this page, unsure why, so grab it and move it.
-		$source='/Applications/MAMP/htdocs/SNAP/';
+		$files=scandir('/Applications/MAMP/htdocs/website_stuff');//--output randomly goes to this page, unsure why, so grab it and move it.
+		$source='/Applications/MAMP/htdocs/website_stuff/';
 		$destination=$this->file_dir.'/partiview_generator/';
 		$individual_gexf_dest=$destination.'individual_gexfs/';
 		foreach ($files as $file) 
 		{
 			$file_extension = pathinfo($file, PATHINFO_EXTENSION);
-			if(($file=="completeLayout.gexf") || ($file=="completeLayout.pdf") || ($file=="FileDates.txt") || ($file_extension == "gexf"))//Check File Extensions, transfer file to Semantic Networks if .dl 
+			if(($file=="completeLayout.gexf") || ($file=="completeLayout.pdf") || ($file=="FileDates.txt"))//Check File Extensions, transfer file to Semantic Networks if .dl 
 			{
 				if (in_array($file, array(".",".."))) continue;
 				  // If we copied this successfully, mark it for deletion
 				  if (copy($source.$file, $destination.$file)) 
 				  {
-				    $delete[] = $source.$file;
+				    //$delete[] = $source.$file;
+				    unlink($source.$file);
 				  }
 			}
-			// else if($file_extension=="gexf")//Check File Extensions, transfer file to Semantic Networks if .dl 
-			// {
-			// 	if (in_array($file, array(".",".."))) continue;
-			// 	  // If we copied this successfully, mark it for deletion
-			// 	  if (copy($source.$file, $individual_gexf_dest.$file)) 
-			// 	  {
-			// 	    $delete[] = $source.$file;
-			// 	  }
-			// }
+			else if($file_extension=="gexf")//Check File Extensions, transfer file to Semantic Networks if .dl 
+			{
+				if (in_array($file, array(".",".."))) continue;
+				  // If we copied this successfully, mark it for deletion
+				  if (copy($source.$file, $individual_gexf_dest.$file)) 
+				  {
+				    //$delete[] = $source.$file;
+				    unlink($source.$file);
+				  }
+			}
 
 
 		}
-		foreach ($delete as $file) //Make so Files only appear in Semantic Networks, deletes them from 
-		{
-  			unlink($file);
-		}
+		///Why the extra logic here? why not simply unlink it when your code reaches the necessary part
+		//foreach ($delete as $file) //Make so Files only appear in Semantic Networks, deletes them from 
+		//{
+  		//	unlink($file);
+		//}
 	}
 
 	public function generateGlobalGEXF()//-----Generate global .gexf file and .txt date file for all files imported-----------//
@@ -76,7 +79,7 @@ class Semantic_networks extends CI_Controller
 		$post=$this->input->post();
 	    if($this->session->userdata('logged_in'))
 		{
-			$gephi_path='/Applications/MAMP/htdocs/SNAP/assets/AutoGephiPipe/AutoGephiPipeV3_1.jar ';
+			$gephi_path='/Applications/MAMP/htdocs/website_stuff/assets/AutoGephiPipe/AutoGephiPipeV3_1.jar ';
 			$output='';
 			$cmd='';
 			$file_path=$this->file_dir.'/semantic_networks';
@@ -109,8 +112,8 @@ class Semantic_networks extends CI_Controller
 		$this->index();
 		$post=$this->input->post();
 	
-		$gephi_path='/Applications/MAMP/htdocs/SNAP/assets/AutoGephiPipe/AutoGephiPipeV3_1.jar ';
-		$individual_gephi_path='/Applications/MAMP/htdocs/SNAP/assets/AutoGephiPipe/individualGraphProcess.jar ';
+		$gephi_path='/Applications/MAMP/htdocs/website_stuff/assets/AutoGephiPipe/AutoGephiPipeV3_1.jar ';
+		$individual_gephi_path='/Applications/MAMP/htdocs/website_stuff/assets/AutoGephiPipe/individualGraphProcess.jar ';
 		$dir_path=$this->file_dir.'/semantic_networks/';
 
 		//-------------------Generate .gexf file for each .dl file in preprocessed directory----------------------------------//
@@ -123,24 +126,24 @@ class Semantic_networks extends CI_Controller
 			$output2='';
 
 				echo '<script type="text/javascript">alert("' . $file . '"); </script>';
-				$cmd2='java'. ' -jar '. $individual_gephi_path . $dir_path . ' ' . $layout . ' ' . $mod_res;
+				$cmd2='java'. ' -jar '. $gephi_path . $dir_path . ' ' . $layout . ' ' . $mod_res;
 				//$message = "command: ".$cmd2;
 				//echo "<script type='text/javascript'>alert('$message');</script>";
 				$output2=shell_exec($cmd2);
 
-			// foreach ($files as $file) 
-			// {
-			// 	echo '<script type="text/javascript">alert("' . $file . '"); </script>';
-			// 	$cmd2='java'. ' -jar '. $individual_gephi_path. $dir_path .$file;
-			// 	//$message = "command: ".$cmd2;
-			// 	//echo "<script type='text/javascript'>alert('$message');</script>";
-			// 	$output2=shell_exec($cmd2);
-			// 	if($output2=='')
-			// 	{
-			// 		$output2="Netork Generation failed for individual file";
-			// 	}
+			/*foreach ($files as $file) 
+			{
+				echo '<script type="text/javascript">alert("' . $file . '"); </script>';
+				$cmd2='java'. ' -jar '. $individual_gephi_path. $dir_path .$file;
+				//$message = "command: ".$cmd2;
+				//echo "<script type='text/javascript'>alert('$message');</script>";
+				$output2=shell_exec($cmd2);
+				if($output2=='')
+				{
+					$output2="Netork Generation failed for individual file";
+				}
 
-			// }
+			}*/
 		}
 
 		$this->session->set_flashdata('flash_message', 'Saved to Partiview');
@@ -148,7 +151,7 @@ class Semantic_networks extends CI_Controller
 		
 		
 		redirect('semantic_networks', 'refresh');
-					
+		
 	}
 
 
@@ -162,6 +165,12 @@ class Semantic_networks extends CI_Controller
 	}
 	public function submit_files()
 	{
+	 	if(is_null($this->input->post('checkbox')))
+	    {
+	        redirect('semantic_networks', 'refresh');//--reload the page
+	    }
+	    else
+	    {
 			if($this->input->post('file_action') == "delete")
 			{
 				$this->delete_files($this->input->post('checkbox'));
@@ -173,57 +182,50 @@ class Semantic_networks extends CI_Controller
 			else 
 			{
 				$this->generateGlobalGEXF($this->input->post('checkbox'));
-
 				//Call below function to generate individual GEXFs from individual .dl files
-				$this->generateIndividualGEXFs($this->input->post('checkbox'));
-				
-			}		
+				//$this->generateIndividualGEXFs($this->input->post('checkbox'));
+			}
+		}		
 	}
 	
 	public function download($files)
 	{
 
-		// $zip = new ZipArchive();
-		// $zipname = 'file.zip';
-		// if ($zip->open($zipname, ZipArchive::CREATE) !==TRUE){
-		// 	exit("Can't open");
-		// }
-		// foreach($files as $file => $file_name){
-		// 	$file_path=$this->file_dir.'/semantic_networks/';
-		// 	if (file_exists($file_path.$file_name)){
-		// 		$zip->addFile($$file_name);
-		// 	}
-		// 	else {
-		// 		$this->index();
-		// 	}
-		// }
-		// $zip->close();
-		// header('Content-Type: application/zip');
-		// header('Content-Disposition: attachment; filename='.$zipname);
-		// header('Content-Length: ' . filesize($zipname));
-		// readfile($zip);
-	
-		foreach($files as $file => $file_name)
+		if(count($files) == 1)
 		{
-			$file_path=$this->file_dir.'/semantic_networks/'.$file_name;
-			if (file_exists($file_path)) 
-			{
-			    header('Content-Description: File Transfer');
-			    header('Content-Type: application/octet-stream');
-			    header('Content-Disposition: attachment; filename="'.basename($file_path).'"');
-			    header('Expires: 0');
-			    header('Cache-Control: must-revalidate');
-			    header('Pragma: public');
-			    header('Content-Length: ' . filesize($file_path));
-			    readfile($file_path);
-			    exit;
-			    $this->index();
-			}
-			else 
-			{
-				$this->index();
-			}
+		    foreach($files as $file => $file_name)
+		    {
+		        $file_path=$this->file_dir.'/semantic_networks/'.$file_name;
+		        if (file_exists($file_path))
+		        {
+		            header('Content-Description: File Transfer');
+		            header('Content-Type: application/octet-stream');
+		            header('Content-Disposition: attachment; filename="'.basename($file_path).'"');
+		            header('Expires: 0');
+		            header('Cache-Control: must-revalidate');
+		            header('Pragma: public');
+		            header('Content-Length: ' . filesize($file_path));
+		            
+		            readfile($file_path);
+		            // exit;
+		        }
+		        //exit;
+		    }
 		}
+		else
+		{
+		    $this->load->library('zip');
+		    foreach($files as $file => $file_name)
+		    {
+		        $file_path=$this->file_dir.'/semantic_networks/'.$file_name;
+		        if (file_exists($file_path))
+		        {
+		            $this->zip->read_file($file_path);
+		        }
+		    }
+		    $this->zip->download('files.zip');
+		}
+		$this->index();
 	}
 	
 	public function delete_files($files_to_delete){

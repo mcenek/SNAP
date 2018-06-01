@@ -20,7 +20,7 @@ class Preprocessed_uploads extends CI_Controller{
 	public function index(){
 		if($this->session->userdata('logged_in'))
 		{
-			$files = array_filter(scandir($this->file_dir . '/preprocessed'),
+			$files = array_filter(scandir($this->file_dir . '/preprocessed'), 
 		    function($item)
 			{
 				return !is_dir($this->file_dir.'/' . $item);
@@ -29,67 +29,156 @@ class Preprocessed_uploads extends CI_Controller{
 			$user_info = array('files' => $files, 'error' => $error);
 			$this->load->view('preprocessed_uploads', $user_info);
 		}
-
+		
 	}
-	public function transfer()
+ 
+    //depricated doesn't no longer needed 
+	public function netgen()
 	{
-		$post=$this->input->post();
-		$files=scandir($this->file_dir. '/preprocessed');
+		//$this->index();
+		$files=$this->input->post('checkbox');
+		$PIDArray = "{\"Pids\":[";
 		$source=$this->file_dir. '/preprocessed/';
 		$destination=$this->file_dir.'/semantic_networks/';
-		foreach ($files as $file)
+		foreach ($files as $file => $file_name) 
 		{
-			$file_parts=pathinfo($file);
-			if($file_parts['extension']=="dl")//Check File Extensions, transfer file to Semantic Networks if .dl
-			{
-				if (in_array($file, array(".",".."))) continue;
-				  // If we copied this successfully, mark it for deletion
-				  if (copy($source.$file, $destination.$file))
-				  {
-				    $delete[] = $source.$file;
-				  }
-			}
+			//$netgen_path='/Applications/MAMP/htdocs/website_stuff/assets/netgen3/';
+			$netgen_path='/Applications/MAMP/htdocs/website_stuff/assets/netgen4/';
+			$output='';
+			$cmd='';
+			$file_path=$this->file_dir.'/preprocessed/'.$file_name.' ';
+			//-------------------Generate .dl files for every file in preprocessed directory----------------------------------//
+			// run the java command, redirect the outputs to null so that doesn't block echo, the java does it's own file io to the dir, echo back the PID
+			$cmd='nice java'. ' -jar '. $netgen_path . 'NetGenL4.jar '. $file_path . $netgen_path .'stopword.txt 2>&1 1> /dev/null & echo $!';
+			
+
+			//--------debug-----------//
+			//$message = "command: ".$cmd;
+			$output = trim(shell_exec($cmd));
+			
+			//$output = (int)$op[0];
+			
+			$PIDArray.= '"'.$output.'", ';
+			
 		}
-		foreach ($delete as $file) //Make so Files only appear in Semantic Networks, deletes them from
-		{
-  			unlink($file);
-		}
+		// while the PID exists pause/sleep, when nothing returns the PID is dead so move the files that have been created by the java process
+		$cmd2='while kill -0 ' . $output . '
+				do 
+				sleep 1
+				done 
+				mv ' . '/' . $source . '/*.dl ' . $destination . '&';
+
+		exec($cmd2);
+		$PIDArray = rtrim($PIDArray,", ");
+		$PIDArray .= ']}';
+		echo $PIDArray;
 	}
 
-	public function netgen($files)
+	//function that is called to generate the .dl files for netword analysis
+	public function netgen2()
 	{
-		$this->index();
-		$post=$this->input->post();
-		foreach ($files as $file => $file_name)
+		$files=$this->input->post('checkbox');
+		$PIDArray = "{\"Pids\":[";
+		$source=$this->file_dir. '/preprocessed/';
+		$destination=$this->file_dir.'/semantic_networks/';
+		foreach ($files as $file => $file_name) 
 		{
-			$netgen_path='/Applications/MAMP/htdocs/SNAP/assets/NetGen/';
+			//$netgen_path='/Applications/MAMP/htdocs/website_stuff/assets/netgen3/';
+			$netgen_path='/Applications/MAMP/htdocs/website_stuff/assets/netgen4/';
 			$output='';
 			$cmd='';
 			$file_path=$this->file_dir.'/preprocessed/'.$file_name.' ';
 			//-------------------Generate .dl files for every file in preprocessed directory----------------------------------//
 			$use_freq= $this->session->userdata('use_freq');
-
+			
 			$freq_lower= $this->session->userdata('freq_lower_bound');
-			$freq_upper= $this->session->userdata('freq_upper_bound');
-			$cmd='java -jar '.$netgen_path.'NetGen.jar '. $file_path.' '.$netgen_path.'stopword.txt '.$use_freq.' '.$freq_lower.' '.$freq_upper;
-
+			$freq_upper= $this->session->userdata('freq_upper_bound');																								//put this here to keep it the same with netgen
+			$cmd='java' . ' -jar ' . $netgen_path . 'NetGenL4.jar ' . $file_path . $netgen_path . 'stopword.txt' . ' ' . $use_freq . ' ' . $freq_lower . ' ' . $freq_upper . ' 2>&1 1> /dev/null & echo $!';
+			
+			
 			//--------debug-----------//
-			$message = "command: ".$cmd;
-			$output=shell_exec($cmd);
-			if($output==''){
-				$output="Netork Generation failed";
-			}
+			//$message = "command: ".$cmd;
+			$output = trim(shell_exec($cmd));			
+			//$output = (int)$op[0];			
+			$PIDArray.= '"'.$output.'", ';
+
 		}
-		$this->session->set_flashdata('flash_message', 'Saved to Semantic Networks');
-		$this->transfer();//-----Attempt to transfer processed .dl files
-		redirect('preprocessed_uploads', 'refresh');//--reload the page
+		$cmd2='while kill -0 ' . $output . '
+		do 
+		sleep 1
+		done 
+		mv ' . '/' . $source . '/*.dl ' . $destination . '';
+
+		exec($cmd2);
+		$PIDArray = rtrim($PIDArray,", ");
+		$PIDArray .= ']}';
+		echo $PIDArray;	
+
+	}
+
+
+	public function HistoGen()
+	{
+		$files=$this->input->post('checkbox');
+		if(!is_null($files))
+		{
+			$PIDArray = "{\"Pids\":[";
+			$source=$this->file_dir. '/preprocessed/';
+			$destination=$this->file_dir.'/semantic_networks/';
+			foreach ($files as $file => $file_name) 
+			{
+				$histGen_path='/Applications/MAMP/htdocs/website_stuff/assets/HistGen/';
+				$output='';
+				$cmd='';
+				$file_path=$this->file_dir.'/preprocessed/'.$file_name.' ';
+
+				//-------------------Generate histogramFrequencies for every file in preprocessed directory----------------------------------//
+				$cmd='java' . ' -jar ' . $histGen_path . "HistGen.jar "  . $file_path . $histGen_path . 'stopword.txt ' . 1 ;
+				
+				exec($cmd);
+			}
+
+			$PIDArray = "{\"Frequency\":[";
+			$file_path=$this->file_dir.'/preprocessed/';
+			exec('sleep 1');
+			$cmd2='cat '. $file_path.'*Histogram*.txt > '.$file_path.'histo.txt'; //concatanates all the files into one file
+			exec($cmd2);
+
+			exec('sleep 1');
+
+			$cmd3 ='rm '. $file_path .'*Histogram*.txt'; //removes the histogram files generated by java
+			exec($cmd3);
+
+			exec('sleep 1');
+
+			exec("sort -n " .$file_path."histo.txt | uniq -c | awk '{print $1}' | sort -n > ".$file_path."data.txt"); //gets the uniq counts of each diffent variable count and sorts before returning it into 
+
+			$handle = fopen($file_path."data.txt", "r");
+			if($handle)
+			{
+				while(($line = fgets($handle)) !== false)
+				{
+					$PIDArray.= '"'.$line.'", ';
+				}
+			}
+
+			exec('sleep 1');
+
+			$cmd5 ='rm '.$file_path.'histo.txt '.$file_path.'data.txt'; //removes the histogram files generated by java
+			exec($cmd5);
+
+			$PIDArray = rtrim($PIDArray,", ");
+			$PIDArray .= ']}';
+			$PIDArray = trim(preg_replace('/\s+/', '', $PIDArray));
+			echo $PIDArray;
+		}
 	}
 
 	public function display_file(){
 		$file = $this->uri->segment(3);
 		$file_path = $this->file_dir . "/preprocessed/" . $file;
 		$file_parts=pathinfo($file);
-		if($file_parts['extension']=="txt") //Check File Extensions, transfer file to Semantic Networks if .dl
+		if($file_parts['extension']=="txt") //Check File Extensions, transfer file to Semantic Networks if .dl 
 		{
 				echo nl2br(file_get_contents($file_path));
 				exit;
@@ -101,6 +190,12 @@ class Preprocessed_uploads extends CI_Controller{
 	}
 	public function submit_files()
 	{
+	    if(is_null($this->input->post('checkbox')))
+	    {
+	        redirect('preprocessed_uploads', 'refresh');//--reload the page    
+	    }
+	    else
+	    {
 			if($this->input->post('file_action') == "delete")
 			{
 				$this->delete_files($this->input->post('checkbox'));
@@ -114,26 +209,66 @@ class Preprocessed_uploads extends CI_Controller{
 				$this->netgen($this->input->post('checkbox'));
 				//$this->netgen($this->input->post('checkbox'));
 			}
+	    }
+	}
+
+	public function kill_process()
+	{
+		$PIDS = $this->input->post('PIDS');
+		$files = $this->input->post('checkbox'); //ensures only processed files are deleted
+		//$files=scandir($this->file_dir. '/preprocessed');
+
+		//echo "<script>console.log(\"Output: \");</script>";
+		foreach ($PIDS as &$PID) 
+		{
+			exec('kill ' . $PID);  					
+		}
+		/*foreach($files as $file => $file_name)
+		{
+				
+			exec('rm ' . $this->file_dir . '/semantic_networks/' . $file["filename"]);
+		}*/
 	}
 
 	public function download($files)
 	{
-		foreach($files as $file => $file_name)
+			
+		if(count($files) == 1)
 		{
-			$file_path=$this->file_dir.'/preprocessed/'.$file_name;
-			if (file_exists($file_path))
-			{
-			    header('Content-Description: File Transfer');
-			    header('Content-Type: application/octet-stream');
-			    header('Content-Disposition: attachment; filename="'.basename($file_path).'"');
-			    header('Expires: 0');
-			    header('Cache-Control: must-revalidate');
-			    header('Pragma: public');
-			    header('Content-Length: ' . filesize($file_path));
-			    readfile($file_path);
-			    exit;
-			}
+		    foreach($files as $file => $file_name)
+		    {
+		        $file_path=$this->file_dir.'/preprocessed/'.$file_name;
+		        if (file_exists($file_path))
+		        {
+		            header('Content-Description: File Transfer');
+		            header('Content-Type: application/octet-stream');
+		            header('Content-Disposition: attachment; filename="'.basename($file_path).'"');
+		            header('Expires: 0');
+		            header('Cache-Control: must-revalidate');
+		            header('Pragma: public');
+		            header('Content-Length: ' . filesize($file_path));
+		            
+		            readfile($file_path);
+		            // exit;
+		        }
+		        //exit;
+		    }
 		}
+		else
+		{
+		    $this->load->library('zip');
+		    foreach($files as $file => $file_name)
+		    {
+		        $file_path=$this->file_dir.'/preprocessed/'.$file_name;
+		        if (file_exists($file_path))
+		        {
+		            $this->zip->read_file($file_path);
+		        }
+		    }
+		    $this->zip->download('files.zip');
+		}
+		
+		// exit;
 		$this->index();
 	}
 

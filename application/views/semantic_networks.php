@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
@@ -25,7 +25,7 @@
 			<p>This page takes all the resulting .dl files of Undirected Graphs, combines them into a single succinct graph using Gephi.<br />
 			Nodes are grouped into circles and colored based on their modularity class then sized and ordered along the circle by Betweenness Centrality. <br />
 			Resulting .gexf file can be used in Gephi if you so choose, .pdf file gives user a brief 2D visualized over view of the network, and the .txt file of time stamped dates is used for 3D visualization.<p />
-			<p class="current_val">Current Layout:
+			<p class="current_val">Current Layout: 
 						<?php $layout= $this->session->userdata('layout');
 						if($layout == 0)
 						{

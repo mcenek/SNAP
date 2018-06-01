@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -309,6 +310,8 @@
 		</script>
 	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/three.js"></script>
 	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/OrbitControls.js"></script>
+	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/Detector.js"></script>
+	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/stats.min.js"></script>
 	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextTexture/THREE.TextTexture.js"></script>
 	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextSprite/THREE.TextSprite.js"></script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/visualize.js"></script>

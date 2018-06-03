@@ -3,7 +3,6 @@
 class Partiview_generator extends CI_Controller{
 	public $data;
 	public $file_dir;
-	//public $post;
 
 	public function __construct()
 	{
@@ -25,7 +24,7 @@ class Partiview_generator extends CI_Controller{
 		if($this->session->userdata('logged_in'))
 		{
 			$files = array_filter(scandir($this->file_dir . '/partiview_generator'),
-		    function($item)
+			function($item)
 			{
 				return !is_dir($this->file_dir.'/' . $item);
 			});
@@ -98,32 +97,32 @@ class Partiview_generator extends CI_Controller{
 	{
 		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
 		echo file_get_contents($this->file_dir.'/partiview_generator/'
-												.$curr_proj
-												.'_meta-colors.three.txt');
+			.$curr_proj
+			.'_meta-colors.three.txt');
 	}
 
 	public function get_layers()
 	{
 		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
 		echo file_get_contents($this->file_dir.'/partiview_generator/'
-												.$curr_proj
-												.'_layers.three.txt');
+			.$curr_proj
+			.'_layers.three.txt');
 	}
 
 	public function get_edges()
 	{
 		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
 		echo file_get_contents($this->file_dir.'/partiview_generator/'
-												.$curr_proj
-												.'_edges.three.txt');
+			.$curr_proj
+			.'_edges.three.txt');
 	}
 
 	public function get_noodles()
 	{
 		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
 		echo file_get_contents($this->file_dir.'/partiview_generator/'
-												.$curr_proj
-												.'_noodles.three.txt');
+			.$curr_proj
+			.'_noodles.three.txt');
 	}
 
 	public function display_file()
@@ -142,69 +141,67 @@ class Partiview_generator extends CI_Controller{
 
 	public function submit_files()//For executing commands
 	{
-    	if(is_null($this->input->post('checkbox')))
-	    {
-	        redirect('partiview_generator', 'refresh');//--reload the page
-	    }
-	    else
-	    {
-    		if($this->input->post('file_action') == "delete")
-    		{
-    			$this->delete_files($this->input->post('checkbox'));
-    		}
-    		else if($this->input->post('file_action') == "download")
-    		{
-    			$this->download($this->input->post('checkbox'));
-    		}
-    		else if($this->input->post('file_action') == "kill"){
-    			$cmd = "pkill java";
-    			shell_exec($cmd);
-    			redirect('partiview_generator', 'refresh');
-    		}
-    		else
-    		{
-    			$this->partiGeneration($this->input->post('checkbox'));
-    		}
-	    }
+		if(is_null($this->input->post('checkbox')))
+		{
+			redirect('partiview_generator', 'refresh');//--reload the page
+		}
+		else
+		{
+			if($this->input->post('file_action') == "delete")
+			{
+				$this->delete_files($this->input->post('checkbox'));
+			}
+			else if($this->input->post('file_action') == "download")
+			{
+				$this->download($this->input->post('checkbox'));
+			}
+			else if($this->input->post('file_action') == "kill"){
+				$cmd = "pkill java";
+				shell_exec($cmd);
+				redirect('partiview_generator', 'refresh');
+			}
+			else
+			{
+				$this->partiGeneration($this->input->post('checkbox'));
+			}
+		}
 	}
 
 	public function download($files)
 	{
-		    if(count($files) == 1)
-	    {
-	        foreach($files as $file => $file_name)
-	        {
-	            $file_path=$this->file_dir.'/partiview_generator/'.$file_name;
-	            if (file_exists($file_path))
-	            {
-	                header('Content-Description: File Transfer');
-	                header('Content-Type: application/octet-stream');
-	                header('Content-Disposition: attachment; filename="'.basename($file_path).'"');
-	                header('Expires: 0');
-	                header('Cache-Control: must-revalidate');
-	                header('Pragma: public');
-	                header('Content-Length: ' . filesize($file_path));
+		if(count($files) == 1)
+		{
+			foreach($files as $file => $file_name)
+			{
+				$file_path=$this->file_dir.'/partiview_generator/'.$file_name;
+				if (file_exists($file_path))
+				{
+					header('Content-Description: File Transfer');
+					header('Content-Type: application/octet-stream');
+					header('Content-Disposition: attachment; filename="'.basename($file_path).'"');
+					header('Expires: 0');
+					header('Cache-Control: must-revalidate');
+					header('Pragma: public');
+					header('Content-Length: ' . filesize($file_path));
 
-	                readfile($file_path);
-	                // exit;
-	            }
-	            //exit;
-	        }
-	    }
-	    else
-	    {
-	        $this->load->library('zip');
-	        foreach($files as $file => $file_name)
-	        {
-	            $file_path=$this->file_dir.'/partiview_generator/'.$file_name;
-	            if (file_exists($file_path))
-	            {
-	                $this->zip->read_file($file_path);
-	            }
-	        }
-	        $this->zip->download('files.zip');
-	    }
-	    $this->index();
+					readfile($file_path);
+				}
+			}
+		}
+		else
+		{
+			$this->load->library('zip');
+			foreach($files as $file => $file_name)
+			{
+				$file_path=$this->file_dir.'/partiview_generator/'.$file_name;
+				if (file_exists($file_path))
+				{
+					$this->zip->read_file($file_path);
+				}
+			}
+			$this->zip->download('files.zip');
+		}
+		$this->index();
 	}
 
 	public function delete_files($files_to_delete){
@@ -218,6 +215,3 @@ class Partiview_generator extends CI_Controller{
 		redirect('partiview_generator', 'refresh');
 	}
 }
-
-/* End of file preprocessed_uploads.php */
-/* Location: ./application/controllers/preprocessed_uploads.php */

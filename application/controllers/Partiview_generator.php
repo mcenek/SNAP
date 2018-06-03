@@ -26,7 +26,7 @@ class Partiview_generator extends CI_Controller{
 			$files = array_filter(scandir($this->file_dir . '/partiview_generator'),
 			function($item)
 			{
-				return !is_dir($this->file_dir.'/' . $item);
+				return !is_dir($this->file_dir . '/' . $item);
 			});
 			$error = '';
 			$user_info = array('files' => $files, 'error' => $error);
@@ -38,6 +38,7 @@ class Partiview_generator extends CI_Controller{
 	{
 		$this->index();
 		$post=$this->input->post();
+		// TODO replace with rel path
 		$partiview_path='/Applications/MAMP/htdocs/SNAP/assets/partiViewGen/PartiGen.jar ';
 		$output='';
 		$cmd='';
@@ -47,38 +48,31 @@ class Partiview_generator extends CI_Controller{
 		$files=scandir($this->file_dir.'/partiview_generator/');
 		foreach ($files as $file) //Set gexf and timestamp files for partiview
 		{
+			// TODO one of these isn't needed anymore...
 			$file_parts=pathinfo($file);
-			if($file=="completeLayout.gexf")
+			if($file=='completeLayout.gexf')
 			{
-				$gexf_file=$this->file_dir.'/partiview_generator/' . $file . ' ';
+				$gexf_file=$this->file_dir . '/partiview_generator/' . $file . ' ';
 			}
-			if($file=="FileDates.txt")
+			if($file=='FileDates.txt')
 			{
-				$file_dates=$this->file_dir.'/partiview_generator/' . $file ;
+				$file_dates=$this->file_dir . '/partiview_generator/' . $file ;
 			}
 			else;
 		}
-		//-------------------Generate .dl files for every file in preprocessed directory----------------------------------//
+
 		$date_range= $this->session->userdata('date_range');
 		$skew_x= $this->session->userdata('skew_x');
 		$skew_y= $this->session->userdata('skew_y');
 		$skew_z= $this->session->userdata('skew_x');
 		$shape= $this->session->userdata('shape');
-		$cmd='java'. ' -jar '. $partiview_path. $gexf_file  . $file_dates . " ". $date_range . " ". $skew_x . " ". $skew_y . " ". $skew_z . " " . $shape ;
-
-		// if($date_range!="NULL"){
-		// 	$cmd='java'. ' -jar '. $partiview_path. $gexf_file  . $file_dates . " ". $date_range . " ". $skew_x . " ". $skew_y . " ". $skew_z . " " . $shape ;
-		// }
-		// else{
-		// 	$cmd='java'. ' -jar '. $partiview_path. $gexf_file  . $file_dates . " 90";
-
-		// }
-
+		$cmd='java' . ' -jar ' . $partiview_path . $gexf_file . $file_dates . ' '
+			. $date_range . ' ' . $skew_x . ' ' . $skew_y . ' ' . $skew_z . ' ' . $shape ;
 
 		$output=shell_exec($cmd);
 		if($output=='')
 		{
-			$output="Network Visualization Generation failed";
+			$output='Network Visualization Generation failed';
 		}
 		$this->session->set_flashdata('flash_message', 'Saved to Partiview');
 		redirect('partiview_generator', 'refresh');
@@ -96,50 +90,46 @@ class Partiview_generator extends CI_Controller{
 	public function get_colors()
 	{
 		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
-		echo file_get_contents($this->file_dir.'/partiview_generator/'
-			.$curr_proj
-			.'_meta-colors.three.txt');
+		echo file_get_contents($this->file_dir . '/partiview_generator/'
+			. $curr_proj
+			. '_meta-colors.three.txt');
 	}
 
 	public function get_layers()
 	{
 		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
-		echo file_get_contents($this->file_dir.'/partiview_generator/'
-			.$curr_proj
-			.'_layers.three.txt');
+		echo file_get_contents($this->file_dir . '/partiview_generator/'
+			. $curr_proj
+			. '_layers.three.txt');
 	}
 
 	public function get_edges()
 	{
 		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
-		echo file_get_contents($this->file_dir.'/partiview_generator/'
-			.$curr_proj
-			.'_edges.three.txt');
+		echo file_get_contents($this->file_dir . '/partiview_generator/'
+			. $curr_proj
+			. '_edges.three.txt');
 	}
 
 	public function get_noodles()
 	{
 		$curr_proj = $this->projects->get_project($this->session->userdata('project_id'))->name;
-		echo file_get_contents($this->file_dir.'/partiview_generator/'
-			.$curr_proj
-			.'_noodles.three.txt');
+		echo file_get_contents($this->file_dir . '/partiview_generator/'
+			. $curr_proj
+			. '_noodles.three.txt');
 	}
 
 	public function display_file()
 	{
 		$file = $this->uri->segment(3);
-		$file_path = $this->file_dir . "/partiview_generator/" . $file;
+		$file_path = $this->file_dir . '/partiview_generator/' . $file;
 
 		echo nl2br(file_get_contents($file_path));
 		exit;
 	}
 
-
-
-
-
-
-	public function submit_files()//For executing commands
+	//For executing commands
+	public function submit_files()
 	{
 		if(is_null($this->input->post('checkbox')))
 		{
@@ -147,16 +137,16 @@ class Partiview_generator extends CI_Controller{
 		}
 		else
 		{
-			if($this->input->post('file_action') == "delete")
+			if($this->input->post('file_action') == 'delete')
 			{
 				$this->delete_files($this->input->post('checkbox'));
 			}
-			else if($this->input->post('file_action') == "download")
+			else if($this->input->post('file_action') == 'download')
 			{
 				$this->download($this->input->post('checkbox'));
 			}
-			else if($this->input->post('file_action') == "kill"){
-				$cmd = "pkill java";
+			else if($this->input->post('file_action') == 'kill'){
+				$cmd = 'pkill java';
 				shell_exec($cmd);
 				redirect('partiview_generator', 'refresh');
 			}
@@ -173,12 +163,12 @@ class Partiview_generator extends CI_Controller{
 		{
 			foreach($files as $file => $file_name)
 			{
-				$file_path=$this->file_dir.'/partiview_generator/'.$file_name;
+				$file_path=$this->file_dir . '/partiview_generator/' . $file_name;
 				if (file_exists($file_path))
 				{
 					header('Content-Description: File Transfer');
 					header('Content-Type: application/octet-stream');
-					header('Content-Disposition: attachment; filename="'.basename($file_path).'"');
+					header('Content-Disposition: attachment; filename="' . basename($file_path) . '"');
 					header('Expires: 0');
 					header('Cache-Control: must-revalidate');
 					header('Pragma: public');
@@ -193,7 +183,7 @@ class Partiview_generator extends CI_Controller{
 			$this->load->library('zip');
 			foreach($files as $file => $file_name)
 			{
-				$file_path=$this->file_dir.'/partiview_generator/'.$file_name;
+				$file_path=$this->file_dir . '/partiview_generator/' . $file_name;
 				if (file_exists($file_path))
 				{
 					$this->zip->read_file($file_path);
@@ -205,7 +195,7 @@ class Partiview_generator extends CI_Controller{
 	}
 
 	public function delete_files($files_to_delete){
-		$source=$this->file_dir. '/partiview_generator/';
+		$source=$this->file_dir . '/partiview_generator/';
 		foreach($files_to_delete as $file){
 			$delete[] = $source.$file;
 		}

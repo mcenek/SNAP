@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
-		<div id="moveview"></div>
+
+		<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
+
 		<title>Network Visualization</title>
 		<script type="text/javascript">
-		    function selectAll(box) { // TODO this really needs to be refined
+			function selectAll(box) { // TODO this really needs to be refined
 				var checkBoxes = document.getElementsByTagName('input');
 				for(var i=0; i < checkBoxes.length; i++) {
 					if(checkBoxes[i].type == 'checkbox') {
@@ -72,13 +75,13 @@
 			canvas{
 				width: 100%;
 				height: 100%;
-	        }
+			}
 			#controlpanel {
 				background: #000000;
 				width: 200px;
 				/*flex: 1 1 30%;*/
   			  	border-left: 10px solid #0f0f0f;
-			    overflow: hidden;
+				overflow: hidden;
 				padding: 1em;
 				color: ivory;
 			}
@@ -102,23 +105,23 @@
 			}
 
 			.loader {
-		      position: absolute;
-			  border: 16px solid #f3f3f3;
-			  border-radius: 50%;
-			  border-top: 16px solid #3498db;
-			  width: 120px;
-			  height: 120px;
-			  -webkit-animation: spin 2s linear infinite; /* Safari */
-			  animation: spin 2s linear infinite;
+				position: absolute;
+				border: 16px solid #f3f3f3;
+				border-radius: 50%;
+				border-top: 16px solid #3498db;
+				width: 120px;
+				height: 120px;
+				-webkit-animation: spin 2s linear infinite; /* Safari */
+				animation: spin 2s linear infinite;
 			}
 			/* Safari */
 			@-webkit-keyframes spin {
-			  0% { -webkit-transform: rotate(0deg); }
-			  100% { -webkit-transform: rotate(360deg); }
+				0% { -webkit-transform: rotate(0deg); }
+				00% { -webkit-transform: rotate(360deg); }
 			}
 			@keyframes spin {
-			  0% { transform: rotate(0deg); }
-			  100% { transform: rotate(360deg); }
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
 			}
 		</style>
 	</head>
@@ -155,81 +158,81 @@
 			</div>
 
 			<div id="first" class="tabcontent" style="display: block;">
-			  <?php
-			    	foreach($files as $file => $file_name)
-							{
-								$file_parts=pathinfo($file_name);
+				<?php
+					foreach($files as $file => $file_name)
+					{
+						$file_parts=pathinfo($file_name);
 
-								if($file_parts['extension']=="gexf")
-								{
-									echo form_checkbox(array(
-										'name' => 'checkbox[]',
-										'id' => 'checkbox[]',
-										'value' => $file_name,
-										'checked' => FALSE
-									));
+						if($file_parts['extension']=="gexf")
+						{
+							echo form_checkbox(array(
+								'name' => 'checkbox[]',
+								'id' => 'checkbox[]',
+								'value' => $file_name,
+								'checked' => FALSE
+							));
 
-									$url = site_url() . '/partiview_generator/display_file' . $file_name;
-									echo '<a href="' .$url. '">' .$file_name. '</a><br/>';
-								}
-							}
-							echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
-							echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
-							echo '<br/>';
-							echo ' <button class="btn btn-primary" name="file_action" value="download" type="submit">Make 3D Visualization files</button>';
-							?>
+							$url = site_url() . '/partiview_generator/display_file' . $file_name;
+							echo '<a href="' .$url. '">' .$file_name. '</a><br/>';
+						}
+					}
+					echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
+					echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
+					echo '<br/>';
+					echo ' <button class="btn btn-primary" name="file_action" value="download" type="submit">Make 3D Visualization files</button>';
+				?>
 			</div>
 			<div id="second" class="tabcontent">
-				 <?php
-			    	foreach($files as $file => $file_name)
-							{
-								$file_parts=pathinfo($file_name);
+				<?php
+					foreach($files as $file => $file_name)
+					{
+						$file_parts=pathinfo($file_name);
 
-								if($file_parts['extension']=="txt")//Check File Extensions, display only produced files
-								{
-									echo form_checkbox(array(
-										'name' => 'checkbox[]',
-										'id' => 'checkbox[]',
-										'value' => $file_name,
-										'checked' => FALSE
-									));
+						if($file_parts['extension']=="txt")//Check File Extensions, display only produced files
+						{
+							echo form_checkbox(array(
+								'name' => 'checkbox[]',
+								'id' => 'checkbox[]',
+								'value' => $file_name,
+								'checked' => FALSE
+							));
 
-									$url = site_url() . '/partiview_generator/display_file' . $file_name;
-									echo '<a href="' .$url. '">' .$file_name. '</a><br/>';
+							$url = site_url() . '/partiview_generator/display_file' . $file_name;
+							echo '<a href="' .$url. '">' .$file_name. '</a><br/>';
 
-								}
-							}
-							echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
-							echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
-							echo '<br/>';
-							echo ' <button class="btn btn-primary" name="file_action" value="Launch" style="display: none;" type="submit">Launch 3D Visualization</button>';
-							        /*might need to change the value of launch to something else*/
-							?>
+						}
+					}
+					echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
+					echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
+					echo '<br/>';
+					echo ' <button class="btn btn-primary" name="file_action" value="Launch" style="display: none;" type="submit">Launch 3D Visualization</button>';
+					/*might need to change the value of launch to something else*/
+				?>
 			</div>
 			<div id="third" class="tabcontent">
 				 <?php
-			    	foreach($files as $file => $file_name)
-							{
-								$file_parts=pathinfo($file_name);
+					foreach($files as $file => $file_name)
+					{
+						$file_parts=pathinfo($file_name);
 
-								if(($file_parts['extension']=="speck")
-								|| ($file_parts['extension']=="cf")
-								|| ($file_parts['extension']=="cmap"))
-								{
-									echo form_checkbox(array(
-										'name' => 'checkbox[]',
-										'id' => 'checkbox[]',
-										'value' => $file_name,
-										'checked' => FALSE
-									));
+						if(($file_parts['extension']=="speck")
+							|| ($file_parts['extension']=="cf")
+							|| ($file_parts['extension']=="cmap"))
+						{
+							echo form_checkbox(array(
+								'name' => 'checkbox[]',
+								'id' => 'checkbox[]',
+								'value' => $file_name,
+								'checked' => FALSE
+							));
 
-									$url = site_url() . '/partiview_generator/display_file' . $file_name;
-									echo '<a href="' .$url. '">' .$file_name. '</a><br/>';
-								}
-							}
-							echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
-							echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
-							?>
+							$url = site_url() . '/partiview_generator/display_file' . $file_name;
+							echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+						}
+					}
+					echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
+					echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
+				?>
 			</div>
 
 			<p id="actionButtons">
@@ -271,7 +274,8 @@
 			{
 				document.getElementById("loadId").style.display = "block";
 			}
-			function hideLoadingWheel() // this is called from visualize.js
+			// this is called from visualize.js
+			function hideLoadingWheel()
 			{
 				document.getElementById("loadId").style.display = "none";
 			}
@@ -292,28 +296,28 @@
 			}
 
 			function openCity(evt, cityName) {
-			    var i, tabcontent, tablinks;
-			    tabcontent = document.getElementsByClassName("tabcontent");
-			    for (i = 0; i < tabcontent.length; i++) {
-			        tabcontent[i].style.display = "none";
-			    }
-			    tablinks = document.getElementsByClassName("tablinks");
-			    for (i = 0; i < tablinks.length; i++) {
-			        tablinks[i].className = tablinks[i].className.replace(" active", "");
-			    }
-			    document.getElementById(cityName).style.display = "block";
-			    evt.currentTarget.className += " active";
+				var i, tabcontent, tablinks;
+				tabcontent = document.getElementsByClassName("tabcontent");
+				for (i = 0; i < tabcontent.length; i++) {
+					tabcontent[i].style.display = "none";
+				}
+				tablinks = document.getElementsByClassName("tablinks");
+				for (i = 0; i < tablinks.length; i++) {
+					tablinks[i].className = tablinks[i].className.replace(" active", "");
+				}
+				document.getElementById(cityName).style.display = "block";
+				evt.currentTarget.className += " active";
 			}
 
 			var assetPath = "<?php echo asset_url(); ?>";
 
 		</script>
-	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/three.js"></script>
-	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/OrbitControls.js"></script>
-	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/Detector.js"></script>
-	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/stats.min.js"></script>
-	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextTexture/THREE.TextTexture.js"></script>
-	    <script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextSprite/THREE.TextSprite.js"></script>
+		<script type="text/javascript" src="<?php echo asset_url(); ?>js/three.js"></script>
+		<script type="text/javascript" src="<?php echo asset_url(); ?>js/OrbitControls.js"></script>
+		<script type="text/javascript" src="<?php echo asset_url(); ?>js/Detector.js"></script>
+		<script type="text/javascript" src="<?php echo asset_url(); ?>js/stats.min.js"></script>
+		<script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextTexture/THREE.TextTexture.js"></script>
+		<script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextSprite/THREE.TextSprite.js"></script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/visualize.js"></script>
 	</body>
 </html>

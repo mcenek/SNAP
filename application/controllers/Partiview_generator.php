@@ -79,6 +79,33 @@ class Partiview_generator extends CI_Controller{
 	}
 
 	// TODO create a threejsFileGeneration function
+	public function threejsFileGeneration()
+	{
+		$this->index();
+		$post=$this->input->post();
+		// TODO replace with rel path
+		$threejsgen_path='/Applications/MAMP/htdocs/SNAP/assets/threejsGen/threejsgen.jar ';
+		$output='';
+		$cmd='';
+		$gexf_file='';
+		$file_dates='';
+
+		$files=scandir($this->file_dir.'/partiview_generator/');
+
+		$date_range= $this->session->userdata('date_range');
+		$skew_x= $this->session->userdata('skew_x');
+		$skew_y= $this->session->userdata('skew_y');
+		$skew_z= $this->session->userdata('skew_x');
+		$shape= $this->session->userdata('shape');
+		$cmd='java' . ' -jar ' . $threejsgen_path . ' TODO other arguments' ;
+
+		$output=shell_exec($cmd);
+		if($output=='')
+		{
+			$output='Threejs file generation failed';
+		}
+		redirect('partiview_generator', 'refresh');
+	}
 
 	// TODO create function to pass threejs files to client
 	public function pass_threejs_files($projectName)
@@ -145,10 +172,15 @@ class Partiview_generator extends CI_Controller{
 			{
 				$this->download($this->input->post('checkbox'));
 			}
-			else if($this->input->post('file_action') == 'kill'){
+			else if($this->input->post('file_action') == 'kill')
+			{
 				$cmd = 'pkill java';
 				shell_exec($cmd);
 				redirect('partiview_generator', 'refresh');
+			}
+			else if($this->input->post('file_action') == 'threejs_gen')
+			{
+
 			}
 			else
 			{

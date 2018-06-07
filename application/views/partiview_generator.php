@@ -53,14 +53,14 @@
 				background-color: #ccc;
 			}
 			/* Style the tab content */
-			.tabcontent {
+			.tabcontent, .tab-content {
 				display: none;
 				padding: 6px 12px;
 				border: 1px solid #ccc;
 				border-top: none;
 			}
 			.black {
-			  background: #000000;
+				background: #000000;
 			}
 
 			#visPanel {
@@ -80,7 +80,7 @@
 				background: #000000;
 				width: 200px;
 				/*flex: 1 1 30%;*/
-  			  	border-left: 10px solid #0f0f0f;
+				border-left: 10px solid #0f0f0f;
 				overflow: hidden;
 				padding: 1em;
 				color: ivory;
@@ -152,10 +152,59 @@
 			</p>
 
 			<div class="tab">
-			  <button class="tablinks active" onclick="openCity(event, 'first')">Network Analysis Files</button>
-			  <button class="tablinks" onclick="openCity(event, 'second')">In Browser 3D Visualization Files</button>
-			  <button class="tablinks" onclick="openCity(event, 'third')">Party View Files</button>
+				<button class="tablinks active" onclick="openCity(event, 'first')">Network Analysis Files</button>
+				<button class="tablinks" onclick="openCity(event, 'second')">In Browser 3D Visualization Files</button>
+				<button class="tablinks" onclick="openCity(event, 'third')">Party View Files</button>
 			</div>
+
+			<ul class="nav nav-tabs tab">
+				<li class="active">
+					<a data-toggle="tab" href="#networkFiles">Network Analysis Files</a>
+				</li>
+				<li>
+					<a data-toggle="tab" href="#visualization">In Browser 3D Visualization Files</a>
+				</li>
+				<li>
+					<a data-toggle="tab" href="#partiviewFiles">Parti-View Files</a>
+				</li>
+			</ul>
+
+			<div class='tab-content'>
+				<div id='networkFiles' class='tab-pane fade in active'>
+					<?php
+						foreach($files as $file => $file_name)
+						{
+							$file_parts=pathinfo($file_name);
+
+							if($file_parts['extension'] == 'gexf')
+							{
+								echo form_checkbox(array(
+									'name' => 'checkbox[]',
+									'id' => 'checkbox[]',
+									'value' => $file_name,
+									'checked' => FALSE
+								));
+
+								$url = site_url() . '/partiview_generator/display_file' . $file_name;
+								echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+							}
+						}
+					?>
+					<form method='post' action='partiview_generator/submit_files'>
+						<input type='checkbox' name='select_all' onClick='selectAll(this)'>Select All</input>
+						<br/>
+						<br/>
+						<button class='btn btn-primary' name='file_action' value='threejs_gen' type='submit'>Make 3D Visualization files</button>
+					</form>
+				</div>
+				<div id='visualization' class='tab-pane fade'>
+
+				</div>
+				<div id='partiviewFiles' class='tab-pane fade'>
+
+				</div>
+			</div>
+
 
 			<div id="first" class="tabcontent" style="display: block;">
 				<?php
@@ -173,7 +222,7 @@
 							));
 
 							$url = site_url() . '/partiview_generator/display_file' . $file_name;
-							echo '<a href="' .$url. '">' .$file_name. '</a><br/>';
+							echo '<a href="' . $url . '">' . $file_name  . '</a><br/>';
 						}
 					}
 					echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
@@ -198,7 +247,7 @@
 							));
 
 							$url = site_url() . '/partiview_generator/display_file' . $file_name;
-							echo '<a href="' .$url. '">' .$file_name. '</a><br/>';
+							echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
 
 						}
 					}
@@ -209,15 +258,15 @@
 					/*might need to change the value of launch to something else*/
 				?>
 			</div>
-			<div id="third" class="tabcontent">
+			<div id='third' class='tabcontent'>
 				 <?php
 					foreach($files as $file => $file_name)
 					{
 						$file_parts=pathinfo($file_name);
 
-						if(($file_parts['extension']=="speck")
-							|| ($file_parts['extension']=="cf")
-							|| ($file_parts['extension']=="cmap"))
+						if($file_parts['extension'] == 'speck'
+							|| $file_parts['extension'] == 'cf'
+							|| $file_parts['extension'] == 'cmap')
 						{
 							echo form_checkbox(array(
 								'name' => 'checkbox[]',
@@ -295,6 +344,7 @@
 				$('canvas:not(#placeholderCanvas)').remove();
 			}
 
+			// TODO rename this to something that actually makes any kind of sense...
 			function openCity(evt, cityName) {
 				var i, tabcontent, tablinks;
 				tabcontent = document.getElementsByClassName("tabcontent");

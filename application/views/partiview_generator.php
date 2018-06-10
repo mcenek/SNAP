@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+		<!-- TODO put these global script imports in a single location -->
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js"
 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 			crossorigin="anonymous"></script>
@@ -33,14 +34,11 @@
 				border: 1px solid #ccc;
 				background-color: #f1f1f1;
 			}
-			/* Style the buttons inside the tab */
-			div.tab button {
-				background-color: inherit;
+			ul.nav-tabs > li {
+				/*background-color: inherit;*/
 				float: left;
 				border: none;
 				outline: none;
-				cursor: pointer;
-				padding: 14px 16px;
 				transition: 0.3s;
 				font-size: 17px;
 			}
@@ -53,8 +51,7 @@
 				background-color: #ccc;
 			}
 			/* Style the tab content */
-			.tabcontent, .tab-content {
-				display: none;
+			.tab-content {
 				padding: 6px 12px;
 				border: 1px solid #ccc;
 				border-top: none;
@@ -125,6 +122,7 @@
 			}
 		</style>
 	</head>
+
 	<body>
 		<?php include 'navi.php'; ?>
 
@@ -147,15 +145,11 @@
 			</ul>
 
 			<p>
-				Select what Network Analysis files you would like to generate for visualization then click Make 3D Visualization files.<br />
-				To run a file in the visualizer select what file you would like to run then click Launch 3D Visualization.
+				Select what Network Analysis files you would like to generate for
+				visualization then click Make 3D Visualization files.<br />
+				To run a file in the visualizer select what file you would like to
+				run then click Launch 3D Visualization.
 			</p>
-
-			<div class="tab">
-				<button class="tablinks active" onclick="openCity(event, 'first')">Network Analysis Files</button>
-				<button class="tablinks" onclick="openCity(event, 'second')">In Browser 3D Visualization Files</button>
-				<button class="tablinks" onclick="openCity(event, 'third')">Party View Files</button>
-			</div>
 
 			<ul class="nav nav-tabs tab">
 				<li class="active">
@@ -171,7 +165,8 @@
 
 			<div class='tab-content'>
 				<div id='networkFiles' class='tab-pane fade in active'>
-					<?php
+					<form method='post' action='partiview_generator/submit_files'>
+						<?php
 						foreach($files as $file => $file_name)
 						{
 							$file_parts=pathinfo($file_name);
@@ -180,7 +175,6 @@
 							{
 								echo form_checkbox(array(
 									'name' => 'checkbox[]',
-									'id' => 'checkbox[]',
 									'value' => $file_name,
 									'checked' => FALSE
 								));
@@ -189,106 +183,75 @@
 								echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
 							}
 						}
-					?>
-					<form method='post' action='partiview_generator/submit_files'>
+						?>
 						<input type='checkbox' name='select_all' onClick='selectAll(this)'>Select All</input>
 						<br/>
 						<br/>
-						<button class='btn btn-primary' name='file_action' value='threejs_gen' type='submit'>Make 3D Visualization files</button>
+						<button class='btn btn-primary' name='file_action' value='vis_gen' type='submit'>
+							Make 3D Visualization files
+						</button>
+						<button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
+						<button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
 					</form>
 				</div>
 				<div id='visualization' class='tab-pane fade'>
+					<form method="post" action="partiview_generator/submit_files">
+						<?php
+						foreach($files as $file => $file_name)
+						{
+							$file_parts=pathinfo($file_name);
 
+							if($file_parts['extension']=="txt")
+							{
+								echo form_checkbox(array(
+									'name' => 'checkbox[]',
+									'value' => $file_name,
+									'checked' => FALSE
+								));
+
+								$url = site_url() . '/partiview_generator/display_file' . $file_name;
+								echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+							}
+						}
+						?>
+						<input type='checkbox' name='select_all' onClick='selectAll(this)'> Select All
+						<button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
+						<button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
+					</form>
 				</div>
 				<div id='partiviewFiles' class='tab-pane fade'>
+					<form method="post" action="partiview_generator/submit_files">
+						<?php
+						foreach($files as $file => $file_name)
+						{
+							$file_parts=pathinfo($file_name);
 
+							if($file_parts['extension'] == 'speck'
+								|| $file_parts['extension'] == 'cf'
+								|| $file_parts['extension'] == 'cmap')
+							{
+								echo form_checkbox(array(
+									'name' => 'checkbox[]',
+									'value' => $file_name,
+									'checked' => FALSE
+								));
+
+								$url = site_url() . '/partiview_generator/display_file' . $file_name;
+								echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+							}
+						}
+						?>
+						<input type='checkbox' name='select_all' onClick='selectAll(this)'> Select All
+						<button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
+						<button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
+					</form>
 				</div>
-			</div>
-
-
-			<div id="first" class="tabcontent" style="display: block;">
-				<?php
-					foreach($files as $file => $file_name)
-					{
-						$file_parts=pathinfo($file_name);
-
-						if($file_parts['extension']=="gexf")
-						{
-							echo form_checkbox(array(
-								'name' => 'checkbox[]',
-								'id' => 'checkbox[]',
-								'value' => $file_name,
-								'checked' => FALSE
-							));
-
-							$url = site_url() . '/partiview_generator/display_file' . $file_name;
-							echo '<a href="' . $url . '">' . $file_name  . '</a><br/>';
-						}
-					}
-					echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
-					echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
-					echo '<br/>';
-					echo ' <button class="btn btn-primary" name="file_action" value="download" type="submit">Make 3D Visualization files</button>';
-				?>
-			</div>
-			<div id="second" class="tabcontent">
-				<?php
-					foreach($files as $file => $file_name)
-					{
-						$file_parts=pathinfo($file_name);
-
-						if($file_parts['extension']=="txt")//Check File Extensions, display only produced files
-						{
-							echo form_checkbox(array(
-								'name' => 'checkbox[]',
-								'id' => 'checkbox[]',
-								'value' => $file_name,
-								'checked' => FALSE
-							));
-
-							$url = site_url() . '/partiview_generator/display_file' . $file_name;
-							echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
-
-						}
-					}
-					echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
-					echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
-					echo '<br/>';
-					echo ' <button class="btn btn-primary" name="file_action" value="Launch" style="display: none;" type="submit">Launch 3D Visualization</button>';
-					/*might need to change the value of launch to something else*/
-				?>
-			</div>
-			<div id='third' class='tabcontent'>
-				 <?php
-					foreach($files as $file => $file_name)
-					{
-						$file_parts=pathinfo($file_name);
-
-						if($file_parts['extension'] == 'speck'
-							|| $file_parts['extension'] == 'cf'
-							|| $file_parts['extension'] == 'cmap')
-						{
-							echo form_checkbox(array(
-								'name' => 'checkbox[]',
-								'id' => 'checkbox[]',
-								'value' => $file_name,
-								'checked' => FALSE
-							));
-
-							$url = site_url() . '/partiview_generator/display_file' . $file_name;
-							echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
-						}
-					}
-					echo '<form id="checkbox_form" name="checkbox_form" method="post" action="partiview_generator/submit_files">';
-					echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
-				?>
 			</div>
 
 			<p id="actionButtons">
 				<button class="btn btn-primary" type="button" onClick="fireVisualizer()">Start Visualization</button>
 				<button class="btn btn-primary" type="button" onclick="stopVisualizer()">Stop Visualization</button>
-				<button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
-				<button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
+
 			</p>
 		</div>
 
@@ -315,7 +278,7 @@
 					<p><input type="checkbox" name="noodlesCheck" onclick="toggleNoodles(this.checked)" checked> Noodles</p>
 					<p><input type="checkbox" name="egdesCheck" onclick="toggleEdges(this.checked)" checked> Edges</p>
 				</p>
-		   </div>
+			</div>
 		</div>
 
 		<script>
@@ -344,28 +307,10 @@
 				$('canvas:not(#placeholderCanvas)').remove();
 			}
 
-			// TODO rename this to something that actually makes any kind of sense...
-			function openCity(evt, cityName) {
-				var i, tabcontent, tablinks;
-				tabcontent = document.getElementsByClassName("tabcontent");
-				for (i = 0; i < tabcontent.length; i++) {
-					tabcontent[i].style.display = "none";
-				}
-				tablinks = document.getElementsByClassName("tablinks");
-				for (i = 0; i < tablinks.length; i++) {
-					tablinks[i].className = tablinks[i].className.replace(" active", "");
-				}
-				document.getElementById(cityName).style.display = "block";
-				evt.currentTarget.className += " active";
-			}
-
 			var assetPath = "<?php echo asset_url(); ?>";
-
 		</script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/three.js"></script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/OrbitControls.js"></script>
-		<script type="text/javascript" src="<?php echo asset_url(); ?>js/Detector.js"></script>
-		<script type="text/javascript" src="<?php echo asset_url(); ?>js/stats.min.js"></script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextTexture/THREE.TextTexture.js"></script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/THREE.TextSprite/THREE.TextSprite.js"></script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/visualize.js"></script>

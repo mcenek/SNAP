@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script type="text/javascript" src="<?php echo asset_url(); ?>js/active_preprocess.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+
 		<title>Raw Uploads</title>
 
 		<script type="text/javascript">
-		    function selectAll(box) {
+			var pids;
+		    function selectAll(box) 
+		    {
 				var checkBoxes = document.getElementsByTagName('input');
 				for(var i=0; i < checkBoxes.length; i++) {
 					if(checkBoxes[i].type == 'checkbox') {
@@ -17,8 +20,73 @@
 					}
 				}
 			}
-		</script>
+			$(function(){
+				$('#CANCELLBUTTON').on('click', function () 
+				{
+					//console.log(pids);
+					var returnPIDs = [];
+					returnPIDs = pids.Pids;
+					var checkBoxes = $('input:checked[name^="checkbox"]');
+					var files = [];
+					$.each(checkBoxes, function(index, item) 
+					{
+						files.push($(item).val());
+					})
 
+					console.log("my PIds: " + returnPIDs);
+				     $.ajax({
+			            url: "raw_uploads/kill_process",
+			            method: "POST",
+			            data: {"PIDS": returnPIDs,
+			            	   "checkbox": files,
+		        			},
+			            success: function(results)
+			            {
+			            	console.log("Files deleted");
+			            }
+			        });
+				})
+
+				$('#FilePostButton').on('click', function () 
+				{
+					var checkBoxes = $('input:checked[name^="checkbox"]');
+					var files = [];
+					if(checkBoxes != null)
+					{
+
+						$.each(checkBoxes, function(index, item) 
+						{
+							files.push($(item).val());
+						})
+						console.log(files);
+
+					     $.ajax({
+				            url: "raw_uploads/batch_preprocess",
+				            method: "POST",
+				            data: {
+				            	"checkbox": files, 
+				            	"stemming": $('#stemming').val(),
+				            	"tokenize": $('#tokenize').val(),
+				            	"sent_split": $('#sent_split').val(),
+				            	"pos_tag": $('#pos_tag').val(),
+				            	"lemmatize": $('#lemmatize').val(),
+				            	"ner_tag": $('#ner_tag').val(),
+				        },
+			            success: function(test)
+			            {
+
+		            		//console.log("Files processing");
+	            			pids = JSON.parse(test);
+	            			console.log(pids);
+
+			            }
+				        });
+				 	}
+				});
+
+			})
+			
+		</script>
 	</head>
 	<body>
 		<?php include 'navi.php'; ?>
@@ -28,9 +96,10 @@
 			Provided toolkits allow for Stemming, Tokenization, Lemmatization, Sentence Splitting, Parts of Speech Recognition and Name Entity Recognition.<br />
 			File dates must be present in the file name in the form YYYY-MM-DD ie 2004-05-26.<br />
 			This date is used as time stamp to later represent the the file's nodes as a layer in 3D space.</p>
+
 			<br />
 
-			<?php
+			<?php 
 			echo $error;
 			$message = $this->session->flashdata();
 			if(!empty($message['flash_message'])){
@@ -44,7 +113,7 @@
 			?>
 
 			<?php echo form_open_multipart('raw_uploads/upload_text'); ?>
-			<div id="upload_area">
+			<div id="upload_area"> 
 				<div class="upload_form" id="upload_form">
 					<input  type="file" name="raw_files[]" id="raw_files[]" multiple="multiple" accept="text/plain"/>
 					<input class="btn btn-primary" type="submit" value="Upload" name="submit"/>
@@ -52,7 +121,7 @@
 			</div>
 			</form>
 
-			<?php
+			<?php 
 				echo '<ul>';
 				echo '<form id="checkbox_form" name="checkbox_form" method="post" action="raw_uploads/submit_files" >';
 				//echo '<form id="checkbox_form" name="checkbox_form" method="post" action="/submit_files">';
@@ -75,16 +144,17 @@
 				}
 
 				echo '<br/>';
-
+				 
 				// <div>
 				// 	<ul>
 				// 		<li>Stemming</li><li>Tokenization</li><li>Sentence Splitting</li><li>POS Tagging</li><li>Lemmatization</li><li>Name-Entity-Recogition</li>
 				// 	</ul>
 				// </div>
-
-
-				echo '<button class="btn btn-primary" name="file_action" value="batch_preprocess"  type="submit">Preprocess</button>';
-
+				echo '<strong style="color:red">FILES 400KB take roughly 1.5 minutes to process Files larger than this will take Exponentially longer!</strong></br>';
+				
+				echo '<button class="btn btn-primary" id="FilePostButton" name="file_action" value="batch_preprocess"  type="button">Preprocess</button>
+				<button class="btn btn-danger" id="CANCELLBUTTON"  name="file_action" value="kill" type="button">Cancel</button>';
+				
 				echo form_dropdown('stemming',
 					array(
 						'' => 'Stemming',
@@ -149,8 +219,10 @@
 
 				for($i = 0; $i < 5; $i++){
 					echo '<br/>';
-				}
-				echo '<button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>	<button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>';
+				} 
+				echo '<button class="btn btn-danger"  name="file_action" value="delete"    type="submit">Delete</button> 
+					  	
+					  <button class="btn btn-primary" name="file_action" value="download"  type="submit">Download</button>';
 
 				echo '</form>';
 				echo '</ul>';
@@ -158,3 +230,4 @@
 		</div>
 	</body>
 </html>
+

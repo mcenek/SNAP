@@ -8,6 +8,23 @@ Clone the repository. If you are a new developer contributing to SNAP, you
 should fork the repository from mcenek/SNAP, unless Dr. Cenek has told you
 otherwise.
 
+Simple setup:
+  Install WAMP,MAMP, or LAMP.
+  Install phpMyAdmin in the www/ directory
+  Install SNAP in the www/ director
+  Install CodeIgnighter in you snap Program
+  ///flip \ to / on mac/Linux
+  Create C:\Users\jessgrunblatt\users-uaa\ddonnally@alaska.edu\project_one\-partiview_generator\    
+                                                                         -preprocessed\
+                                                                         -raw\
+                                                                         -semantic_networks\
+  ///where each of the directories under project_one are their own directories
+  ///following these plus the steps above and below should get you a succesful install
+  Create an account on the production database
+  download the production database
+  Create your databases on your local machine
+  
+  
 In repository, install Code Igniter. This basically means downloading the
 latest version, unzipping it, and migrating its contents into the repository.
  - You may want to rename the application folder in the repository before you do
@@ -40,7 +57,9 @@ In your database.php file, update the username and password fields to whatever
 database account you want the site to use. If you haven't set up the mysql db
 yet, do so now: There are lots of tutorials online for setting up a mysql db
 locally. You'll also need an apache server set up, if you're on a linux machine,
-follow a guide on setting up a LAMP Server, if you're on a mac, just use MAMP.
+follow a guide on setting up a LAMP Server, if you're on a mac, just use MAMP, and if you're on windows use WAMP.
 
+
+                            
 Unless I've forgotten something crucial (likely), as long as you have your
 server and database running, you should be set up. Go to your base url to test.

@@ -26,7 +26,7 @@ class settings extends CI_Controller{
 	{
 		if($this->session->userdata('logged_in'))
 		{
-			// $files = array_filter(scandir($this->file_dir . '/settings'),
+			// $files = array_filter(scandir($this->file_dir . '/settings'), 
 		 	// function($item)
 			// {
 			// 	return !is_dir($this->file_dir.'/' . $item);
@@ -51,7 +51,7 @@ class settings extends CI_Controller{
 			$this->load->view('settings', $data);
 		}
 	}
-
+	
 	public function save_use_freq($bool)
 	{
 		//echo '<script type="text/javascript">alert("' . $bool . '"); </script>';
@@ -63,7 +63,7 @@ class settings extends CI_Controller{
 		}
 		$id = $this->session->userdata('id');
 		$data = array(
-           'use_freq' => $bool,
+           'use_freq' => $bool,  
         );
 		$this->db->where('id', $id);
 		$this->db->update('users', $data);
@@ -73,7 +73,7 @@ class settings extends CI_Controller{
 	public function save_low_freq($low_freq,$high_freq)
 	{
 		$id = $this->session->userdata('id');
-		if (TRUE) {
+		if ($low_freq<=100 && $low_freq >$high_freq) {
 			$data = array(
            		'freq_lower_bound' => $low_freq,
         	);
@@ -86,14 +86,14 @@ class settings extends CI_Controller{
 	public function save_high_freq($high_freq, $low_freq)
 	{
 		$id = $this->session->userdata('id');
-		if (TRUE)
+		if ($high_freq<$low_freq && $high_freq >=0) 
 		{
 			$data = array(
            		'freq_upper_bound' => $high_freq,
-
+           
         	);
 			$this->db->where('id', $id);
-			$this->db->update('users', $data);
+			$this->db->update('users', $data); 
 			$this->session->set_userdata('freq_upper_bound', $high_freq);
 		}
 		// else{
@@ -124,7 +124,7 @@ class settings extends CI_Controller{
         	);
 
 			$this->db->where('id', $id);
-			$this->db->update('users', $data);
+			$this->db->update('users', $data); 
 			$this->session->set_userdata('mod_resolution', $mod_resolution);
 		}
 	}
@@ -192,7 +192,7 @@ class settings extends CI_Controller{
 		$this->session->set_userdata('shape', $shape);
 	}
 
-
+	
 
 	public function save_settings()
 	{
@@ -284,6 +284,12 @@ class settings extends CI_Controller{
 			echo $error['message'];
 			//return false;
 		}
+		if(!@mkdir($dir . '/partiview_generator/individual_gexfs', 0777)){
+			$error = error_get_last();
+			echo $error['message'];
+			//return false;
+		}
+
 		if(!@mkdir($dir . '/parti_output', 0777)){
 			$error = error_get_last();
 			echo $error['message'];

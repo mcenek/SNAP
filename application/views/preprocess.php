@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
 	<script type="text/javascript" src="<?php echo asset_url(); ?>js/active_preprocess.js"></script>
+
+	<link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
+
 	<style>
 		.right{
 			position: absolute;
@@ -19,7 +18,7 @@
 </head>
 	<body>
 		<?php include 'navi.php'; ?><!-- Load Navigation -->
-		<?php
+		<?php 
 			echo form_open('raw_uploads/preprocess', '', array('file_name' => $file_name));//Text document to be processed is displayed in this box.
 			$fattr = array(
 				'name' => 'raw_textbox',
@@ -36,7 +35,7 @@
 		<?php echo validation_errors(); ?>
 		<div id="preprocess_dropdowns">
 
-		<?php
+		<?php 
 		/*TODO:  Add labels above menus for easier readability*/
 			echo form_dropdown('stemming',
 				array(

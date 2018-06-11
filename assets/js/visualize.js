@@ -210,7 +210,6 @@ function loadMetaColors() {
                 var text = request.responseText;
                 var lines = text.split( "\n" );
                 console.log( "Loading file:"+metaColorFilename );
-                console.log( "saw the file: "+text );
                 layercount = lines[0].split( " " )[1];
                 colorcount = lines[1].split( " " )[1];
                 console.log( "Layer Count:"+layercount );

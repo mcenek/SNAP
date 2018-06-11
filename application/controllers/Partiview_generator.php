@@ -77,8 +77,6 @@ class Partiview_generator extends CI_Controller{
 			. $date_range . ' ' . $skew_x . ' ' . $skew_y . ' ' . $skew_z . ' ' . $shape ;
 
 		$output=shell_exec($cmd);
-		echo $output;
-		return;
 		if($output=='')
 		{
 			$output='Network Visualization Generation failed';
@@ -105,12 +103,7 @@ class Partiview_generator extends CI_Controller{
 		$cmd=sprintf('java -jar %s %s %s %s %s %s %s %s', $threejsgen_path, $project_name,
 			$date_range, $skew_x, $skew_y, $skew_z, $shape, $gexf_dir);
 
-		echo $cmd;
-		return;
-
 		$output=shell_exec($cmd);
-		echo $output;
-		return;
 		if($output=='')
 		{
 			$output='Threejs file generation failed';
@@ -164,8 +157,6 @@ class Partiview_generator extends CI_Controller{
 	{
 		if(is_null($this->input->post('checkbox')))
 		{
-			echo "didn't see any checkboxes...";
-			return;
 			redirect('partiview_generator', 'refresh');//--reload the page
 		}
 		else

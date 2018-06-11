@@ -210,6 +210,7 @@ function loadMetaColors() {
                 var text = request.responseText;
                 var lines = text.split( "\n" );
                 console.log( "Loading file:"+metaColorFilename );
+                console.log( "saw the file: "+text );
                 layercount = lines[0].split( " " )[1];
                 colorcount = lines[1].split( " " )[1];
                 console.log( "Layer Count:"+layercount );
@@ -226,7 +227,7 @@ function loadMetaColors() {
                 resolve();
             }
         }
-        request.open( 'colors', 'threejs', true );
+        request.open( 'GET', 'partiview_generator/get_colors', true );
         request.setRequestHeader("Cache-Control", "no-cache");
         request.send();
     });
@@ -388,7 +389,7 @@ function loadLayers() {
                 loadSome();
             }
         }
-        request.open( 'layers', 'threejs', true );
+        request.open( 'GET', 'partiview_generator/get_layers', true );
         request.setRequestHeader("Cache-Control", "no-cache");
         request.send();
     });
@@ -434,7 +435,7 @@ function loadEdges() {
                 resolve();
             }
         }
-        request.open( 'edges', 'threejs', true );
+        request.open( 'GET', 'partiview_generator/get_edges', true );
         request.setRequestHeader("Cache-Control", "no-cache");
         request.send();
     });
@@ -518,7 +519,7 @@ function loadNoodles() {
                 resolve();
             }
         }
-        request.open( 'noodles', 'threejs', true );
+        request.open( 'GET', 'partiview_generator/get_noodles', true );
         request.setRequestHeader("Cache-Control", "no-cache");
         request.send();
     });

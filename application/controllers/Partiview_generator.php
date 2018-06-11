@@ -3,6 +3,7 @@
 class Partiview_generator extends CI_Controller{
 	public $data;
 	public $file_dir;
+	public $current_project;
 
 	public function __construct()
 	{
@@ -11,8 +12,14 @@ class Partiview_generator extends CI_Controller{
 		$this->load->library('form_validation');
 
 		if($this->session->userdata('logged_in')){
+
+			// $data['projects'] = $this->projects->get_projects($this->session->userdata('id'));
+			// $data['current_project'] = $this->projects->get_project($this->session->userdata('project_id'));
+
+			$this->projects->get_project($this->session->userdata('project_id'));
 			$this->data = $this->session->userdata;
 			$this->file_dir = $this->data['file_dir'];
+			$this->current_project = $this->projects->get_project($this->data['project_id']);
 		}
 		else{
 			redirect('home', 'refresh');
@@ -45,7 +52,7 @@ class Partiview_generator extends CI_Controller{
 		$gexf_file='';
 		$file_dates='';
 
-		$files=scandir($this->file_dir.'/partiview_generator/');
+		$files=scandir($this->file_dir . '/partiview_generator/');
 		foreach ($files as $file) //Set gexf and timestamp files for partiview
 		{
 			// TODO one of these isn't needed anymore...
@@ -70,6 +77,8 @@ class Partiview_generator extends CI_Controller{
 			. $date_range . ' ' . $skew_x . ' ' . $skew_y . ' ' . $skew_z . ' ' . $shape ;
 
 		$output=shell_exec($cmd);
+		echo $output;
+		return;
 		if($output=='')
 		{
 			$output='Network Visualization Generation failed';
@@ -78,40 +87,35 @@ class Partiview_generator extends CI_Controller{
 		redirect('partiview_generator', 'refresh');
 	}
 
-	// TODO create a threejsFileGeneration function
 	public function threejsFileGeneration()
 	{
 		$this->index();
 		$post=$this->input->post();
-		// TODO replace with rel path
-		$threejsgen_path='/Applications/MAMP/htdocs/SNAP/assets/threejsGen/threejsgen.jar ';
+		$threejsgen_path=$this->config->item('base_directory') . 'assets/ThreeJsGen/ThreeJsGen.jar';
 		$output='';
 		$cmd='';
-		$gexf_file='';
-		$file_dates='';
+		$gexf_dir=$this->file_dir . '/partiview_generator/';
 
-		$files=scandir($this->file_dir.'/partiview_generator/');
+		$project_name=$this->current_project->name;
+		$date_range=$this->session->userdata('date_range');
+		$skew_x=$this->session->userdata('skew_x');
+		$skew_y=$this->session->userdata('skew_y');
+		$skew_z=$this->session->userdata('skew_x');
+		$shape=$this->session->userdata('shape');
+		$cmd=sprintf('java -jar %s %s %s %s %s %s %s %s', $threejsgen_path, $project_name,
+			$date_range, $skew_x, $skew_y, $skew_z, $shape, $gexf_dir);
 
-		$date_range= $this->session->userdata('date_range');
-		$skew_x= $this->session->userdata('skew_x');
-		$skew_y= $this->session->userdata('skew_y');
-		$skew_z= $this->session->userdata('skew_x');
-		$shape= $this->session->userdata('shape');
-		$cmd='java' . ' -jar ' . $threejsgen_path . ' TODO other arguments' ;
+		echo $cmd;
+		return;
 
 		$output=shell_exec($cmd);
+		echo $output;
+		return;
 		if($output=='')
 		{
 			$output='Threejs file generation failed';
 		}
 		redirect('partiview_generator', 'refresh');
-	}
-
-	// TODO create function to pass threejs files to client
-	public function pass_threejs_files($projectName)
-	{
-		// this should be called via ajax, and pass back the contents of the
-		// threejs files
 	}
 
 	public function get_colors()
@@ -160,6 +164,8 @@ class Partiview_generator extends CI_Controller{
 	{
 		if(is_null($this->input->post('checkbox')))
 		{
+			echo "didn't see any checkboxes...";
+			return;
 			redirect('partiview_generator', 'refresh');//--reload the page
 		}
 		else
@@ -178,17 +184,16 @@ class Partiview_generator extends CI_Controller{
 				shell_exec($cmd);
 				redirect('partiview_generator', 'refresh');
 			}
-			else if($this->input->post('file_action') == 'threejs_gen')
-			{
-
-			}
-			else
+			else if($this->input->post('file_action') == 'vis_gen')
 			{
 				$this->partiGeneration($this->input->post('checkbox'));
+				$this->threejsFileGeneration($this->input->post('checkbox'));
 			}
 		}
 	}
 
+	// TODO almost constant download and delete functions like these should be
+	// stored in one place, not rewritten every page
 	public function download($files)
 	{
 		if(count($files) == 1)

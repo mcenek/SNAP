@@ -11,8 +11,10 @@ import java.util.stream.Stream;
 
 public class Main {
 	private static int fileCounter = 100;
-	
-	private static void partiviewGen(String projectName, int range, double xSkew, double ySkew, double zSkew, String shape, String iGEXFPath) throws IOException{
+
+	private static void partiviewGen(String projectName, int range, double xSkew,
+		double ySkew, double zSkew, String shape, String iGEXFPath) throws IOException {
+
 		GexfReader reader = new GexfReader();
 		ArrayList<Layer> tempLayers = new ArrayList<Layer>();
 		ArrayList<Layer> layers;
@@ -21,7 +23,7 @@ public class Main {
 		ArrayList<NodeColor> colorList;
 		MeshLogic logic;
 		int lowestZ;
-		
+
 		System.out.println("PATH " + iGEXFPath);
 		if(iGEXFPath != null){
 			try(Stream<Path> paths = Files.walk(Paths.get(iGEXFPath))){
@@ -35,34 +37,34 @@ public class Main {
 			    });
 			}
 		}
-		
+
 		logic = new MeshLogic(tempLayers);
 		colorList = logic.getColorList(tempLayers);
 		lowestZ = logic.lowestZ(tempLayers);
 		layers = logic.setCentroids(tempLayers);
 		//logic.printLayers(layers);
 		layers = logic.resetNodeValuesToCentroid(layers);
-		
+
 		// TODO adapt for prod
 		System.out.println("Testing templayer dates");
 		logic.verifyLayerDates(tempLayers);
 		System.out.println("Testing layer dates");
 		logic.verifyLayerDates(layers);
-		
+
 		writer.writeMetaColors(layers.size(), colorList, iGEXFPath, projectName);
-		
+
 		ArrayList<Layer> newLayers = logic.sortLayers(layers);
 		links = logic.getLinks();
 		newLayers = logic.createAdjCentroid(links, newLayers);
-		
+
 		// TODO adapt for prod
 		System.out.println("Testing newLayer dates");
 		logic.verifyLayerDates(newLayers);
-		
+
 		writer.writeLayers(newLayers, colorList, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
 		writer.writeEdges(newLayers, iGEXFPath, projectName);
 		writer.writeNoodles(logic.linkAndGet(), iGEXFPath, projectName);
-		
+
 //		for(Map.Entry<Integer, Link> entry: links.entrySet()){
 //			Integer modClass = entry.getKey();
 //			Link tempLink = entry.getValue();
@@ -85,13 +87,13 @@ public class Main {
 		//writer.writeLabels(newLayers, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
 		//writer.writeEdges(newLayers, colorList, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
 	}
-	
+
 	public static void main(String[] args) throws IOException{
 		if(args.length == 0) {
 			partiviewGen("test", 91, 1, 1, 1, "hybrid", "gexfs");
 			System.exit(0);
 		}
-		
+
 		// Mandatory Arguments
 		String projectName = args[0];
 
@@ -102,7 +104,7 @@ public class Main {
 		double zSkew = 1; // Shorten or stretch the z axis
 		String shape = "hybrid"; // Shape of the structure of the 3D objects.(wire/solid/point/hybrid)
 		String individualGEXFFolder = null; // Path to the folder containing individual GEXFs
-		
+
 		if(args.length >= 2){
 			range = Integer.valueOf(args[1]); // Set Argument for range [IntervalSize(int)]
 		}

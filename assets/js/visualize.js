@@ -72,8 +72,6 @@ function init(){
 
     container.addEventListener( 'resize', onWindowResize, false );
     render();
-
-
 }
 
 function updateLabelStatus() {
@@ -228,7 +226,7 @@ function loadMetaColors() {
                 resolve();
             }
         }
-        request.open( "GET", metaColorFilename, true );
+        request.open( 'GET', 'partiview_generator/get_colors', true );
         request.setRequestHeader("Cache-Control", "no-cache");
         request.send();
     });
@@ -380,7 +378,7 @@ function loadLayers() {
                             resolve();
                         }
                         if ( i + 1 < lines.length && i % 50 == 0) {
-                            console.log('Pausing for a bit...'+i);
+                            //console.log('Pausing for a bit...'+i);
                             setTimeout(loadSome, 5);
                             i++;
                             break;
@@ -390,7 +388,7 @@ function loadLayers() {
                 loadSome();
             }
         }
-        request.open( "GET", layerFilename, true );
+        request.open( 'GET', 'partiview_generator/get_layers', true );
         request.setRequestHeader("Cache-Control", "no-cache");
         request.send();
     });
@@ -436,7 +434,7 @@ function loadEdges() {
                 resolve();
             }
         }
-        request.open( "GET", edgeFilename, true );
+        request.open( 'GET', 'partiview_generator/get_edges', true );
         request.setRequestHeader("Cache-Control", "no-cache");
         request.send();
     });
@@ -520,7 +518,7 @@ function loadNoodles() {
                 resolve();
             }
         }
-        request.open( "GET", noodleFilename, true );
+        request.open( 'GET', 'partiview_generator/get_noodles', true );
         request.setRequestHeader("Cache-Control", "no-cache");
         request.send();
     });

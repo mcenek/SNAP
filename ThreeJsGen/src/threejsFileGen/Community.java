@@ -1,79 +1,95 @@
+//
+// Copyright Martin Cenek <drcenek@gmail.com> 2016-2019
+//
+// All source code is released under the terms of the MIT License.
+// See LICENSE for more information.
+// Contributions from: 
+// Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
+//
 package threejsFileGen;
 
 import java.util.HashMap;
 
-public class Community{
-	private HashMap<String, Node> nodesHM;
-	private int modularityValue; // Also known as modularity class or community number
+public class Community {
+	private static boolean logging = Main.logging;
+
+	private HashMap<String, Node> nodes;
+	private int communityId; // Also known as modularity class or community number
 	private NodeColor color;
 	private Centroid centroid;
 	private Centroid adjustedCentroid;
-	
-	// Constructor
-	public Community(){
-		nodesHM = new HashMap<String, Node>();
+
+	// Constructors
+	public Community() {
+		nodes = new HashMap<String, Node>();
 	}
-	public Community(int modularityValueIn){
-		nodesHM = new HashMap<String, Node>();
-		modularityValue = modularityValueIn;
+	public Community(int communityId) {
+		nodes = new HashMap<String, Node>();
+		this.communityId = communityId;
 	}
 
 	// nodesHM getter/setter
-	public HashMap<String, Node> getNodes(){
-		return nodesHM;
+	public HashMap<String, Node> getNodes() {
+		return nodes;
 	}
-	public void setNodes(HashMap<String, Node> nodesHMIn){
-		nodesHM = nodesHMIn;
+	public void setNodes(HashMap<String, Node> nodesHMIn) {
+		nodes = nodesHMIn;
 	}
 
 	// modularityValue getter/setter
-	public int getModValue(){
-		return modularityValue;
+	public int getCommunityId() {
+		return communityId;
 	}
-	public void setModValue(int modValueIn){
-		modularityValue = modValueIn;
+	public void setCommunityId(int communityId) {
+		this.communityId = communityId;
 	}
 
 	// color getter/setter
-	public NodeColor getColor(){
+	public NodeColor getColor() {
 		return color;
 	}
-	public void setColor(NodeColor colorIn){
+	public void setColor(NodeColor colorIn) {
 		color = colorIn;
 	}
-	
+
 	// centroid getter/setter
-	public Centroid getCentroid(){
+	public Centroid getCentroid() {
 		return centroid;
 	}
-	public void setCentroid(Centroid centroidIn){
+	public void setCentroid(Centroid centroidIn) {
 		centroid = centroidIn;
 	}
-	
+
 	// adjustedCentroid getter/setter
-	public Centroid getAdjCentroid(){
+	public Centroid getAdjCentroid() {
 		return adjustedCentroid;
 	}
-	public void setAdjCentroid(Centroid centroidIn){
+	public void setAdjCentroid(Centroid centroidIn) {
 		adjustedCentroid = centroidIn;
 	}
-	
-	public boolean containsKey(String token){
-		return nodesHM.containsKey(token);
+
+	public boolean containsKey(String token) {
+		return nodes.containsKey(token);
 	}
-	
+
 	// add Node to HashMap
-	public void addNode(Node nodeIn){
-		if(!nodesHM.containsKey(nodeIn.getLabel())){
-			nodesHM.put(nodeIn.getLabel(), nodeIn);
+	public boolean addNode(Node nodeIn) {
+		if(!nodes.containsKey(nodeIn.getLabel())) {
+			nodes.put(nodeIn.getLabel(), nodeIn);
+		} else {
+			if(logging)
+				System.err.println("Cannot insert node, one already exists with same key.");
+			return false;
 		}
+		return true;
 	}
-	
+
+	// get the largest node within this community
 	public String dominantConcept() {
 		double max = -1;
 		String dominant = "";
 		
-		for( Node node : nodesHM.values() ) {
+		for( Node node : nodes.values() ) {
 			if( node.getSize() > max ) {
 				max = node.getSize();
 				dominant = node.getLabel();

@@ -1,3 +1,11 @@
+//
+// Copyright Martin Cenek <drcenek@gmail.com> 2016-2019
+//
+// All source code is released under the terms of the MIT License.
+// See LICENSE for more information.
+// Contributions from: 
+// Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
+//
 package threejsFileGen;
 
 import java.io.File;
@@ -10,86 +18,83 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GexfReader {
-
+	private static boolean logging = Main.logging;
 	Set<String> dateStrings = new HashSet<String>();
 	Set<Integer> dateInts = new HashSet<Integer>();
 	
-	public Layer createLayer(Path filePath, int fileCounter) {
+	public static String edgeToken = "<edge";
+	public static String nodeToken = "<node";
+
+	public Layer createLayerFromFile(Path filePath, int fileCounter) {
 		Layer layer;
-		System.out.println("path: "+filePath.toString());
-		
-		String date = findDate(filePath.toString());
-		System.out.println("date: "+date);
-		if( !dateStrings.add(date) ) {
-			System.out.println( "Duplicate Date:"+date );
-			System.exit(0);
+
+		if (logging)
+			System.out.println("Path: " + filePath.toString());
+
+		String dateString = findDate(filePath.toString());
+		int dateInt = convertDateToInt(0, dateString);
+		if (logging)
+			System.out.println("Date string: " + dateString + " int: " + dateInt);
+		if (!dateStrings.add(dateString) || !dateInts.add(dateInt)) {
+			System.err.println("Error - Duplicate Date string: " + dateString + " int: " + dateInt);
+			System.exit(1);
 		}
-		
-		int intDate = convertDateToInt(0, date);
-		System.out.println("Z: "+intDate);
-		if( !dateInts.add(intDate) ) {
-			System.out.println( "Duplicate Date:"+date+" int:"+intDate );
-			System.exit(0);
-		}
-		
-		layer = readFile(filePath.toString(), intDate, fileCounter);
+
+		layer = readFile(filePath.toString(), dateInt, fileCounter);
 		return layer;
 	}
 
-	public Layer readFile(String path, int dateIn, int fileCounter){
-		Layer tempLayer = new Layer(dateIn);
-		String token;
-		try{
+	public Layer readFile(String path, int dateIn, int fileCounter) {
+		Layer layer = new Layer(dateIn);
+		try {
 			Scanner file = new Scanner(new File(path));
-			while (file.hasNext()){
-				token = file.next();
-				if (token.equalsIgnoreCase("<edge")){
-					//System.out.println("edge");
-					tempLayer.addEdge(loadEdge(file));
+			while (file.hasNext()) {
+				String token = file.next();
+				if (token.equalsIgnoreCase(edgeToken)){
+					layer.addEdge(readEdge(file));
 				}
-				else if(token.equalsIgnoreCase("<node")){
-					tempLayer = loadNodes(tempLayer, file, fileCounter);
+				else if(token.equalsIgnoreCase(nodeToken)){
+					layer = loadNodes(layer, file, fileCounter);
 				}
 			}
-		}
-		catch(IOException e){
+		} catch (IOException e) {
+			System.err.println("Error - Trouble reading file to layer, path: " + path);
 			System.err.println(e.getMessage());
+			System.exit(1);
 		}
-		return tempLayer;
+		return layer;
 	}
-	
-	private Layer loadNodes(Layer tempLayer, Scanner file, int fileCounter) throws IOException{
+
+	private Layer loadNodes(Layer layer, Scanner file, int fileCounter) throws IOException {
 		String token = "";
-		Node tempNode = new Node();
-		
-        do{
+		Node node = new Node();
+
+		do {
 			token = file.next();
-			if (token.startsWith("id=")){
-				tempNode.setId(token.substring(4, findSecondQuote(4, token)));
+			if (token.startsWith("id=")) {
+				node.setId(token.substring(4, findSecondQuote(4, token)));
 			}
-			else if (token.startsWith("label=")){
-				tempNode.setLabel(token.substring(7, findSecondQuote(7, token)));
+			else if (token.startsWith("label=")) {
+				node.setLabel(token.substring(7, findSecondQuote(7, token)));
 			}
-			else if (token.equalsIgnoreCase("for=\"modularity_class\"")){
+			else if (token.equalsIgnoreCase("for=\"modularity_class\"")) {
 				token = file.next();
-				//System.out.println("THIS HERE: "+(fileCounter + Integer.parseInt(token.substring(7, findSecondQuote(7, token)))));
-				tempNode.setModClass((fileCounter + Integer.parseInt(token.substring(7, findSecondQuote(7, token)))));
+				node.setModClass((fileCounter + Integer.parseInt(token.substring(7, findSecondQuote(7, token)))));
 			}
-			else if (token.equalsIgnoreCase("<viz:size")){
+			else if (token.equalsIgnoreCase("<viz:size")) {
 				token = file.next();
-				tempNode.setSize(Double.parseDouble(token.substring(7, findSecondQuote(7, token))));
+				node.setSize(Double.parseDouble(token.substring(7, findSecondQuote(7, token))));
 			}
-			else if (token.startsWith("start=")){
-				tempNode.setZ(convertDateToInt(7, token));
+			else if (token.startsWith("start=")) {
+				node.setZ(convertDateToInt(7, token));
 			}
-			else if (token.startsWith("x=")){
-				tempNode.setX(Double.parseDouble(token.substring(3, findSecondQuote(3, token))));
+			else if (token.startsWith("x=")) {
+				node.setX(Double.parseDouble(token.substring(3, findSecondQuote(3, token))));
 			}
-			else if (token.startsWith("y=")){
-				tempNode.setY(Double.parseDouble(token.substring(3, findSecondQuote(3, token))));
+			else if (token.startsWith("y=")) {
+				node.setY(Double.parseDouble(token.substring(3, findSecondQuote(3, token))));
 			}
-			
-			else if (token.equalsIgnoreCase("<viz:color")){
+			else if (token.equalsIgnoreCase("<viz:color")) {
 				int r, g, b;
 				token = file.next();
 				r = Integer.parseInt(token.substring(3, findSecondQuote(3, token)));
@@ -97,60 +102,61 @@ public class GexfReader {
 				g = Integer.parseInt(token.substring(3, findSecondQuote(3, token)));
 				token = file.next();
 				b = Integer.parseInt(token.substring(3, findSecondQuote(3, token)));
-				tempNode.setColor(new NodeColor(String.format("#%02X%02X%02X", r, g, b)));
+				node.setColor(new NodeColor(String.format("#%02X%02X%02X", r, g, b)));
 			}
-		}while(!token.equalsIgnoreCase("</node>"));
-        if(tempNode.getZ() == 0){
-        	tempNode.setZ(tempLayer.getDate());
-        }
-        if(tempLayer.checkModClassExist(tempNode.getModClass())){
-        	tempLayer.getCommunity(tempNode.getModClass()).addNode(tempNode);
-        }
-        else{
-        	tempLayer.addCommunity(new Community(tempNode.getModClass()), tempNode.getModClass());
-        	tempLayer.getCommunity(tempNode.getModClass()).addNode(tempNode);
-        	tempLayer.getCommunity(tempNode.getModClass()).setColor(tempNode.getColor());
-        }
-        return tempLayer;
+		} while (!token.equalsIgnoreCase("</node>"));
+
+		if (node.getZ() == 0) {
+			node.setZ(layer.getDate());
+		}
+
+		if (layer.checkModClassExist(node.getModClass())) {
+			layer.getCommunity(node.getModClass()).addNode(node);
+		} else {
+			layer.addCommunity(new Community(node.getModClass()), node.getModClass());
+			layer.getCommunity(node.getModClass()).addNode(node);
+			layer.getCommunity(node.getModClass()).setColor(node.getColor());
+		}
+		return layer;
 	}
 
-	private Edge loadEdge(Scanner file) throws IOException{
+	private Edge readEdge(Scanner file) throws IOException {
 		String token;
 		Edge edge = new Edge();
 
-		do{
+		do {
 			token = file.next();
-			
-			if(token.startsWith("source=")){
+
+			if (token.startsWith("source=")) {
 				edge.setSource(token.substring(8, findSecondQuote(8,token)));
 			}
-			else if(token.startsWith("target=")){
+			else if (token.startsWith("target=")) {
 				edge.setTarget(token.substring(8, findSecondQuote(8,token)));
 			}
-			else if(token.startsWith("for=\"weight")){
+			else if (token.startsWith("for=\"weight")) {
 				token = file.next();
-				if(token.startsWith("value=\"")){
+				if (token.startsWith("value=\"")) {
 					edge.setWeight(Double.parseDouble(token.substring(7, findSecondQuote(7,token))));
 				}
 			}
-			else if(token.startsWith("start=")){
+			else if (token.startsWith("start=")) {
 				edge.setStart(convertDateToInt(7, token));
-				if(token.endsWith(">")){
+				if (token.endsWith(">")) {
 					edge.setEnd(convertDateToInt(7, token));
 				}
 			}
-			else if(token.startsWith("endopen=")){
+			else if (token.startsWith("endopen=")) {
 				edge.setEnd(convertDateToInt(9,token));
 			}
-		}while (!token.endsWith("</edge>"));
+		} while (!token.endsWith("</edge>"));
 		return edge;
 	}
 
 	// Finds the second double quote
-	private int findSecondQuote(int i, String s){
+	private int findSecondQuote(int i, String s) {
 		int secondQuoteLocation = s.length();
-		for(int j = i; j < s.length(); j++){
-			if(s.charAt(j)== '"'){
+		for (int j = i; j < s.length(); j++) {
+			if (s.charAt(j)== '"') {
 				secondQuoteLocation = j;
 			}
 		}
@@ -158,10 +164,10 @@ public class GexfReader {
 	}
 
 	// Finds the date in a string with yyyy-mm-dd format
-	public String findDate(String s){
+	public String findDate(String s) {
 		Pattern p = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
 		Matcher m = p.matcher(s);
-		if(m.find()){
+		if (m.find()) {
 			return m.group(0);
 		}
 		return "Date Not Found";
@@ -183,7 +189,7 @@ public class GexfReader {
 		// Not adjusted for Leap year.
 		year = year * 365;
 		int daysInMonthsSoFar = 0;
-		int[] daysInEachMonth = { 
+		int[] daysInEachMonth = {
 				31, // January
 				28, // February
 				31, // March 
@@ -197,7 +203,7 @@ public class GexfReader {
 				30, // November
 				31  // December
 		};
-		for( int i=0; i<month-1; i++ ) { 
+		for ( int i=0; i<month-1; i++ ) { 
 			// if month=1, we don't want daysInMonthsSoFar=0
 			// and if month=12, we only want up to November added in
 			// i.e. we never actually use December

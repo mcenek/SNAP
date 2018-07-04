@@ -6,14 +6,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class Main {
 	private static int fileCounter = 100;
+	public static boolean logging = true;
 
-	private static void partiviewGen(String projectName, int range, double xSkew,
-		double ySkew, double zSkew, String shape, String iGEXFPath) throws IOException {
+	private static void partiviewGen(
+			String projectName,
+			int range,
+			double xSkew,
+			double ySkew,
+			double zSkew,
+			String shape,
+			String iGEXFPath) throws IOException {
 
 		GexfReader reader = new GexfReader();
 		ArrayList<Layer> tempLayers = new ArrayList<Layer>();
@@ -24,18 +30,22 @@ public class Main {
 		MeshLogic logic;
 		int lowestZ;
 
-		System.out.println("PATH " + iGEXFPath);
-		if(iGEXFPath != null){
-			try(Stream<Path> paths = Files.walk(Paths.get(iGEXFPath))){
-			    paths.forEach(filePath -> {
-			        if (Files.isRegularFile(filePath)){
-			        	if(filePath.toString().endsWith(".gexf")){
-			        		tempLayers.add(reader.createLayer(filePath, fileCounter));
-			        		fileCounter += 100;
-			        	}
-			        }
-			    });
-			}
+		// read files into layers
+		if (logging)
+			System.out.println("PATH " + iGEXFPath);
+
+		try (Stream<Path> paths = Files.walk(Paths.get(iGEXFPath))) {
+			paths.forEach(filePath -> {
+				if (Files.isRegularFile(filePath)) {
+					if (filePath.toString().endsWith(".gexf")){
+						tempLayers.add(reader.createLayerFromFile(filePath, fileCounter));
+						fileCounter += 100;
+					}
+				}
+			});
+		} catch (Exception e) {
+			System.out.println("A problem occurred reading the files into layers.");
+			System.out.println(e.getMessage());
 		}
 
 		logic = new MeshLogic(tempLayers);

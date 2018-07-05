@@ -11,7 +11,7 @@ package threejsFileGen;
 import java.util.HashMap;
 
 public class Community {
-	private static boolean logging = Main.logging;
+	private static boolean logging = Generator.logging;
 
 	private HashMap<String, Node> nodes;
 	private int communityId; // Also known as modularity class or community number
@@ -28,12 +28,12 @@ public class Community {
 		this.communityId = communityId;
 	}
 
-	// nodesHM getter/setter
+	// nodes getter/setter
 	public HashMap<String, Node> getNodes() {
 		return nodes;
 	}
-	public void setNodes(HashMap<String, Node> nodesHMIn) {
-		nodes = nodesHMIn;
+	public void setNodes(HashMap<String, Node> nodes) {
+		this.nodes = nodes;
 	}
 
 	// modularityValue getter/setter
@@ -48,24 +48,24 @@ public class Community {
 	public NodeColor getColor() {
 		return color;
 	}
-	public void setColor(NodeColor colorIn) {
-		color = colorIn;
+	public void setColor(NodeColor color) {
+		this.color = color;
 	}
 
 	// centroid getter/setter
 	public Centroid getCentroid() {
 		return centroid;
 	}
-	public void setCentroid(Centroid centroidIn) {
-		centroid = centroidIn;
+	public void setCentroid(Centroid centroid) {
+		this.centroid = centroid;
 	}
 
 	// adjustedCentroid getter/setter
 	public Centroid getAdjCentroid() {
 		return adjustedCentroid;
 	}
-	public void setAdjCentroid(Centroid centroidIn) {
-		adjustedCentroid = centroidIn;
+	public void setAdjCentroid(Centroid adjustedCentroid) {
+		this.adjustedCentroid = adjustedCentroid;
 	}
 
 	public boolean containsKey(String token) {
@@ -74,10 +74,10 @@ public class Community {
 
 	// add Node to HashMap
 	public boolean addNode(Node nodeIn) {
-		if(!nodes.containsKey(nodeIn.getLabel())) {
+		if (!nodes.containsKey(nodeIn.getLabel())) {
 			nodes.put(nodeIn.getLabel(), nodeIn);
 		} else {
-			if(logging)
+			if (logging)
 				System.err.println("Cannot insert node, one already exists with same key.");
 			return false;
 		}
@@ -89,8 +89,8 @@ public class Community {
 		double max = -1;
 		String dominant = "";
 		
-		for( Node node : nodes.values() ) {
-			if( node.getSize() > max ) {
+		for ( Node node : nodes.values() ) {
+			if (node.getSize() > max) {
 				max = node.getSize();
 				dominant = node.getLabel();
 			}

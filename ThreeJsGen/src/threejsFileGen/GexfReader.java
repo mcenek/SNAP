@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GexfReader {
-	private static boolean logging = Main.logging;
+	private static boolean logging = Generator.logging;
 	Set<String> dateStrings = new HashSet<String>();
 	Set<Integer> dateInts = new HashSet<Integer>();
 	
@@ -79,7 +79,7 @@ public class GexfReader {
 			}
 			else if (token.equalsIgnoreCase("for=\"modularity_class\"")) {
 				token = file.next();
-				node.setModClass((fileCounter + Integer.parseInt(token.substring(7, findSecondQuote(7, token)))));
+				node.setCommunityId((fileCounter + Integer.parseInt(token.substring(7, findSecondQuote(7, token)))));
 			}
 			else if (token.equalsIgnoreCase("<viz:size")) {
 				token = file.next();
@@ -110,12 +110,12 @@ public class GexfReader {
 			node.setZ(layer.getDate());
 		}
 
-		if (layer.checkModClassExist(node.getModClass())) {
-			layer.getCommunity(node.getModClass()).addNode(node);
+		if (layer.checkCommunityIdExists(node.getCommunityId())) {
+			layer.getCommunity(node.getCommunityId()).addNode(node);
 		} else {
-			layer.addCommunity(new Community(node.getModClass()), node.getModClass());
-			layer.getCommunity(node.getModClass()).addNode(node);
-			layer.getCommunity(node.getModClass()).setColor(node.getColor());
+			layer.addCommunity(new Community(node.getCommunityId()), node.getCommunityId());
+			layer.getCommunity(node.getCommunityId()).addNode(node);
+			layer.getCommunity(node.getCommunityId()).setColor(node.getColor());
 		}
 		return layer;
 	}
@@ -209,7 +209,7 @@ public class GexfReader {
 			// i.e. we never actually use December
 			daysInMonthsSoFar += daysInEachMonth[i];
 		}
-		
+
 		date = day + daysInMonthsSoFar + year;
 		return date;
 	}

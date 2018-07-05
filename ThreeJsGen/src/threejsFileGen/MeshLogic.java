@@ -1,3 +1,11 @@
+//
+// Copyright Martin Cenek <drcenek@gmail.com> 2016-2019
+//
+// All source code is released under the terms of the MIT License.
+// See LICENSE for more information.
+// Contributions from: 
+// Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
+//
 package threejsFileGen;
 
 import java.util.ArrayList;
@@ -8,47 +16,26 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+// class containing various utilities, such as linking communities between layers,
+// sorting layers, etc
 public class MeshLogic {
-	private ArrayList<Layer> layers;
-	private HashMap<Integer, Link> links = new HashMap<Integer, Link>();
-	
-	// Constructor
-	MeshLogic(){}
 
-	MeshLogic(ArrayList<Layer> layersIn){
-		layers = sortLayers(layersIn);
-		//System.out.println("\nIN MESH LOGIC");
-		for(int i = 0; i < layers.size(); i++){
-			//System.out.println(i+": "+layers.get(i).getEdgeList().size());
-		}
-		linkCommunities();
-		for(Map.Entry<Integer, Link> entry: links.entrySet()){
-			Integer modClass = entry.getKey();
-			//System.out.println("ModClass: "+modClass);
-			Link links = entry.getValue();
-			ArrayList<Integer> linkedClass = links.getLinkedClass();
-			for(int i = 0; i < linkedClass.size(); i++){
-				//System.out.println(linkedClass.get(i).toString());
-			}
-		}
-	}
-
-	public HashMap<Integer, Link> getLinks(){
-		return links;
-	}
-	
 	// give an arraylist of links - representing everytime a concept links from one layer to the next
 	// these links only store two numbers - modclass of the first community, and modclass of the second
-	public ArrayList<Link> linkAndGet() {
-		ArrayList<Link> l = new ArrayList<Link>(); // could potentially assign a weight here...
-		for(int i = 0; i < layers.size()-1; i++) {
-			for(Community c : layers.get(i).getCommunities().values()) {
-				for(Community nextC : layers.get(i+1).getCommunities().values()) {
+	public ArrayList<Link> linkLayers(ArrayList<Layer> layers) {
+		ArrayList<Link> links = new ArrayList<Link>(); // could potentially assign a weight here...
+
+		for (int i = 0; i < layers.size()-1; i++) {
+
+			for (Community c : layers.get(i).getCommunities().values()) {
+				for (Community nextC : layers.get(i+1).getCommunities().values()) {
+
 					boolean foundLink = false;
-					for(Node n : c.getNodes().values()) { // there is a better way to do this - possibly need
-						for(Node nextN : nextC.getNodes().values()) { // a list of concept labels for each community
-							if(n.getLabel().equals(nextN.getLabel()) && !foundLink) { // this just use a .contains()
-								l.add(new Link(c.dominantConcept(), nextC.dominantConcept(), i, i+1));
+					for (Node n : c.getNodes().values()) { // there is a better way to do this - possibly need
+						for (Node nextN : nextC.getNodes().values()) { // a list of concept labels for each community
+
+							if (n.getLabel().equals(nextN.getLabel()) && !foundLink) { // then just use a .contains()
+								links.add(new Link(c.dominantConcept(), nextC.dominantConcept(), i, i+1));
 								foundLink = true;
 							}
 						}
@@ -56,41 +43,7 @@ public class MeshLogic {
 				}
 			}
 		}
-		return l;
-	}
-
-	// TODO not currently used
-	private void linkCommunities(){
-		for(int i = 0; i < layers.size()-1; i++){
-			HashMap<Integer, Community> communities2 = layers.get(i).getCommunities();
-			HashMap<Integer, Community> communities1 = layers.get(i+1).getCommunities();
-			for(Map.Entry<Integer, Community> entry1: communities1.entrySet()){
-				Integer modClass1 = entry1.getKey();
-				Community community1 = entry1.getValue();
-				if(i == -1){
-					//System.out.println("=== DATE: " + layers.get(i).getDate());
-					community1.setAdjCentroid(community1.getCentroid());
-				}
-				else{
-					for(Map.Entry<String, Node> nodeHMEntry: community1.getNodes().entrySet()){
-						String label = nodeHMEntry.getKey();
-						for(Map.Entry<Integer, Community> entry2: communities2.entrySet()){
-							Integer modClass2 = entry2.getKey();
-							Community community2 = entry2.getValue();
-							if(community2.getNodes().containsKey(label)){
-								if(links.isEmpty() || !links.containsKey(modClass1)){
-									Link tempLinks = new Link(modClass1, modClass2);
-									links.put(modClass1, tempLinks);
-								}
-								else{
-									links.get(modClass1).addLink(modClass2);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+		return links;
 	}
 
 	// Sort Layers by date
@@ -117,30 +70,30 @@ public class MeshLogic {
 		}
 		return lowestZ;
 	}
-	
+
 	public void verifyLayerDates(ArrayList<Layer> layers) {
 		Set<Integer> dates = new HashSet<Integer>();
-		for( Layer layer : layers ) {
-			if( !dates.add( layer.getDate() ) )
-				System.out.println( "Found a duplicate date: "+layer.getDate() );
+		for (Layer layer : layers) {
+			if (!dates.add(layer.getDate()))
+				System.err.println("Found a duplicate date: " + layer.getDate());
 		}
 	}
 
-	public ArrayList<NodeColor> getColorList(ArrayList<Layer> layers){
-		ArrayList<NodeColor> tempColorList = new ArrayList<NodeColor>();
-		
-		for(int i = 0; i < layers.size(); i++){
-			HashMap<Integer, Community>tempCom = layers.get(i).getCommunities();
-			for(Map.Entry<Integer, Community> entry: tempCom.entrySet()){
-				tempColorList.add(entry.getValue().getColor());
+	// gets a list of all the colors within a layer
+	public ArrayList<NodeColor> getColorList(ArrayList<Layer> layers) {
+		ArrayList<NodeColor> colors = new ArrayList<NodeColor>();
+
+		for (Layer layer : layers) {
+			for (Community community : layer.getCommunities().values()) {
+				colors.add(community.getColor());
 			}
 		}
-		return tempColorList;
+		return colors;
 	}
 
 	public ArrayList<Node> xyStackSort(ArrayList<Node> nodeList){
-        Stack<Node> xstack = new Stack<Node>();
-        ArrayList<Node> sortedList = new ArrayList<Node>();
+		Stack<Node> xstack = new Stack<Node>();
+		ArrayList<Node> sortedList = new ArrayList<Node>();
 
 		// sort by x into stack
 		nodeList = sortByX(nodeList);
@@ -230,7 +183,7 @@ public class MeshLogic {
 			for(int j = 0; j < layers.size(); j++){
 				for(int i = 0; i < tempLink.getLinkedClass().size(); i++){
 					//System.out.println(j);
-					if(layers.get(j).checkModClassExist(tempLink.getLinkedClass().get(i))){
+					if(layers.get(j).checkCommunityIdExists(tempLink.getLinkedClass().get(i))){
 						//System.out.println("\tCreate ADJ CENTROID "+j);
 						//System.out.println("Link: "+tempLink.getLinkedClass().get(i));
 						Centroid tempCentroid = findAdjCentroid(tempLink, layers.get(j));

@@ -3,7 +3,7 @@
 //
 // All source code is released under the terms of the MIT License.
 // See LICENSE for more information.
-// Contributions from: 
+// Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
 package threejsFileGen;
@@ -13,8 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class Generator {
@@ -23,20 +21,13 @@ public class Generator {
 	public static boolean logging = true;
 	private static boolean development = true;
 
-	private static void generateFiles(
-			String projectName,
-			String iGEXFPath,
-			GenType genType,
-			int range,
-			double xSkew,
-			double ySkew,
-			double zSkew,
-			String shape) throws IOException {
+	private static void generateFiles(String projectName, String iGEXFPath, GenType genType, int range, double xSkew,
+			double ySkew, double zSkew, String shape) throws IOException {
 
 		GexfReader reader = new GexfReader();
-		MeshLogic logic = new MeshLogic();
+		LayerUtilities utils = new LayerUtilities();
 		ArrayList<Layer> layers = new ArrayList<Layer>();
-		HashMap<Integer, Link> links;
+		ArrayList<Link> links;
 		ArrayList<NodeColor> colorList;
 		int lowestZ;
 
@@ -48,7 +39,7 @@ public class Generator {
 		try (Stream<Path> paths = Files.walk(Paths.get(iGEXFPath))) {
 			paths.forEach(filePath -> {
 				if (Files.isRegularFile(filePath)) {
-					if (filePath.toString().endsWith(".gexf")){
+					if (filePath.toString().endsWith(".gexf")) {
 						initialLayers.add(reader.createLayerFromFile(filePath, fileCounter));
 						fileCounter += 100;
 					}
@@ -60,21 +51,10 @@ public class Generator {
 		}
 		layers = new ArrayList<Layer>(initialLayers);
 
-		colorList = logic.getColorList(layers);
-		lowestZ = logic.lowestZ(layers);
-		layers = logic.setCentroids(layers);
-		layers = logic.resetNodeValuesToCentroid(layers);
-		layers = logic.sortLayers(layers);
-		// TODO do we need to be setting the adjusted centroids and --
-		// should the centroid logic be moved into the community? as well as
-		// possibly the link storage
-//		links = logic.linkLayers(layers);
-//		layers = logic.createAdjCentroid(links, layers);
-
-		// TODO should we verify the layer dates? I think there's an
-		// error check for duplicates when they're being created in the first place
-//		System.out.println("Testing layer dates");
-//		logic.verifyLayerDates(layers);
+		colorList = utils.getColorList(layers);
+		lowestZ = utils.lowestZ(layers);
+		layers = utils.sortLayers(layers);
+		links = utils.linkLayers(layers, range);
 
 		if (genType == GenType.Threejs) {
 			ThreeWriter writer = new ThreeWriter();
@@ -82,31 +62,31 @@ public class Generator {
 			writer.writeMetaColors(layers.size(), colorList, iGEXFPath, projectName);
 			writer.writeLayers(layers, colorList, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
 			writer.writeEdges(layers, iGEXFPath, projectName);
-			writer.writeNoodles(logic.linkLayers(layers), iGEXFPath, projectName);
+			writer.writeNoodles(links, iGEXFPath, projectName);
+
 		} else if (genType == GenType.Partiview) {
 			Writer writer = new Writer();
 
-			for (Map.Entry<Integer, Link> entry: links.entrySet()) {
-				Integer modClass = entry.getKey();
-				Link tempLink = entry.getValue();
-				for (int j = 0; j < layers.size()-1; j++) {
-					for (int i = 0; i < tempLink.getLinkedClass().size(); i++) {
-						if (layers.get(j).checkCommunityIdExists(tempLink.getLinkedClass().get(i))) {
-							Community tempLayer1 = layers.get(j+1).getCommunity(modClass);
-							Community tempLayer2 = layers.get(j).getCommunity(tempLink.getLinkedClass().get(i));
-							int numCom = logic.numberOfCommunities(layers);
-							writer.writeMesh(tempLayer1, tempLayer2, modClass, true, shape, iGEXFPath,
-									projectName, xSkew, ySkew, zSkew, lowestZ, numCom);
-						}
-						else{
-							break;
-						}
-					}
-				}
-			}
-			writer.writeNodes(layers, colorList, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
-			writer.writeLabels(layers, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
-			writer.writeEdges(layers, colorList, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
+//			for (Map.Entry<Integer, Link> entry : links.entrySet()) {
+//				Integer modClass = entry.getKey();
+//				Link tempLink = entry.getValue();
+//				for (int j = 0; j < layers.size() - 1; j++) {
+//					for (int i = 0; i < tempLink.getLinkedClass().size(); i++) {
+//						if (layers.get(j).checkCommunityIdExists(tempLink.getLinkedClass().get(i))) {
+//							Community tempLayer1 = layers.get(j + 1).getCommunity(modClass);
+//							Community tempLayer2 = layers.get(j).getCommunity(tempLink.getLinkedClass().get(i));
+//							int numCom = utils.numberOfCommunities(layers);
+//							writer.writeMesh(tempLayer1, tempLayer2, modClass, true, shape, iGEXFPath, projectName,
+//									xSkew, ySkew, zSkew, lowestZ, numCom);
+//						} else {
+//							break;
+//						}
+//					}
+//				}
+//			}
+//			writer.writeNodes(layers, colorList, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
+//			writer.writeLabels(layers, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
+//			writer.writeEdges(layers, colorList, iGEXFPath, projectName, xSkew, ySkew, zSkew, lowestZ);
 		}
 	}
 
@@ -130,24 +110,25 @@ public class Generator {
 		// TODO should be moved to mandatory args -- before the optional ones
 		String individualGEXFFolder = null; // Path to the folder containing individual GEXFs
 
-		if(args.length >= 2){
+		if (args.length >= 2) {
 			range = Integer.valueOf(args[1]); // Set Argument for range [IntervalSize(int)]
 		}
-		if(args.length >= 3){
+		if (args.length >= 3) {
 			xSkew = Double.valueOf(args[2]); // Set Argument for xSkew
 		}
-		if(args.length >= 4){
+		if (args.length >= 4) {
 			ySkew = Double.valueOf(args[3]); // Set Argument for ySkew
 		}
-		if(args.length >= 5){
+		if (args.length >= 5) {
 			zSkew = Double.valueOf(args[4]); // Set Argument for zSkew
 		}
-		if(args.length >= 6){
+		if (args.length >= 6) {
 			shape = args[5].toLowerCase(); // Set Argument for Shape
 		}
-		if(args.length >= 7){
+		if (args.length >= 7) {
 			individualGEXFFolder = args[6];
 		}
+
 		generateFiles(projectName, individualGEXFFolder, GenType.Threejs, range, xSkew, ySkew, zSkew, shape);
 	}
 }

@@ -1,48 +1,32 @@
+//
+// Copyright Martin Cenek <drcenek@gmail.com> 2016-2019
+//
+// All source code is released under the terms of the MIT License.
+// See LICENSE for more information.
+// Contributions from: 
+// Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
+//
 package threejsFileGen;
 
-import java.util.ArrayList;
-
 public class Link {
-	private int communityId;
-	private ArrayList<Integer> linkedClass;
+	// source and target layer dates
+	public int sourceLayer;
+	public int targetLayer;
+	// source and target community Ids
+	public int sourceCommunity;
+	public int targetCommunity;
+	// weight is currently the number of concepts these communities share
+	public int weight;
 
-	// Constructor
-	public Link(int communityId, int linkedClassIn){
-		this.communityId = communityId;
-		linkedClass = new ArrayList<Integer>();
-		linkedClass.add(linkedClassIn);
-	}
-
-	// modClass getter/setter
-	public int getModClass(){
-		return communityId;
-	}
-	public void setModClass(int modClassIn){
-		communityId = modClassIn;
-	}
-
-	// linkedClass getter/setter/add
-	public ArrayList<Integer> getLinkedClass(){
-		return linkedClass;
-	}
-	public void setLinkedClass(ArrayList<Integer> linkedClassIn){
-		linkedClass = linkedClassIn;
-	}
-	public void addLink(int link){
-		linkedClass.add(link);
+	public Link(int sourceLayer, int targetLayer, int sourceCommunity, int targetCommunity) {
+		this.sourceLayer = sourceLayer;
+		this.targetLayer = targetLayer;
+		this.sourceCommunity = sourceCommunity;
+		this.targetCommunity = targetCommunity;
+		weight = 1;
 	}
 
-	// new imp
-	public int layerOne;
-	public int layerTwo;
-	public String commOne;
-	public String commTwo;
-	
-	public Link(String commOne, String commTwo, int layerOne, int layerTwo) {
-		// not at all ideal, but until I rewrite the rest of the app, I don't want to break this class' functionality
-		this.commOne = commOne;
-		this.commTwo = commTwo;
-		this.layerOne = layerOne;
-		this.layerTwo = layerTwo;
+	public void addToWeight() {
+		weight += 1;
 	}
 }

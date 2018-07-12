@@ -319,7 +319,7 @@ public class Writer {
 	}
 
 	private ArrayList<Node> fillGaps(ArrayList<Node> largerCommunity, ArrayList<Node> smallerCommunity){
-		MeshLogic logic = new MeshLogic();
+		LayerUtilities logic = new LayerUtilities();
 		ArrayList<Node> smallerArray;
 		ArrayList<Node> largerArray;
 

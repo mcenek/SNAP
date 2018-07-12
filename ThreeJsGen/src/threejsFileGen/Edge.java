@@ -1,58 +1,70 @@
+//
+// Copyright Martin Cenek <drcenek@gmail.com> 2016-2019
+//
+// All source code is released under the terms of the MIT License.
+// See LICENSE for more information.
+// Contributions from:
+// Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
+//
 package threejsFileGen;
 
-public class Edge{
+// An Edge represents a link between two nodes in one layer -
+// two connected concepts within one piece of text
+public class Edge {
 	private String source;
 	private String target;
 	private double weight;
+	// TODO what exactly are start and end used for?
 	private int start;
 	private int end;
-	
-	// constructor
-	Edge(){ }
-	Edge(String targetIn, String sourceIn, int startIn, int endIn){
-		target = targetIn;
-		source = sourceIn;
-		start = startIn;
-		end = endIn;
+
+	// constructors
+	public Edge() {
 	}
-	
+	public Edge(String target, String source, int start, int end) {
+		this.target = target;
+		this.source = source;
+		this.start = start;
+		this.end = end;
+	}
+
 	// source getter/setter
-	public String getSource(){
+	public String getSource() {
 		return source;
 	}
-	public void setSource(String sourceIn){
-		source = sourceIn;
+	public void setSource(String source) {
+		this.source = source;
 	}
-	
+
 	// target getter/setter
-	public String getTarget(){
+	public String getTarget() {
 		return target;
 	}
-	public void setTarget(String targetIn){
-		target = targetIn;
+	public void setTarget(String target) {
+		this.target = target;
 	}
-	
+
 	// weight getter/setter
-	public double getWeight(){
+	public double getWeight() {
 		return weight;
 	}
-	public void setWeight(double weightIn){
-		weight = weightIn;
+	public void setWeight(double weight) {
+		this.weight = weight;
 	}
-	
+
 	// start getter/setter
-	public int getStart(){
+	public int getStart() {
 		return start;
 	}
-	public void setStart(int startIn){
-		start = startIn;
+	public void setStart(int start) {
+		this.start = start;
 	}
-	
+
 	// end getter/setter
-	public int getEnd(){
+	public int getEnd() {
 		return end;
 	}
-	public void setEnd(int endIn){
-		end = endIn;
+	public void setEnd(int end) {
+		this.end = end;
 	}
 }

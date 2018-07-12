@@ -3,7 +3,7 @@
 //
 // All source code is released under the terms of the MIT License.
 // See LICENSE for more information.
-// Contributions from: 
+// Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
 package threejsFileGen;
@@ -16,10 +16,12 @@ public class Centroid {
 		this.x = x;
 		this.y = y;
 	}
+
 	// x getter/setter
 	public double getX() {
 		return x;
 	}
+
 	public void setX(double x) {
 		this.x = x;
 	}
@@ -28,6 +30,7 @@ public class Centroid {
 	public Double getY() {
 		return y;
 	}
+
 	public void setY(double y) {
 		this.y = y;
 	}
@@ -36,6 +39,7 @@ public class Centroid {
 	public void addX(double x) {
 		this.x += x;
 	}
+
 	public void addY(double y) {
 		this.y += y;
 	}

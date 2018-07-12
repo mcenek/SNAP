@@ -3,7 +3,7 @@
 //
 // All source code is released under the terms of the MIT License.
 // See LICENSE for more information.
-// Contributions from: 
+// Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
 package threejsFileGen;
@@ -21,7 +21,7 @@ public class GexfReader {
 	private static boolean logging = Generator.logging;
 	Set<String> dateStrings = new HashSet<String>();
 	Set<Integer> dateInts = new HashSet<Integer>();
-	
+
 	public static String edgeToken = "<edge";
 	public static String nodeToken = "<node";
 
@@ -50,11 +50,10 @@ public class GexfReader {
 			Scanner file = new Scanner(new File(path));
 			while (file.hasNext()) {
 				String token = file.next();
-				if (token.equalsIgnoreCase(edgeToken)){
+				if (token.equalsIgnoreCase(edgeToken)) {
 					layer.addEdge(readEdge(file));
-				}
-				else if(token.equalsIgnoreCase(nodeToken)){
-					layer = loadNodes(layer, file, fileCounter);
+				} else if (token.equalsIgnoreCase(nodeToken)) {
+					layer = readNode(layer, file, fileCounter);
 				}
 			}
 		} catch (IOException e) {
@@ -65,36 +64,30 @@ public class GexfReader {
 		return layer;
 	}
 
-	private Layer loadNodes(Layer layer, Scanner file, int fileCounter) throws IOException {
+	private Layer readNode(Layer layer, Scanner file, int fileCounter) throws IOException {
 		String token = "";
 		Node node = new Node();
+		int communityId = 0, z = 0;
 
 		do {
 			token = file.next();
 			if (token.startsWith("id=")) {
 				node.setId(token.substring(4, findSecondQuote(4, token)));
-			}
-			else if (token.startsWith("label=")) {
+			} else if (token.startsWith("label=")) {
 				node.setLabel(token.substring(7, findSecondQuote(7, token)));
-			}
-			else if (token.equalsIgnoreCase("for=\"modularity_class\"")) {
+			} else if (token.equalsIgnoreCase("for=\"modularity_class\"")) {
 				token = file.next();
-				node.setCommunityId((fileCounter + Integer.parseInt(token.substring(7, findSecondQuote(7, token)))));
-			}
-			else if (token.equalsIgnoreCase("<viz:size")) {
+				communityId = Integer.parseInt(token.substring(7, findSecondQuote(7, token)));
+			} else if (token.equalsIgnoreCase("<viz:size")) {
 				token = file.next();
 				node.setSize(Double.parseDouble(token.substring(7, findSecondQuote(7, token))));
-			}
-			else if (token.startsWith("start=")) {
-				node.setZ(convertDateToInt(7, token));
-			}
-			else if (token.startsWith("x=")) {
+			} else if (token.startsWith("start=")) {
+				z = convertDateToInt(7, token);
+			} else if (token.startsWith("x=")) {
 				node.setX(Double.parseDouble(token.substring(3, findSecondQuote(3, token))));
-			}
-			else if (token.startsWith("y=")) {
+			} else if (token.startsWith("y=")) {
 				node.setY(Double.parseDouble(token.substring(3, findSecondQuote(3, token))));
-			}
-			else if (token.equalsIgnoreCase("<viz:color")) {
+			} else if (token.equalsIgnoreCase("<viz:color")) {
 				int r, g, b;
 				token = file.next();
 				r = Integer.parseInt(token.substring(3, findSecondQuote(3, token)));
@@ -102,20 +95,16 @@ public class GexfReader {
 				g = Integer.parseInt(token.substring(3, findSecondQuote(3, token)));
 				token = file.next();
 				b = Integer.parseInt(token.substring(3, findSecondQuote(3, token)));
-				node.setColor(new NodeColor(String.format("#%02X%02X%02X", r, g, b)));
+				node.setColor(new NodeColor(r, g, b));
 			}
 		} while (!token.equalsIgnoreCase("</node>"));
 
-		if (node.getZ() == 0) {
-			node.setZ(layer.getDate());
-		}
-
-		if (layer.checkCommunityIdExists(node.getCommunityId())) {
-			layer.getCommunity(node.getCommunityId()).addNode(node);
+		if (layer.checkCommunityIdExists(communityId)) {
+			layer.getCommunity(communityId).addNode(node);
 		} else {
-			layer.addCommunity(new Community(node.getCommunityId()), node.getCommunityId());
-			layer.getCommunity(node.getCommunityId()).addNode(node);
-			layer.getCommunity(node.getCommunityId()).setColor(node.getColor());
+			layer.addCommunity(new Community(communityId), communityId);
+			layer.getCommunity(communityId).addNode(node);
+			layer.getCommunity(communityId).setColor(node.getColor());
 		}
 		return layer;
 	}
@@ -128,25 +117,21 @@ public class GexfReader {
 			token = file.next();
 
 			if (token.startsWith("source=")) {
-				edge.setSource(token.substring(8, findSecondQuote(8,token)));
-			}
-			else if (token.startsWith("target=")) {
-				edge.setTarget(token.substring(8, findSecondQuote(8,token)));
-			}
-			else if (token.startsWith("for=\"weight")) {
+				edge.setSource(token.substring(8, findSecondQuote(8, token)));
+			} else if (token.startsWith("target=")) {
+				edge.setTarget(token.substring(8, findSecondQuote(8, token)));
+			} else if (token.startsWith("for=\"weight")) {
 				token = file.next();
 				if (token.startsWith("value=\"")) {
-					edge.setWeight(Double.parseDouble(token.substring(7, findSecondQuote(7,token))));
+					edge.setWeight(Double.parseDouble(token.substring(7, findSecondQuote(7, token))));
 				}
-			}
-			else if (token.startsWith("start=")) {
+			} else if (token.startsWith("start=")) {
 				edge.setStart(convertDateToInt(7, token));
 				if (token.endsWith(">")) {
 					edge.setEnd(convertDateToInt(7, token));
 				}
-			}
-			else if (token.startsWith("endopen=")) {
-				edge.setEnd(convertDateToInt(9,token));
+			} else if (token.startsWith("endopen=")) {
+				edge.setEnd(convertDateToInt(9, token));
 			}
 		} while (!token.endsWith("</edge>"));
 		return edge;
@@ -156,7 +141,7 @@ public class GexfReader {
 	private int findSecondQuote(int i, String s) {
 		int secondQuoteLocation = s.length();
 		for (int j = i; j < s.length(); j++) {
-			if (s.charAt(j)== '"') {
+			if (s.charAt(j) == '"') {
 				secondQuoteLocation = j;
 			}
 		}
@@ -189,10 +174,9 @@ public class GexfReader {
 		// Not adjusted for Leap year.
 		year = year * 365;
 		int daysInMonthsSoFar = 0;
-		int[] daysInEachMonth = {
-				31, // January
+		int[] daysInEachMonth = { 31, // January
 				28, // February
-				31, // March 
+				31, // March
 				30, // April
 				31, // May
 				30, // June
@@ -201,9 +185,9 @@ public class GexfReader {
 				30, // September
 				31, // October
 				30, // November
-				31  // December
+				31 // December
 		};
-		for ( int i=0; i<month-1; i++ ) { 
+		for (int i = 0; i < month - 1; i++) {
 			// if month=1, we don't want daysInMonthsSoFar=0
 			// and if month=12, we only want up to November added in
 			// i.e. we never actually use December

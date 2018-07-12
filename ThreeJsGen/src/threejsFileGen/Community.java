@@ -3,36 +3,34 @@
 //
 // All source code is released under the terms of the MIT License.
 // See LICENSE for more information.
-// Contributions from: 
+// Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
 package threejsFileGen;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Community {
 	private static boolean logging = Generator.logging;
 
-	private HashMap<String, Node> nodes;
+	private ArrayList<Node> nodes;
 	private int communityId; // Also known as modularity class or community number
 	private NodeColor color;
-	private Centroid centroid;
-	private Centroid adjustedCentroid;
+	private Centroid trueCenter;
+	private Centroid weightedCenter;
 
 	// Constructors
-	public Community() {
-		nodes = new HashMap<String, Node>();
-	}
 	public Community(int communityId) {
-		nodes = new HashMap<String, Node>();
+		nodes = new ArrayList<Node>();
 		this.communityId = communityId;
 	}
 
 	// nodes getter/setter
-	public HashMap<String, Node> getNodes() {
+	public ArrayList<Node> getNodes() {
 		return nodes;
 	}
-	public void setNodes(HashMap<String, Node> nodes) {
+
+	public void setNodes(ArrayList<Node> nodes) {
 		this.nodes = nodes;
 	}
 
@@ -40,6 +38,7 @@ public class Community {
 	public int getCommunityId() {
 		return communityId;
 	}
+
 	public void setCommunityId(int communityId) {
 		this.communityId = communityId;
 	}
@@ -48,54 +47,92 @@ public class Community {
 	public NodeColor getColor() {
 		return color;
 	}
+
 	public void setColor(NodeColor color) {
 		this.color = color;
 	}
 
 	// centroid getter/setter
-	public Centroid getCentroid() {
-		return centroid;
+	public Centroid getTrueCenter() {
+		return trueCenter;
 	}
-	public void setCentroid(Centroid centroid) {
-		this.centroid = centroid;
+
+	public void setTrueCenter(Centroid trueCenter) {
+		this.trueCenter = trueCenter;
 	}
 
 	// adjustedCentroid getter/setter
-	public Centroid getAdjCentroid() {
-		return adjustedCentroid;
-	}
-	public void setAdjCentroid(Centroid adjustedCentroid) {
-		this.adjustedCentroid = adjustedCentroid;
+	public Centroid getWeightedCenter() {
+		return weightedCenter;
 	}
 
-	public boolean containsKey(String token) {
-		return nodes.containsKey(token);
+	public void setWeightedCenter(Centroid weightedCenter) {
+		this.weightedCenter = weightedCenter;
 	}
 
-	// add Node to HashMap
-	public boolean addNode(Node nodeIn) {
-		if (!nodes.containsKey(nodeIn.getLabel())) {
-			nodes.put(nodeIn.getLabel(), nodeIn);
+	public boolean containsNodeWithLabel(String label) {
+		for (Node n : nodes) {
+			if (n.getLabel().equals(label)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// adds the node to the community if one with it's label doesn't already exist,
+	// and adjusts the centroids to accommodate the new node
+	public boolean addNode(Node node) {
+		if (!containsNodeWithLabel(node.getLabel())) {
+			nodes.add(node);
+			calculateTrueCenter();
+			calculateWeightedCenter();
 		} else {
 			if (logging)
-				System.err.println("Cannot insert node, one already exists with same key.");
+				System.err.println("Cannot insert node, one already exists with same label.");
 			return false;
 		}
 		return true;
 	}
 
+	private void calculateTrueCenter() {
+		double x = 0, y = 0;
+
+		for (Node n : nodes) {
+			x += n.getX();
+			y += n.getY();
+		}
+		x = x / nodes.size();
+		y = y / nodes.size();
+
+		trueCenter = new Centroid(x, y);
+	}
+
+	private void calculateWeightedCenter() {
+		double x = 0, y = 0, totalSize = 0;
+		for (Node n : nodes) {
+			totalSize += n.getSize();
+		}
+
+		for (Node n : nodes) {
+			x += n.getX() / totalSize;
+			y += n.getY() / totalSize;
+		}
+
+		weightedCenter = new Centroid(x, y);
+	}
+
 	// get the largest node within this community
 	public String dominantConcept() {
-		double max = -1;
+		double max = Double.MIN_VALUE;
 		String dominant = "";
-		
-		for ( Node node : nodes.values() ) {
+
+		for (Node node : nodes) {
 			if (node.getSize() > max) {
 				max = node.getSize();
 				dominant = node.getLabel();
 			}
 		}
-		
+
 		return dominant;
 	}
 }

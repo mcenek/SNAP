@@ -10,19 +10,19 @@ package threejsFileGen;
 
 public class Link {
 	// source and target layer dates
-	public int sourceLayer;
-	public int targetLayer;
+	public int sourceLayerDate;
+	public int targetLayerDate;
 	// source and target community Ids
-	public int sourceCommunity;
-	public int targetCommunity;
+	public int sourceCommunityId;
+	public int targetCommunityId;
 	// weight is currently the number of concepts these communities share
 	public int weight;
 
 	public Link(int sourceLayer, int targetLayer, int sourceCommunity, int targetCommunity) {
-		this.sourceLayer = sourceLayer;
-		this.targetLayer = targetLayer;
-		this.sourceCommunity = sourceCommunity;
-		this.targetCommunity = targetCommunity;
+		this.sourceLayerDate = sourceLayer;
+		this.targetLayerDate = targetLayer;
+		this.sourceCommunityId = sourceCommunity;
+		this.targetCommunityId = targetCommunity;
 		weight = 1;
 	}
 

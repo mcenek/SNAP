@@ -65,7 +65,7 @@ public class Generator {
 			writer.writeNoodles(links, iGEXFPath, projectName);
 
 		} else if (genType == GenType.Partiview) {
-			Writer writer = new Writer();
+			PartiWriter writer = new PartiWriter();
 
 //			for (Map.Entry<Integer, Link> entry : links.entrySet()) {
 //				Integer modClass = entry.getKey();

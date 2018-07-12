@@ -79,6 +79,15 @@ public class Community {
 		return false;
 	}
 
+	public Node getNodeWithLabel(String label) {
+		for (Node n : nodes) {
+			if (n.getLabel().equals(label)) {
+				return n;
+			}
+		}
+		return null;
+	}
+
 	// adds the node to the community if one with it's label doesn't already exist,
 	// and adjusts the centroids to accommodate the new node
 	public boolean addNode(Node node) {
@@ -134,5 +143,18 @@ public class Community {
 		}
 
 		return dominant;
+	}
+
+	// returns negative 1 when size of dominant concept
+	// isn't found
+	public double sizeOfDominantConcept() {
+		String dominant = dominantConcept();
+
+		for (Node node : nodes) {
+			if (node.getLabel().equals(dominant)) {
+				return node.getSize();
+			}
+		}
+		return -1;
 	}
 }

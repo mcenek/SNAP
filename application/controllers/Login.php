@@ -24,7 +24,7 @@ class Login extends CI_Controller
             $this->load->view('login');
         } else {
             $post = $this->input->post();
-            //xss_clean is intended to prevent a hacker from using Cross Site Scripting attacks to hijack cookies or do other malicious things.
+            // xss_clean is intended to prevent a hacker from using Cross Site Scripting attacks to hijack cookies or do other malicious things.
             $clean = $this->security->xss_clean($post);
 
             $user_info = $this->user->checkLogin($clean);
@@ -35,7 +35,7 @@ class Login extends CI_Controller
             }
             $key = 'logged_in';
             $this->session->set_userdata('logged_in', true);
-            //save each column value for user row id in session
+            // save each column value for user row id in session
             foreach ($user_info as $key => $val) {
                 $this->session->set_userdata($key, $val);
             }

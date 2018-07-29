@@ -34,17 +34,16 @@ class Preprocessed_uploads extends CI_Controller
         }
     }
 
+    // TODO: Which of these isn't actually needed? I don't the this comment is accurate...
     //depricated doesn't no longer needed
     public function netgen()
     {
-        //$this->index();
         $files = $this->input->post('checkbox');
         $PIDArray = "{\"Pids\":[";
         $source = $this->file_dir . '/preprocessed/';
         $destination = $this->file_dir . '/semantic_networks/';
         foreach ($files as $file => $file_name) {
-            //$netgen_path='/Applications/MAMP/htdocs/website_stuff/assets/netgen3/';
-            $netgen_path = '/Applications/MAMP/htdocs/website_stuff/assets/netgen4/';
+            $netgen_path = $this->config->item('base_directory') . 'assets/netgen/';
             $output = '';
             $cmd = '';
             $file_path = $this->file_dir . '/preprocessed/' . $file_name . ' ';
@@ -82,8 +81,7 @@ class Preprocessed_uploads extends CI_Controller
         $source = $this->file_dir . '/preprocessed/';
         $destination = $this->file_dir . '/semantic_networks/';
         foreach ($files as $file => $file_name) {
-            //$netgen_path='/Applications/MAMP/htdocs/website_stuff/assets/netgen3/';
-            $netgen_path = '/Applications/MAMP/htdocs/website_stuff/assets/netgen4/';
+            $netgen_path = $this->config->item('base_directory') . 'assets/netgen/';
             $output = '';
             $cmd = '';
             $file_path = $this->file_dir . '/preprocessed/' . $file_name . ' ';

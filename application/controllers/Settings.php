@@ -44,6 +44,7 @@ class settings extends CI_Controller
         $data = array(
             'use_freq' => $bool,
         );
+
         $this->db->where('id', $id);
         $this->db->update('users', $data);
         $this->session->set_userdata('use_freq', $bool);
@@ -56,6 +57,7 @@ class settings extends CI_Controller
             $data = array(
                 'freq_lower_bound' => $low_freq,
             );
+
             $this->db->where('id', $id);
             $this->db->update('users', $data);
             $this->session->set_userdata('freq_lower_bound', $low_freq);
@@ -69,6 +71,7 @@ class settings extends CI_Controller
             $data = array(
                 'freq_upper_bound' => $high_freq,
             );
+
             $this->db->where('id', $id);
             $this->db->update('users', $data);
             $this->session->set_userdata('freq_upper_bound', $high_freq);
@@ -180,7 +183,8 @@ class settings extends CI_Controller
             $this->save_shape($this->input->post('shape'));
         } elseif ($this->input->post('file_action') == "current_project") {
             $idOut = $this->session->userdata['id'];
-            $new_file_dir = '/Users/jessgrunblatt/users-uaa/' . $this->session->userdata('email') . '/' . $this->projects->get_project($this->input->post('project'))->name;
+            $new_file_dir = $this->config->item('user_directory') . $this->session->userdata('email');
+            $new_file_dir = $new_file_dir . '/' . $this->projects->get_project($this->input->post('project'))->name;
             $new_project = array(
                 'project_id' => $this->input->post('project'),
                 'file_dir' => $new_file_dir,
@@ -210,7 +214,7 @@ class settings extends CI_Controller
         );
         $this->projects->createProject($projectIn);
 
-        $dir_path = '/Users/jessgrunblatt/users-uaa/' . $this->session->userdata('email');
+        $dir_path = $this->config->item('user_directory') . $this->session->userdata('email');
         $dir = $dir_path . '/' . $dir;
 
         $oldmask = umask(0);

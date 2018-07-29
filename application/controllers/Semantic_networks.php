@@ -39,8 +39,8 @@ class Semantic_networks extends CI_Controller
     {
         $post = $this->input->post();
         // TODO output randomly goes to this page, unsure why, so grab it and move it.
-        $files = scandir('/Applications/MAMP/htdocs/website_stuff');
-        $source = '/Applications/MAMP/htdocs/website_stuff/';
+        $files = scandir($this->config->item('base_directory'));
+        $source = $this->config->item('base_directory');
         $destination = $this->file_dir . '/partiview_generator/';
         $individual_gexf_dest = $destination . 'individual_gexfs/';
         foreach ($files as $file) {
@@ -82,7 +82,7 @@ class Semantic_networks extends CI_Controller
         $this->index();
         $post = $this->input->post();
         if ($this->session->userdata('logged_in')) {
-            $gephi_path = '/Applications/MAMP/htdocs/website_stuff/assets/AutoGephiPipe/AutoGephiPipeV3_1.jar ';
+            $gephi_path = $this->config->item('base_directory') . 'assets/AutoGephiPipe/AutoGephiPipeV3_1.jar';
             $output = '';
             $cmd = '';
             $file_path = $this->file_dir . '/semantic_networks';
@@ -112,15 +112,15 @@ class Semantic_networks extends CI_Controller
         $this->index();
         $post = $this->input->post();
 
-        $gephi_path = '/Applications/MAMP/htdocs/website_stuff/assets/AutoGephiPipe/AutoGephiPipeV3_1.jar ';
-        $individual_gephi_path = '/Applications/MAMP/htdocs/website_stuff/assets/AutoGephiPipe/individualGraphProcess.jar ';
+        $gephi_path = $this->config->item('base_directory') . 'assets/AutoGephiPipe/AutoGephiPipeV3_1.jar';
+        $individual_gephi_path = $this->config->item('base_directory') . 'assets/AutoGephiPipe/individualGraphProcess.jar';
         $dir_path = $this->file_dir . '/semantic_networks/';
 
         // Generate .gexf file for each .dl file in preprocessed directory
-
         if ($this->session->userdata('logged_in')) {
             $file_path = $this->file_dir . '/semantic_networks';
-            $files = scandir($file_path); //For exporting individual .gexf for each .dl
+            // For exporting individual .gexf for each .dl
+            $files = scandir($file_path);
             $cmd2 = '';
             $output2 = '';
 

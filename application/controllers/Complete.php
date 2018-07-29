@@ -25,20 +25,19 @@ class Complete extends CI_Controller
 
     public function completeReg()
     {
-        //uri->segment() returns the vector value contained in the url at position indicated
-        //this can differ depending on if showing index.php in url or not
+        // uri->segment() returns the vector value contained in the url at position indicated
+        // this can differ depending on if showing index.php in url or not
         $token = base64_decode($this->uri->segment(4));
         $cleanToken = $this->security->xss_clean($token);
 
-        //return false or user value array from corresponding token value
+        // return false or user value array from corresponding token value
         $user_info = $this->user->isTokenValid($cleanToken);
 
         if (!$user_info) {
             $this->session->set_flashdata('flash_message', 'Token is invalid or expired');
             redirect(site_url());
         }
-        $data = array
-            (
+        $data = array(
             'firstName' => $user_info->firstName,
             'email' => $user_info->email,
             'user_id' => $user_info->id,

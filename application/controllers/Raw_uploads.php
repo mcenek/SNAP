@@ -57,7 +57,7 @@ class Raw_uploads extends CI_Controller
 
     public function build_command($framework, $post)
     {
-        //Choose which processing framework to use then which functionality to make use of
+        // Choose which processing framework to use then which functionality to make use of
         $cmd = '';
         if ($framework == 'corenlp') {
             if ($post['tokenize'] != '') {
@@ -136,7 +136,7 @@ class Raw_uploads extends CI_Controller
 
             $path = $_FILES['raw_files']['name'];
             $ext = pathinfo($path, PATHINFO_EXTENSION);
-            //to fix error with text files having characters in them, but also still filter out all non text files
+            // to fix error with text files having characters in them, but also still filter out all non text files
             if ($ext == 'txt') {
                 if ($this->upload->do_upload('raw_files')) {
                     $this->session->set_flashdata('flash_message', "Files sucessfully uploaded!");
@@ -179,9 +179,7 @@ class Raw_uploads extends CI_Controller
                     header('Content-Length: ' . filesize($file_path));
 
                     readfile($file_path);
-                    // exit;
                 }
-                //exit;
             }
         } else {
             $this->load->library('zip');
@@ -193,7 +191,6 @@ class Raw_uploads extends CI_Controller
             }
             $this->zip->download('files.zip');
         }
-        // exit;
         $this->index();
     }
 
@@ -202,14 +199,11 @@ class Raw_uploads extends CI_Controller
         $files = $this->input->post('checkbox');
         $post = $this->input->post();
         $PIDArray = "{\"Pids\":[";
+
         if (!is_null($files)) {
             foreach ($files as $file => $file_name) {
-
-                // $preprocess_path = '/Applications/MAMP/htdocs/website_stuff/assets/preprocess/';
                 $preprocess_path = config_item('base_directory') . 'assets/preprocess/';
-
                 $cmd = '';
-
                 $file_path = $this->file_dir . '/raw/' . $file_name;
 
                 if ($post['stemming'] != null) {

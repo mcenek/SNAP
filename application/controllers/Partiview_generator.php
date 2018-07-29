@@ -42,17 +42,16 @@ class Partiview_generator extends CI_Controller
     {
         $this->index();
         $post = $this->input->post();
-        // TODO replace with rel path
-        $partiview_path = '/Applications/MAMP/htdocs/SNAP/assets/partiViewGen/PartiGen.jar ';
+        $partiview_path = $this->config->item('base_directory') . 'assets/partiViewGen/PartiGen.jar';
         $output = '';
         $cmd = '';
         $gexf_file = '';
         $file_dates = '';
-
         $files = scandir($this->file_dir . '/partiview_generator/');
-        foreach ($files as $file) //Set gexf and timestamp files for partiview
-        {
-            // TODO one of these isn't needed anymore...
+
+        // Set gexf and timestamp files for partiview
+        foreach ($files as $file) {
+            // TODO: one of these isn't needed anymore...
             $file_parts = pathinfo($file);
             if ($file == 'completeLayout.gexf') {
                 $gexf_file = $this->file_dir . '/partiview_generator/' . $file . ' ';
@@ -70,7 +69,7 @@ class Partiview_generator extends CI_Controller
         $skew_y = $this->session->userdata('skew_y');
         $skew_z = $this->session->userdata('skew_x');
         $shape = $this->session->userdata('shape');
-        $cmd = 'java' . ' -jar ' . $partiview_path . $gexf_file . $file_dates . ' '
+        $cmd = 'java' . ' -jar ' . $partiview_path . '' . $gexf_file . $file_dates . ' '
             . $date_range . ' ' . $skew_x . ' ' . $skew_y . ' ' . $skew_z . ' ' . $shape;
 
         $output = shell_exec($cmd);

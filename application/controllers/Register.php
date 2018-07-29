@@ -26,16 +26,16 @@ class Register extends CI_Controller
         if ($this->form_validation == false) {
             $this->session->set_flashdata('flash_message', 'Form validation error');
             redirect(site_url() . '/register');
-        }
-        //Form is filled out properly
-        else {
+        } else {
+            // Form is filled out properly
             if ($this->user->isDuplicate($this->input->post('email'))) {
                 $this->session->set_flashdata('flash_message', 'User email already exists');
                 redirect(site_url() . '/register');
             } else {
-                //Insert user into tempUser table
-                //Returns all post items with xss filter
-                $clean = $this->security->xss_clean($this->input->post(null, true)); //xss_clean is intended to prevent a hacker from using Cross Site Scripting attacks to hijack cookies or do other malicious things.
+                // Insert user into tempUser table
+                // Returns all post items with xss filter
+                // xss_clean is intended to prevent a hacker from using Cross Site Scripting attacks to hijack cookies or do other malicious things.
+                $clean = $this->security->xss_clean($this->input->post(null, true));
                 $id = $this->user->insertUser($clean);
                 $token = $this->user->insertToken($id);
 

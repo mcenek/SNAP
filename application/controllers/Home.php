@@ -16,7 +16,7 @@ class Home extends CI_Controller
             $data = $this->session->userdata;
             $this->load->view('home', $data);
         } else {
-            //If no session redirect back to login
+            // If no session redirect back to login
             redirect('login', 'refresh');
         }
     }

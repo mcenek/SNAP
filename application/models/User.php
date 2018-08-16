@@ -175,13 +175,11 @@ class User extends CI_Model
 
     public function checkLogin($login_info)
     {
-        //$this->load->library('password');
         $this->db->select('*');
         $this->db->where('email', $login_info['email']);
         $query = $this->db->get('users');
         $user_info = $query->row();
         if ($user_info) {
-            //if(!$this->password->validate_password($login_info['password'], $user_info->password)){
             if (!password_verify($login_info['password'], $user_info->password)) {
                 error_log('Incorrect password (' . $login_info['email'] . ')');
                 return false;
@@ -200,5 +198,4 @@ class User extends CI_Model
         $this->db->update('users', array('last_login' => date('Y-m-d h:i:s A')));
         return;
     }
-
 }

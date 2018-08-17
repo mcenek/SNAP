@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <?php include 'resources.php'; ?>
+    <?php include 'partial/resources.php'; ?>
 
     <link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
 
@@ -28,7 +28,7 @@
     </style>
 </head>
 <body>
-    <?php include 'header.php'; ?>
+    <?php include 'partial/header.php'; ?>
 
     <div class ="container">
         <?php

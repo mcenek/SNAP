@@ -16,7 +16,7 @@
     </style>
 </head>
 <body>
-    <?php include 'navi.php';?>
+    <?php include 'partial/navi.php';?>
     <?php
 //Text document to be processed is displayed in this box.
 echo form_open('raw_uploads/preprocess', '', array('file_name' => $file_name));

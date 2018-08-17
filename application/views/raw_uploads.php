@@ -89,7 +89,7 @@
     </script>
 </head>
 <body>
-    <?php include 'navi.php';?>
+    <?php include 'partial/navi.php';?>
 
     <div class="container">
         <H3>Natural Language Processing</H3>

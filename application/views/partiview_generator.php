@@ -123,7 +123,7 @@
 </head>
 
 <body>
-    <?php include 'navi.php';?>
+    <?php include 'partial/navi.php';?>
 
     <div class="container">
         <H3>Network Visualization</H3>

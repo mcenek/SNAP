@@ -11,7 +11,7 @@
         </style>
     </head>
     <body>
-        <?php include 'header.php';?>
+        <?php include 'partial/header.php'; ?>
         <div class ="container">
             <h1>New User</h1>
             <?php echo validation_errors(); ?>

@@ -3,8 +3,6 @@
 <head>
     <?php include 'partial/resources.php'; ?>
 
-    <link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
-
     <title>Home Page</title>
 </head>
 <body>

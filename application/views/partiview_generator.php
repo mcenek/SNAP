@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <!-- TODO put these global script imports in a single location -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' />
+    <?php include 'partial/resources.php'; ?>
 
-    <link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
+    <link rel="stylesheet" href=<?php echo style_url() . 'partiview_generator.css'; ?> type="text/css" />
 
     <title>Network Visualization</title>
+
     <script type="text/javascript">
-        function selectAll(box) { // TODO this really needs to be refined
+        function selectAll(box) { // TODO: this really needs to be refined
             var checkBoxes = document.getElementsByTagName('input');
             for(var i=0; i < checkBoxes.length; i++) {
                 if(checkBoxes[i].type == 'checkbox') {
@@ -22,106 +17,7 @@
             }
         }
     </script>
-    <style>
-        body {
-            font-family: "Lato", sans-serif;
-        }
-
-        /* Style the tab */
-        div.tab {
-            overflow: hidden;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-        }
-        ul.nav-tabs > li {
-            /*background-color: inherit;*/
-            float: left;
-            border: none;
-            outline: none;
-            transition: 0.3s;
-            font-size: 17px;
-        }
-        /* Change background color of buttons on hover */
-        div.tab button:hover {
-            background-color: #ddd;
-        }
-        /* Create an active/current tablink class */
-        div.tab button.active {
-            background-color: #ccc;
-        }
-        /* Style the tab content */
-        .tab-content {
-            padding: 6px 12px;
-            border: 1px solid #ccc;
-            border-top: none;
-        }
-        .black {
-            background: #000000;
-        }
-
-        #visPanel {
-            display: flex;
-            width: 90vw;
-            height: 90vh;
-            border: 10px solid #0f0f0f;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 200px;
-        }
-        canvas{
-            width: 100%;
-            height: 100%;
-        }
-        #controlpanel {
-            background: #000000;
-            width: 200px;
-            /*flex: 1 1 30%;*/
-            border-left: 10px solid #0f0f0f;
-            overflow: hidden;
-            padding: 1em;
-            color: ivory;
-        }
-        #visualizer {
-            flex: 1 1 70%;
-        }
-        #placeholderCanvas {
-            background: #000000;
-        }
-        #searchField {
-            width: 150px;
-            box-sizing: border-box;
-            border: 2px solid #ccc;
-            border-radius: 2px;
-            font-size: 16px;
-            background-color: white;
-            margin-bottom: 10px;
-        }
-        #actionButtons {
-            margin: 0.5em;
-        }
-
-        .loader {
-            position: absolute;
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3498db;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: spin 2s linear infinite; /* Safari */
-            animation: spin 2s linear infinite;
-        }
-        /* Safari */
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            00% { -webkit-transform: rotate(360deg); }
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
 </head>
-
 <body>
     <?php include 'partial/navi.php';?>
 
@@ -166,21 +62,22 @@
             <div id='networkFiles' class='tab-pane fade in active'>
                 <form method='post' action='partiview_generator/submit_files'>
                     <?php
-foreach ($files as $file => $file_name) {
-    $file_parts = pathinfo($file_name);
+                        foreach ($files as $file => $file_name) {
+                            $file_parts = pathinfo($file_name);
 
-    if ($file_parts['extension'] == 'gexf') {
-        echo form_checkbox(array(
-            'name' => 'checkbox[]',
-            'value' => $file_name,
-            'checked' => false,
-        ));
+                            if ($file_parts['extension'] == 'gexf') {
+                                echo form_checkbox(array(
+                                    'name' => 'checkbox[]',
+                                    'value' => $file_name,
+                                    'checked' => false,
+                                ));
 
-        $url = site_url() . '/partiview_generator/display_file' . $file_name;
-        echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
-    }
-}
-?>
+                                $url = site_url() . '/partiview_generator/display_file' . $file_name;
+                                echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+                            }
+                        }
+                    ?>
+
                     <input type='checkbox' name='select_all' onClick='selectAll(this)'>Select All</input>
                     <br/>
                     <br/>
@@ -194,21 +91,21 @@ foreach ($files as $file => $file_name) {
             <div id='visualization' class='tab-pane fade'>
                 <form method="post" action="partiview_generator/submit_files">
                     <?php
-foreach ($files as $file => $file_name) {
-    $file_parts = pathinfo($file_name);
+                        foreach ($files as $file => $file_name) {
+                            $file_parts = pathinfo($file_name);
 
-    if ($file_parts['extension'] == "txt") {
-        echo form_checkbox(array(
-            'name' => 'checkbox[]',
-            'value' => $file_name,
-            'checked' => false,
-        ));
+                            if ($file_parts['extension'] == "txt") {
+                                echo form_checkbox(array(
+                                    'name' => 'checkbox[]',
+                                    'value' => $file_name,
+                                    'checked' => false,
+                                ));
 
-        $url = site_url() . '/partiview_generator/display_file' . $file_name;
-        echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
-    }
-}
-?>
+                                $url = site_url() . '/partiview_generator/display_file' . $file_name;
+                                echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+                            }
+                        }
+                    ?>
                     <input type='checkbox' name='select_all' onClick='selectAll(this)'> Select All
                     <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
                     <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
@@ -217,23 +114,23 @@ foreach ($files as $file => $file_name) {
             <div id='partiviewFiles' class='tab-pane fade'>
                 <form method="post" action="partiview_generator/submit_files">
                     <?php
-foreach ($files as $file => $file_name) {
-    $file_parts = pathinfo($file_name);
+                        foreach ($files as $file => $file_name) {
+                            $file_parts = pathinfo($file_name);
 
-    if ($file_parts['extension'] == 'speck'
-        || $file_parts['extension'] == 'cf'
-        || $file_parts['extension'] == 'cmap') {
-        echo form_checkbox(array(
-            'name' => 'checkbox[]',
-            'value' => $file_name,
-            'checked' => false,
-        ));
+                            if ($file_parts['extension'] == 'speck'
+                                || $file_parts['extension'] == 'cf'
+                                || $file_parts['extension'] == 'cmap') {
+                                echo form_checkbox(array(
+                                    'name' => 'checkbox[]',
+                                    'value' => $file_name,
+                                    'checked' => false,
+                                ));
 
-        $url = site_url() . '/partiview_generator/display_file' . $file_name;
-        echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
-    }
-}
-?>
+                                $url = site_url() . '/partiview_generator/display_file' . $file_name;
+                                echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+                            }
+                        }
+                    ?>
                     <input type='checkbox' name='select_all' onClick='selectAll(this)'> Select All
                     <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
                     <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
@@ -244,7 +141,6 @@ foreach ($files as $file => $file_name) {
         <p id="actionButtons">
             <button class="btn btn-primary" type="button" onClick="fireVisualizer()">Start Visualization</button>
             <button class="btn btn-primary" type="button" onclick="stopVisualizer()">Stop Visualization</button>
-
         </p>
     </div>
 
@@ -275,13 +171,11 @@ foreach ($files as $file => $file_name) {
     </div>
 
     <script>
-        function showLoadingWheel()
-        {
+        function showLoadingWheel() {
             document.getElementById("loadId").style.display = "block";
         }
-        // this is called from visualize.js
-        function hideLoadingWheel()
-        {
+        function hideLoadingWheel() {
+            // this is called from visualize.js
             document.getElementById("loadId").style.display = "none";
         }
 

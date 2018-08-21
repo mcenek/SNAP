@@ -3,59 +3,40 @@
 <head>
     <?php include 'partial/resources.php'; ?>
 
-    <title>UAA NLP Login</title>
+    <link rel="stylesheet" href=<?php echo style_url() . 'login.css'; ?> type="text/css" />
 
-    <style>
-        fieldset > div.container {
-            padding: 10px;
-        }
-        fieldset > div.container > * {
-            display: block;
-        }
-        fieldset > div.container > h3,
-        fieldset > div.container > p {
-            margin: 10px 0px;
-        }
-        button {
-            margin: 5px 0px;
-        }
-        #warning {
-            color: red;
-            font-weight: bold;
-        }
-    </style>
+    <title>UAA NLP Login</title>
 </head>
 <body>
     <?php include 'partial/header.php'; ?>
 
-    <div class ="container">
+    <div class="container">
         <?php
-            echo validation_errors();
             $fattr = array('class' => 'form-signin');
             echo form_open('login/verifylogin', $fattr);
         ?>
-            <fieldset>
-                <div class='container'>
-                    <H3>Login</H3>
+            <div class='container'>
+                <h3>Login</h3>
 
+                <div class="input-group">
                     <input type="text" name="email" value="" id="email" placeholder="Email">
                     <?php echo form_error('email'); ?>
                     <input type="password" name="password" value="" id="password" placeholder="Password">
                     <?php echo form_error('password'); ?>
-                    <button class="btn btn-primary" type="submit" value="Login">Login</button>
-
-                    <p>
-                        Don't have an account? Click to <a href="<?php echo site_url(); ?>/register">Register</a>
-                        <br />
-                        Forgot your password? Click <a href="<?php echo site_url(); ?>/forgotpass">Here</a>
-                    </p>
                 </div>
-            </fieldset>
+                <button class="btn btn-primary" type="submit" value="Login">Login</button>
+
+                <p>
+                    Don't have an account? Click to <a href="<?php echo site_url(); ?>/register">Register</a>
+                    <br />
+                    Forgot your password? Click <a href="<?php echo site_url(); ?>/forgotpass">Here</a>
+                </p>
+            </div>
         <?php echo form_close(); ?>
         <?php 
             $arr = $this->session->flashdata();
             if (!empty($arr['flash_message'])) {
-                $html = '<p id="warning">';
+                $html = '<p id="warning" class="warning">';
                 $html .= $arr['flash_message'];
                 $html .= '</p>';
                 echo $html;

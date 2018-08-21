@@ -9,6 +9,7 @@ class Register extends CI_Controller
         parent::__construct();
         $this->load->model('user', '', true);
         $this->load->library('form_validation');
+        $this->form_validation->set_error_delimiters('<span class="warning">', '</span>');
     }
 
     public function index()
@@ -19,22 +20,23 @@ class Register extends CI_Controller
 
     public function registerUser()
     {
-        $this->form_validation->set_rules('firstName', 'Firstname', 'required');
-        $this->form_validation->set_rules('lastName', 'Lastname', 'required');
+        $this->form_validation->set_rules('firstName', 'First Name', 'required');
+        $this->form_validation->set_rules('lastName', 'Last Name', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 
-        if ($this->form_validation == false) {
-            $this->session->set_flashdata('flash_message', 'Form validation error');
-            redirect(site_url() . '/register');
+        if ($this->form_validation->run() == false) {
+            $this->load->view('register');
         } else {
             // Form is filled out properly
+            // Does the email already exist?
             if ($this->user->isDuplicate($this->input->post('email'))) {
-                $this->session->set_flashdata('flash_message', 'User email already exists');
+                $this->session->set_flashdata('flash_message', 'User email already exists.');
                 redirect(site_url() . '/register');
             } else {
                 // Insert user into tempUser table
                 // Returns all post items with xss filter
-                // xss_clean is intended to prevent a hacker from using Cross Site Scripting attacks to hijack cookies or do other malicious things.
+                // xss_clean is intended to prevent a hacker from using Cross Site Scripting
+                // attacks to hijack cookies or do other malicious things.
                 $clean = $this->security->xss_clean($this->input->post(null, true));
                 $id = $this->user->insertUser($clean);
                 $token = $this->user->insertToken($id);
@@ -49,8 +51,6 @@ class Register extends CI_Controller
 
                 //TODO: Send $message through mail()
                 echo $message;
-
-                exit;
             }
         }
     }

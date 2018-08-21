@@ -10,7 +10,7 @@
 
     <div class="container">
         <h1>Home</h1>
-        <h2>Welcome <?php echo $firstName; ?></h2>
+        <h3>Welcome, <?php echo $firstName; ?>.</h3>
     </div>
 </body>
 </html>

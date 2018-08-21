@@ -13,3 +13,6 @@
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
     crossorigin="anonymous"
 >
+
+<!-- Global CSS Rules -->
+<link rel="stylesheet" href=<?php echo style_url() . 'global.css'; ?> type="text/css" />

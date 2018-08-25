@@ -10,6 +10,13 @@ class Register extends CI_Controller
         $this->load->model('user', '', true);
         $this->load->library('form_validation');
         $this->form_validation->set_error_delimiters('<span class="warning">', '</span>');
+
+        $this->load->library('email');
+        $config['protocol'] = 'sendmail';
+        $config['mailtype'] = 'html';
+        $this->email->initialize($config);
+
+        $this->done = false;
     }
 
     public function index()
@@ -45,12 +52,21 @@ class Register extends CI_Controller
                 $url = site_url() . '/complete/completeReg/token/' . $qstring;
                 $link = '<a href="' . $url . '">' . $url . '</a>';
 
-                $message = '';
+                $message = 'Welcome to UAA NLP, the Semantic Network Analysis Pipeline<br/>';
                 $message .= '<strong>Click the link below to finish registration</strong><br/>';
                 $message .= $link;
 
-                //TODO: Send $message through mail()
-                echo $message;
+                // NOTE: the domain name here must match one of the FQDNs in the machine's hosts file
+                $this->email->from('register@uaanlp.org', 'UAA NLP - SNAP');
+                $this->email->to($this->input->post('email'));
+
+                $this->email->subject('UAA NLP - Registration');
+                $this->email->message($message);
+
+                $this->email->send();
+
+                $this->done = true;
+                $this->load->view('register');
             }
         }
     }

@@ -17,7 +17,9 @@ class settings extends CI_Controller
 
         if ($this->session->userdata('logged_in')) {
             $this->data = $this->session->userdata;
-            $this->file_dir = $this->data['file_dir'];
+            $email = $this->data['email'];
+            $project_name = $this->data['project_name'];
+            $this->file_dir = config_item('user_directory') . "{$email}/{$project_name}";
         } else {
             redirect('home', 'refresh');
         }
@@ -182,26 +184,50 @@ class settings extends CI_Controller
             $this->save_skew_z($this->input->post('skew_z'));
             $this->save_shape($this->input->post('shape'));
         } elseif ($this->input->post('file_action') == "current_project") {
-            $idOut = $this->session->userdata['id'];
-            $new_file_dir = $this->config->item('user_directory') . $this->session->userdata('email');
-            $new_file_dir = $new_file_dir . '/' . $this->projects->get_project($this->input->post('project'))->name;
-            $new_project = array(
-                'project_id' => $this->input->post('project'),
-                'file_dir' => $new_file_dir,
-            );
-            $this->user->update_user($new_project, $idOut);
-            $this->session->set_userdata('project_id', $this->input->post('project'));
-            $this->session->set_userdata('file_dir', $new_file_dir);
+            $this->change_project($this->input->post('project'));
         } elseif ($this->input->post('file_action') == "delete") {
             $this->delete_project($this->input->post('project'));
         }
         redirect('settings', 'refresh');
     }
 
+    /*
+    Change the user's currently active project
+    */
+    public function change_project($project_id)
+    {
+        $user_id = $this->session->userdata['id'];
+        $project = $this->projects->get_project($project_id);
+
+        // TODO: should be removed when file_dir is taken out of the db,
+        // at which point all we'll have to do is update the user's current project id,
+        // and the session userdata
+        $new_file_dir = $this->config->item('user_directory') . $this->session->userdata['email'];
+        $new_file_dir = $new_file_dir . '/' . $project->name;
+        $new_project = array(
+            'project_id' => $project_id,
+            'file_dir' => $new_file_dir
+        );
+
+        $this->user->update_user($new_project, $user_id);
+
+        $this->session->set_userdata('project_id', $project_id);
+        $this->session->set_userdata('file_dir', $new_file_dir);
+        $this->session->set_userdata('project_name', $project->name);
+    }
+
+    /*
+    Delete a project from a user's list of active projects
+
+    TODO: If the user deletes their currently active project, we need to account
+    for that somehow -- also if they delete ALL their projects
+    */
     public function delete_project($id)
     {
         $this->projects->delete_project($id);
-        // TODO - delete directory - This is now a feature. "Deleted" projects can be recovered.
+        // TODO: "Deleted" projects can be recovered, so all this should really do is
+        // somehow un-link the project from the user account
+        // Maybe keep a list of each user's active projects?
     }
 
     public function create_directory()

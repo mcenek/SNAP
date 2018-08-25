@@ -18,3 +18,11 @@ function flash_data($arr)
         echo $html;
     }
 }
+
+// Mainly used for debugging
+function echo_arr($arr)
+{
+    foreach ($arr as $key => $value) {
+        echo "{$key} => {$value} <br />";
+    }
+}

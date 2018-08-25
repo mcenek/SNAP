@@ -42,6 +42,10 @@ class Login extends CI_Controller
             foreach ($user_info as $key => $val) {
                 $this->session->set_userdata($key, $val);
             }
+            // Set other common pieces of information
+            $project = $this->projects->get_project($this->session->userdata('project_id'));
+            $this->session->set_userdata('project_name', $project->name);
+
             redirect(site_url() . '/home');
         }
     }

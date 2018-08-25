@@ -15,7 +15,9 @@ class Preprocessed_uploads extends CI_Controller
 
         if ($this->session->userdata('logged_in')) {
             $this->data = $this->session->userdata;
-            $this->file_dir = config_item('user_directory') . $this->data['email'];
+            $email = $this->data['email'];
+            $project_name = $this->data['project_name'];
+            $this->file_dir = config_item('user_directory') . "{$email}/{$project_name}";
         } else {
             redirect('home', 'refresh');
         }

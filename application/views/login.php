@@ -33,15 +33,7 @@
                 </p>
             </div>
         <?php echo form_close(); ?>
-        <?php 
-            $arr = $this->session->flashdata();
-            if (!empty($arr['flash_message'])) {
-                $html = '<p id="warning" class="warning">';
-                $html .= $arr['flash_message'];
-                $html .= '</p>';
-                echo $html;
-            }
-        ?>
+        <?php flash_data($this->session->flashdata()); ?>
     </div>
 </body>
 </html>

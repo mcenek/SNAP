@@ -201,7 +201,10 @@
                     }
                 }
             ?>
-            <button class="btn btn-primary" data-toggle="tooltip" title="Generates Histogram based on selected files!" id="histogramGeneration" name="file_action" value="HistoGram" type="button">Generate Histogram</button>
+            <button class="btn btn-primary" data-toggle="tooltip" title="Generates Histogram based on selected files!"
+                id="histogramGeneration" name="file_action" value="HistoGram" type="button">
+                Generate Histogram
+            </button>
             <button class="btn btn-primary" id="NetGenButton" name="file_action" value="netgen" type="button">Network Generation</button>
 
             <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>

@@ -17,8 +17,9 @@ class Partiview_generator extends CI_Controller
         if ($this->session->userdata('logged_in')) {
             $this->projects->get_project($this->session->userdata('project_id'));
             $this->data = $this->session->userdata;
-            $this->file_dir = $this->config->item('user_directory') . $this->data['email'];
-            // $this->file_dir = config_item('user_directory') . $this->data['email'];
+            $email = $this->data['email'];
+            $project_name = $this->data['project_name'];
+            $this->file_dir = config_item('user_directory') . "{$email}/{$project_name}";
             $this->current_project = $this->projects->get_project($this->data['project_id']);
         } else {
             redirect('home', 'refresh');

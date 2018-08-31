@@ -14,6 +14,16 @@ On windows, this can be achieved by going to properties->security for that folde
 
 TODO: What is the server's user group on Mac?
 
+The following is needed for a public/production instance of the project, not for local development:
+
+The apache server needs to be configured to disallow directory access. This can be accomplished by placing or editing the `Options` line in the `<Directory>` section of `apache2.conf` to be something like:
+```
+<Directory /path/to/snap>
+    Options -Indexes
+</Directory>
+```
+Of course, other options or directory settings should also apply.
+
 ### Email Registration
 
 The email registration sends via the php email library, using the `sendmail` application, so if you need to have said feature working, you'll need to ensure that is installed:

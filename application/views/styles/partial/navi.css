@@ -7,26 +7,18 @@
     background-color: #333;
 }
 
-.headerBar {
+#nav .headerBar {
     font-size: 50px;
     color: white;
     padding: 30px 60px;
 }
 
-.menuItem {
+#nav .menuItem {
     float: left;
     border-right: 1px solid #bbb;
 }
 
-.jumbotron {
-    background-color: 000;
-}
-
-.current_val {
-    font-weight: bold;
-}
-
-li:last-child {
+#nav li:last-child {
     border-right: none;
 }
 
@@ -38,6 +30,6 @@ li:last-child {
     text-decoration: none;
 }
 
-li a:hover:not(.active) {
+#nav li a:hover:not(.active) {
     background-color: #111;
 }

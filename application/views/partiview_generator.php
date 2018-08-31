@@ -19,10 +19,10 @@
     </script>
 </head>
 <body>
-    <?php include 'partial/navi.php';?>
+    <?php include 'partial/navi.php'; ?>
 
     <div class="container">
-        <H3>Network Visualization</H3>
+        <h3>Network Visualization</h3>
         <p>
             Using the .gexf files from Gephi's Network Analysis, this page
             will generate files for use in Partiview or in browser with
@@ -41,26 +41,27 @@
 
         <p>
             Select what Network Analysis files you would like to generate for
-            visualization then click Make 3D Visualization files.<br />
+            visualization then click Make 3D Visualization files.
+            <br />
             To run a file in the visualizer select what file you would like to
             run then click Launch 3D Visualization.
         </p>
 
-        <ul class="nav nav-tabs tab">
-            <li class="active">
-                <a data-toggle="tab" href="#networkFiles">Network Analysis Files</a>
+        <ul class="nav nav-tabs" role-"tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" role="tab" href="#networkFiles">Network Analysis Files</a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#visualization">In Browser 3D Visualization Files</a>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" role="tab" href="#visualization">In Browser 3D Visualization Files</a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#partiviewFiles">Parti-View Files</a>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" role="tab" href="#partiviewFiles">Parti-View Files</a>
             </li>
         </ul>
 
-        <div class='tab-content'>
-            <div id='networkFiles' class='tab-pane fade in active'>
-                <form method='post' action='partiview_generator/submit_files'>
+        <div class="tab-content">
+            <div id="networkFiles" class="tab-pane fade show active" role="tabpanel">
+                <form method="post" action="partiview_generator/submit_files">
                     <?php
                         foreach ($files as $file => $file_name) {
                             $file_parts = pathinfo($file_name);
@@ -78,17 +79,17 @@
                         }
                     ?>
 
-                    <input type='checkbox' name='select_all' onClick='selectAll(this)'>Select All</input>
+                    <input type="checkbox" name="select_all" onClick="selectAll(this)">Select All</input>
                     <br/>
                     <br/>
-                    <button class='btn btn-primary' name='file_action' value='vis_gen' type='submit'>
+                    <button class="btn btn-primary" name="file_action" value="vis_gen" type="submit">
                         Make 3D Visualization files
                     </button>
                     <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
                     <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
                 </form>
             </div>
-            <div id='visualization' class='tab-pane fade'>
+            <div id="visualization" class="tab-pane fade" role="tabpanel">
                 <form method="post" action="partiview_generator/submit_files">
                     <?php
                         foreach ($files as $file => $file_name) {
@@ -106,12 +107,12 @@
                             }
                         }
                     ?>
-                    <input type='checkbox' name='select_all' onClick='selectAll(this)'> Select All
+                    <input type="checkbox" name="select_all" onClick="selectAll(this)"> Select All
                     <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
                     <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
                 </form>
             </div>
-            <div id='partiviewFiles' class='tab-pane fade'>
+            <div id="partiviewFiles" class="tab-pane fade" role="tabpanel">
                 <form method="post" action="partiview_generator/submit_files">
                     <?php
                         foreach ($files as $file => $file_name) {

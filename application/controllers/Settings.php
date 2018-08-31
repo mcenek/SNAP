@@ -35,6 +35,38 @@ class settings extends CI_Controller
         }
     }
 
+    public function save_settings()
+    {
+        $input = $this->input;
+
+        switch ($input->post('file_action')) {
+            case 'net_gen_set':
+                $this->save_use_freq($input->post('useFreq'));
+                $this->save_low_freq($input->post('freq_lower'), $input->post('freq_upper'));
+                $this->save_high_freq($input->post('freq_upper'), $input->post('freq_lower'));
+                break;
+            case 'net_ana_set':
+                $this->save_layout($input->post('layout'));
+                $this->save_mod($input->post('mod_resolution'));
+                break;
+            case 'net_vis_set':
+                $this->save_date_range($input->post('date_range'));
+                $this->save_skew_x($input->post('skew_x'));
+                $this->save_skew_y($input->post('skew_y'));
+                $this->save_skew_x($input->post('skew_z'));
+                $this->save_shape($input->post('shape'));
+                break;
+            case 'current_project':
+                $this->change_project($input->post('project'));
+                break;
+            case 'delete':
+                $this->delete_project($input->post('project'));
+                break;
+        }
+
+        redirect('settings', 'refresh');
+    }
+
     public function save_use_freq($bool)
     {
         if ($bool == "on") {
@@ -80,6 +112,12 @@ class settings extends CI_Controller
         }
     }
 
+    /*
+    Set the layout that network analysis should use when creating the graph of concepts
+    
+    TODO: I don't recall which of these are actually implemented - should be checked and
+    the ones that aren't, removed from the options in the view
+    */
     public function save_layout($layout)
     {
         $id = $this->session->userdata('id');
@@ -106,7 +144,13 @@ class settings extends CI_Controller
         }
     }
 
-    public function save_net_vis($date_range)
+    /*
+    Save the date range that concepts should be connected in between layers
+
+    TODO: Don't think this is implemented - should either be removed, implemented,
+    or disabled/noted that it isn't functional
+    */
+    public function save_date_range($date_range)
     {
         $id = $this->session->userdata('id');
         $data = array(
@@ -154,6 +198,12 @@ class settings extends CI_Controller
         $this->session->set_userdata('skew_z', $skew_z);
     }
 
+    /*
+    Save shape of communities when generating visualization files
+
+    TODO: Not sure which of these is implemented - need to remove, disable,
+    disclaim, or implement
+    */
     public function save_shape($shape)
     {
         $id = $this->session->userdata('id');
@@ -164,31 +214,6 @@ class settings extends CI_Controller
         $this->db->where('id', $id);
         $this->db->update('users', $data);
         $this->session->set_userdata('shape', $shape);
-    }
-
-    public function save_settings()
-    {
-        if ($this->input->post('file_action') == "nlp_set") {
-            $this->delete_files($this->input->post('checkbox'));
-        } elseif ($this->input->post('file_action') == "net_gen_set") {
-            $this->save_use_freq($this->input->post('useFreq'));
-            $this->save_low_freq($this->input->post('freq_lower'), $this->input->post('freq_upper'));
-            $this->save_high_freq($this->input->post('freq_upper'), $this->input->post('freq_lower'));
-        } elseif ($this->input->post('file_action') == "net_ana_set") {
-            $this->save_layout($this->input->post('Layout'));
-            $this->save_mod($this->input->post('mod_resolution'));
-        } elseif ($this->input->post('file_action') == "net_vis_set") {
-            $this->save_net_vis($this->input->post('date_range'));
-            $this->save_skew_x($this->input->post('skew_x'));
-            $this->save_skew_y($this->input->post('skew_y'));
-            $this->save_skew_z($this->input->post('skew_z'));
-            $this->save_shape($this->input->post('shape'));
-        } elseif ($this->input->post('file_action') == "current_project") {
-            $this->change_project($this->input->post('project'));
-        } elseif ($this->input->post('file_action') == "delete") {
-            $this->delete_project($this->input->post('project'));
-        }
-        redirect('settings', 'refresh');
     }
 
     /*

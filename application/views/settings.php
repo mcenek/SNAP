@@ -15,7 +15,7 @@
     <?php include 'partial/navi.php'; ?>
 
     <div class="container">
-        <H3>Current Project</H3>
+        <h3>Current Project</h3>
         <ul>
             <form id="settings" name="settings" method="post" action="settings/save_settings">
                 <p>Projects</p>
@@ -37,17 +37,15 @@
             </form>
         </ul>
 
-        <H3>Create New Project</H3>
+        <h3>Create New Project</h3>
         <ul>
             <form id="settings" name="settings" method="post" action="settings/create_directory">
                 <input type="text" maxlength="28" name="directory_name" />
-                <br />
-                <br />
                 <button class="btn btn-primary" value="create_directory" type="submit">Create</button>
             </form>
         </ul>
 
-        <H3>Network Generation Settings</H3>
+        <h3>Network Generation Settings</h3>
         <ul>
             <form id="settings" name="settings" method="post" action="settings/save_settings">
                 <ul>
@@ -76,7 +74,8 @@
                 /> Use Frequency
                 <br />
                 <br />
-                <p class="current_val">Current Use Frequency Setting:
+                <p class="current_val">
+                    Current Use Frequency Setting:
                     <?php
                         $use_freq = $this->session->userdata('use_freq');
                         if ($use_freq == 1) {
@@ -91,26 +90,28 @@
                 <input
                     type="number" min="0" name="freq_upper" 
                     value=<?php echo $this->session->userdata('freq_upper_bound'); ?>
-                /> Frequency Threshold Upper Bound 
+                />
+                Frequency Threshold Upper Bound 
                 <p class="current_val">Current Set Upper Bound: <?php echo $this->session->userdata('freq_upper_bound'); ?></p>
                 <br />
                 <br />
                 <p>Enter a number greater than the Upper bound and less than or equal to 100 </p>
                 <input
                     type="number" max="100" name="freq_lower"
-                    value="<?php echo $this->session->userdata('freq_lower_bound'); ?>"
-                /> Frequency Threshold Lower Bound
+                    value=<?php echo $this->session->userdata('freq_lower_bound'); ?>
+                />
+                Frequency Threshold Lower Bound
                 <p class="current_val">Current Set Lower Bound: <?php echo $this->session->userdata('freq_lower_bound'); ?></p>
 
                 <button class="btn btn-primary" name="file_action" value="net_gen_set" type="submit">Save</button>
             </form>
         </ul>
 
-        <H3>Network Analysis Settings</H3>
+        <h3>Network Analysis Settings</h3>
         <ul>
             <form id="settings" name="settings" method="post" action="settings/save_settings">
                 <p>Layout</p>
-                <select name="Layout">
+                <select name="layout">
                     <option value="0"<?php $layout = $this->session->userdata('layout');if ($layout == 0) {echo "selected";}?>>Circular Star Layout</option>
                     <option value = "1"<?php $layout = $this->session->userdata('layout');if ($layout == 1) {echo "selected";}?>>Radial Axis Layout</option>
                     <option value = "2"<?php $layout = $this->session->userdata('layout');if ($layout == 2) {echo "selected";}?>>Yifan Hu Layout</option>
@@ -136,14 +137,15 @@
                     type="number" step="0.0001" min="0.0001" max="1"
                     value="<?php echo $this->session->userdata('mod_resolution'); ?>"
                     name="mod_resolution" id="mod_resolution"
-                /> Modularity Resolution
+                />
+                Modularity Resolution
                 <p class="current_val">Current Set Modularity Resolution: <?php echo $this->session->userdata('mod_resolution'); ?></p>
 
                 <button class="btn btn-primary" name="file_action" value="net_ana_set" type="submit">Save</button>
             </form>
         </ul>
 
-        <H3>Network Visualization Settings</H3>
+        <h3>Network Visualization Settings</h3>
         <ul>
             <form id="settings" name="settings" method="post" action="settings/save_settings">
                 <p>Enter the number of days you would like nodes to be connected to each other between layers. </p>

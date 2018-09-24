@@ -26,10 +26,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['base_url'] = 'http://localhost/SNAP/';
 
 // This is the machine specific path to the user files
-$config['user_directory'] = '/Users/jessgrunblatt/users-uaa/';
+$config['user_directory'] = '/path/to/user/files/';
 
 // Machine specific directory file path
-$config['base_directory'] = '/home/rowan/html/SNAP/';
+$config['base_directory'] = '/path/to/SNAP/';
 
 /*
 |--------------------------------------------------------------------------

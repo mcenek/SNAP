@@ -6,7 +6,7 @@
 // Contributions from: 
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package threejsFileGen;
+//package threejsFileGen;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -18,8 +18,15 @@ import java.util.Map;
 public class Writer {
 	
 	public void writeCF(String path, String filename) {
-		String pathname = path + "/" + filename + ".cf";
+		String pathname;
 		String name;
+		if(path == null) 
+			pathname = filename + ".cf";
+		else
+			pathname = path + filename + ".cf";
+			//pathname = path + "/" + filename + ".cf";
+
+		
 		if(filename.contains("/")){
 			name = filename.substring(filename.lastIndexOf('/')+1);
 		}
@@ -51,7 +58,12 @@ public class Writer {
 	}
 
 	public void writeCmap(ArrayList<NodeColor> colorList, String path, String filename){
-		String fullpath = path + "/" + filename + ".cmap";
+		String fullpath;
+		if(path == null)
+			fullpath = filename + ".cmap";
+		else
+			fullpath = path + "/" + filename + ".cmap";
+
 		try{
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));
 			writer.write(colorList.size() + "\n");
@@ -64,9 +76,15 @@ public class Writer {
 	}
 
 	public void writeNodes(ArrayList<Layer> layers, ArrayList<NodeColor> colorList, String path, String filename, double xSkew, double ySkew, double zSkew, int lowestZ) {
-		String fullPath = path + "/" + filename + "_nodes.speck";
+		String fullpath;
+		if(path == null)
+			fullpath = filename + "_nodes.speck";
+		else
+			fullpath = path + "/" + filename + "_nodes.speck";
+		
+
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));
 			double size;
 			double maxRadius = 0;
 			
@@ -104,9 +122,14 @@ public class Writer {
 	}
 	
 	public void writeLabels(ArrayList<Layer> layers, String path, String filename, double xSkew, double ySkew, double zSkew, int lowestZ) {
-		String fullPath = path + "/" + filename + ".label";
+		String fullpath;
+		if(path == null)
+			fullpath = filename + ".label";
+		else
+			fullpath = path + "/" + filename + ".label";
+		
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));
 			double size;
 			double maxRadius = 0;
 			
@@ -267,7 +290,12 @@ public class Writer {
 	}
 	
 	public void writeEdges(ArrayList<Layer> layerList, ArrayList<NodeColor> colorList, String path, String filename, double xSkew, double ySkew, double zSkew, int lowestZ) {
-		String fullpath = path + "/" + filename + "_edges.speck";
+		String fullpath;
+		if(path == null)
+			fullpath = filename + "_edges.speck";
+		else
+			fullpath = path + "/" + filename + "_edges.speck";
+	
 		String mesh = "mesh -s wire -c 0 {\n1 2\n";
 		try{
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));

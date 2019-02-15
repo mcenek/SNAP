@@ -1,11 +1,19 @@
+#!/usr/bin/env python
 import os
 import sys
 
 import nltk
+#nltk.download('punkt')
+#nltk.download('averaged_perceptron_tagger')
+#nltk.download('wordnet')
+#nltk.download('maxent_ne_chunker')
+#nltk.download('words')
+
 from nltk.tree import ParentedTree
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 from nltk.tokenize import PunktSentenceTokenizer
+
 
 def get_wordnet_pos(treebank_tag):
 	if treebank_tag.startswith('J'):
@@ -62,56 +70,64 @@ SENTENCE = 'S'
 _ners = []
 first = 1 
 current = ''
-def ner_process(file_in):
-#def ner_process(parent):
-	# ner = ''
-	# global SENTENCE, _ners, first, current
-	# for node in parent:
-	# 	if type(node) is nltk.Tree:
-	# 		if node.label() == SENTENCE:
-	# 			sys.stdout.write('')
-	# 		else:
-	# 			for leaf in node.leaves():
-	# 				ner = '{}/{}/{}'.format(leaf[0].encode("ascii", "ignore"), leaf[1], node.label())
-	# 				current = leaf[0]
-	# 				_ners.append(ner)
-	# 		ner_process(node)
-	# 	else:
-	# 		if first == 1:
-	# 			ner = '{}/{}'.format(node[0].encode("ascii", "ignore"), node[1])
-	# 			first = 0 
-	# 			_ners.append(ner)
-	# 		elif node[0] != current:
-	# 			ner = '{}/{}'.format(node[0].encode("ascii", "ignore"), node[1])
-	# 			_ners.append(ner)
-	# 		else:
-	# 			pass
 
+def ner_process(parent):
+	ner = ''
+	global SENTENCE, _ners, first, current
+	for node in parent:
+		if type(node) is nltk.Tree:
+			if node.label() == SENTENCE:
+				sys.stdout.write('')
+			else:
+				for leaf in node.leaves():
+					ner = '{}/{}/{}'.format(leaf[0].encode("ascii", "ignore"), leaf[1], node.label())
+					current = leaf[0]
+					_ners.append(ner)
+			ner_process(node)
+		else:
+			if first == 1:
+				ner = '{}/{}'.format(node[0].encode("ascii", "ignore"), node[1])
+				first = 0 
+				_ners.append(ner)
+			elif node[0] != current:
+				ner = '{}/{}'.format(node[0].encode("ascii", "ignore"), node[1])
+				_ners.append(ner)
+			else:
+				pass
+	return _ners
 
-	sample_text = "The world is a strange place. Filled with cats and dogs. Guam is an island in the Pacific Ocean. The United States of America is a grand place with Donald Trump as President. Canada is Americas hat. I used to work for Alaska's Division of Election."
+	#sample_text = "The world is a strange place. Filled with cats and dogs. Guam is an island in the Pacific Ocean. The United States of America is a grand place with Donald Trump as President. Canada is Americas hat. I used to work for Alaska's Division of Election."
 	#custom_sent_tokenizer = PunktSentenceTokenizer(sample_text)
 	#tokenized = custom_sent_tokenizer.tokenize(sample_text)
-	namedEnt = ""
 
-	target = open("target.txt", 'w')
-	
-	stringFile = file_in
+#def ner_process(file_in):
+	#namedEnt = ""
+	#target = open("target.txt", 'w')
+	#print(type(stringFile))
+	#custom_sent_tokenizer = PunktSentenceTokenizer(sample_text)
+	#tokenized = custom_sent_tokenizer.tokenize(sample_text)
 
-	print(type(stringFile))
-
-	words = nltk.word_tokenize(stringFile)
-	tagged = nltk.pos_tag(words)
-	namedEnt = nltk.ne_chunk(tagged, binary=True)
-			
-	target.write(str(namedEnt))
-	return namedEnt
+#	words = nltk.word_tokenize(file_in)
+#	tagged = nltk.pos_tag(words)
+#	namedEnt = nltk.ne_chunk(tagged, binary=True)
+#	sys.stdout.write(namedEnt)
+ 
+#	f = open('/var/www/html/SNAP/cenek@up.edu/project_one/preprocessed/NER_Test.txt', 'w')
+#	f.write("blah blah")
+#	f.write(" ".join(namedEnt))
+	#f.write(str(namedEnt))
+	#f.write(str('this is it'))
+#	f.close()
+		
+	#target.write(str(namedEnt))
+#	return namedEnt
 
 def main():
 	doc = []
 	sents = []
 	pos_tagged = []
 	lemmas = []
-	#ner_tagged = []
+	ner_tagged = []
 
 	file = ''
 	
@@ -123,7 +139,6 @@ def main():
 		sys.exit()
 
 	uni_str = unicode(file, encoding="utf-8")
-
 	if sys.argv[-1] == 'tokenize':
 		doc = token_process(uni_str)
 		sys.stdout.write(" ".join(doc).encode("ascii", "ignore"))
@@ -143,31 +158,42 @@ def main():
 		#	sys.stdout.write(pos)
 		sys.stdout.write("\n".join(pos_tagged))
 
-		f = open("test_write.txt", "w")
-		f.write("\n".join(pos_tagged))
-		f.close()
+		#f = open("test_write.txt", "w")
+		#f.write("\n".join(pos_tagged))
+		#f.close()
 
 	elif sys.argv[-1] == 'lemmatize':
 		lemmas = lemma_process(uni_str)
 		#for lemma in lemmas:
 			#print lemma
 		#	sys.stdout.write(lemma)
+		
 		sys.stdout.write(" ".join(lemmas))
 
 	elif sys.argv[-1] == 'ner_tag':
-		# _sents = nltk.sent_tokenize(uni_str)
-		# _tokens = [nltk.word_tokenize(sent) for sent in _sents]
-		# _pos = [nltk.pos_tag(sent) for sent in _tokens]
-		# _chunked = nltk.ne_chunk_sents(_pos, binary=False)
-		# ner_process(_chunked)
-		# sys.stdout.write(" ".join(_ners))
+		sents = nltk.sent_tokenize(uni_str)
+		tokens = [nltk.word_tokenize(s) for s in sents]
+		pos = [nltk.pos_tag(s) for s in tokens]
+		chunked = nltk.ne_chunk_sents(pos, binary=False)
+		ners = ner_process(chunked)	
+		sys.stdout.write(str(ners))
 
-		ner_tagged = ner_process(uni_str)
-		sys.stdout.write(str(ner_tagged))
+		#words = nltk.word_tokenize(uni_str)
+		#tagged = nltk.pos_tag(words)
+		#namedEnt = nltk.ne_chunk(tagged, binary=True)
 
+		# this might be easier and cleaner, but the output file name 
+		# has to be passed in as sys.argv[1] a param before POST vars
+		#f = open('/var/www/html/SNAP/cenek@up.edu/project_one/preprocessed/NER_Test.txt', 'w')
+		#f.write(str(ners))
+		#f.close()
+	else:
+		sys.stdout.write("Could not process files, invalid tag")
 	#open("test_write.txt", "w")
 
-main()
+if __name__ == '__main__':
+    main()
+
 #
 #inpt = ""
 #tokenCount = 0

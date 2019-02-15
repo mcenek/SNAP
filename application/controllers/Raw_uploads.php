@@ -117,9 +117,10 @@ class Raw_uploads extends CI_Controller
 
     public function upload_text()
     {
-        ini_set('max_file_uploads', 20000);
 
-        $config['upload_path'] = $this->file_dir . 'raw';
+       ini_set('max_file_uploads', 20000);
+
+        $config['upload_path'] = $this->file_dir . '/raw';
         $config['allowed_types'] = '*';
         $config['max_size'] = '1000000';
 
@@ -140,9 +141,10 @@ class Raw_uploads extends CI_Controller
             $ext = pathinfo($path, PATHINFO_EXTENSION);
             // to fix error with text files having characters in them, but also still filter out all non text files
             if ($ext == 'txt') {
-                if ($this->upload->do_upload('raw_files')) {
+               if ($this->upload->do_upload('raw_files')) {
                     $this->session->set_flashdata('flash_message', "Files sucessfully uploaded!");
-                } else {
+               } else {
+       		    show_error($this->upload->display_errors());
                     $error = array('error' => $this->upload->display_errors());
                     $this->load->view('raw_uploads', $error);
                 }
@@ -230,19 +232,32 @@ class Raw_uploads extends CI_Controller
                     $cmd .= $this->build_command('corenlp', $post);
                 } else if ($post['tokenize'] == 'nltk') {
                     $preprocess_path .= 'nltk/';
-                    $cmd .= 'python ' . $preprocess_path . 'nltk-nlp.py ' . $file_path;
+                    $cmd .= '/usr/bin/python ' . $preprocess_path . 'nltk-nlp.py ' . $file_path;
                     $cmd .= $this->build_command('nltk', $post);
                 } else if ($post['tokenize'] == 'spacy') {
                     $preprocess_path .= 'spacy/';
                     $cmd .= 'python ' . $preprocess_path . 'spacy-nlp.py ' . $file_path;
                     $cmd .= $this->build_command('spacy', $post);
                 }
+		$cmd .= ' > ' . $this->file_dir . '/preprocessed/' . $file_name . ' & echo $!';
+		exec($cmd,$op);
 
-                $cmd .= ' > ' . $this->file_dir . '/preprocessed/' . $file_name . ' & echo $!';
-
-                exec($cmd, $op);
                 $output = (int) $op[0];
-                $PIDArray .= '"' . $output . '", ';
+		$PIDArray .= '"' . $output . '", ';
+		#$PIDArray .= '"' . $cmd . '", ';
+		#$PIDArray .= '"' . $op . '", ';
+		#$output = popen( $cmd,"r");
+		#echo "$op";
+
+		#while( !feof( $output ) ){
+		#	echo fread( $output, 256);
+		#	flush();
+		#	ob_flush();
+		#	#usleep(100000);
+		#}
+		#pclose($output);
+
+
             }
 
             $PIDArray = rtrim($PIDArray, ", ");

@@ -6,7 +6,7 @@
 // Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package threejsFileGen;
+//package threejsFileGen;
 
 // An Edge represents a link between two nodes in one layer -
 // two connected concepts within one piece of text

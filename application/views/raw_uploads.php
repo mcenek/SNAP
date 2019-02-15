@@ -155,6 +155,8 @@ echo '<br/>';
 //         <li>Stemming</li><li>Tokenization</li><li>Sentence Splitting</li><li>POS Tagging</li><li>Lemmatization</li><li>Name-Entity-Recogition</li>
 //     </ul>
 // </div>
+
+echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/><br/>";
 echo '<strong style="color:red">FILES 400KB take roughly 1.5 minutes to process Files larger than this will take Exponentially longer!</strong></br>';
 
 echo '<button class="btn btn-primary" id="FilePostButton" name="file_action" value="batch_preprocess"  type="button">Preprocess</button>

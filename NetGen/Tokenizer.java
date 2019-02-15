@@ -1,6 +1,6 @@
 //
 // Copyright Martin Cenek <drcenek@gmail.com> 2016-2019
-//
+// 
 // All source code is released under the terms of the MIT License.
 // See LICENSE for more information.
 // Contributions from: 
@@ -12,7 +12,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package netgen;
+//package netgen;
 
 import java.util.ArrayList;
 

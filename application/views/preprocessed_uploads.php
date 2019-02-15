@@ -3,6 +3,13 @@
 <head>
     <?php include 'partial/resources.php'; ?>
 
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <link rel="stylesheet" href="<?php echo asset_url(); ?>css/menuStyle.css" type="text/css" />
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <link rel='stylesheet' type='text/css' href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+
+
     <link rel="stylesheet" href=<?php echo style_url() . 'preprocessed_uploads.css'; ?> type="text/css" />
 
     <title>Preprocessed Uploads</title>
@@ -68,7 +75,7 @@
                         },
                         success: function(test)
                         {
-                            //console.log("Files processing");
+                            console.log("Files processing");
                             var histValues = JSON.parse(test);
                             console.log(histValues);
 
@@ -105,7 +112,7 @@
                 return function (val) {
                     return (val - min) / delta;
                 };
-            }
+            };
 
 
             $('#FinishHist').on('click', function ()
@@ -115,7 +122,7 @@
                     method: "POST",
                     success: function(data)
                     {
-                        //console.log("Files processing");
+                        console.log("Files processing");
                         var histValues = JSON.parse(data);
                         console.log(histValues);
                     }
@@ -132,27 +139,28 @@
                     {
                         files.push($(item).val());
                     })
-                    //console.log(files);
+                    console.log(files);
 
                         $.ajax({
-                            url: "preprocessed_uploads/netgen2",
+                            url: "preprocessed_uploads/NetGen",
                             method: "POST",
                             data: {
                                 "checkbox": files,
                         },
                         success: function(test)
                         {
-                            //console.log("Files processing");
+                            console.log("Files processing"+test);
                             pids = JSON.parse(test);
                             console.log(pids);
 
                         }
                     });
-                    }
+                }
             });
         })
     </script>
 </head>
+
 <body>
     <?php include 'partial/navi.php';?>
 
@@ -205,7 +213,7 @@
                 id="histogramGeneration" name="file_action" value="HistoGram" type="button">
                 Generate Histogram
             </button>
-            <button class="btn btn-primary" id="NetGenButton" name="file_action" value="netgen" type="button">Network Generation</button>
+            <button class="btn btn-primary" data-toggle="tooltip" title="Generate Semantic Networks" id="NetGenButton" name="file_action" value="netgen2" type="button">Network Generation</button>
 
             <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
             <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>

@@ -6,7 +6,7 @@
 // Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package netgen;
+//package netgen;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ public class Main {
 
         //Read input file
         String text = IO.readFileAsString(inputFileName);
-    	//String text = IO.importDirectory(inputFileName);
+        //String text = IO.importDirectory(inputFileName);
         System.out.println(text);
 
         //Clean POS
@@ -40,9 +40,9 @@ public class Main {
 
         //Frequency
         if(frequency == 1){
-        	tokens = Filter.setFrequency(tokens, freqMin, freqMax);
-        	System.out.println("Frequency: "+tokens.toString());
-	    }
+            tokens = Filter.setFrequency(tokens, freqMin, freqMax);
+            System.out.println("Frequency: "+tokens.toString());
+        }
 
         //Generate network
         Network network = Network.generateNetworkBySlidingWindow(tokens, windowSize);
@@ -54,29 +54,29 @@ public class Main {
     public static void main(String[] args)
     {
         //-----------------------Import Single file----------------------//
-		String input = args[0].toString();
-		String stopword = args[1];
-		System.out.println("input: " + input);
-		String[] tokens = input.split("\\.(?=[^\\.]+$)");///Eliminate input extension for use in output name.
-		String output = tokens[0];
-		int frequency = 0; // Set to 1 to use frequency
-		double freqMin = 35; // Percentage value - Defaults to 35% : less than 4 words
-		double freqMax = 5; // Percentage value - Defaults to 5% : more than 20 words
-		int windowSize = 3;
+        String input = args[0].toString();
+        String stopword = args[1];
+        System.out.println("input: " + input);
+        String[] tokens = input.split("\\.(?=[^\\.]+$)");///Eliminate input extension for use in output name.
+        String output = tokens[0];
+        int frequency = 0; // Set to 1 to use frequency
+        double freqMin = 35; // Percentage value - Defaults to 35% : less than 4 words
+        double freqMax = 5; // Percentage value - Defaults to 5% : more than 20 words
+        int windowSize = 3;
 
-		if(args.length >= 3){
-			frequency = Integer.parseInt(args[2]);
-		}
-		if(args.length >= 4){
-			freqMin = Double.parseDouble(args[3]);
-		}
-		if(args.length >= 5){
-			freqMax = Double.parseDouble(args[4]);
-		}
-		if(args.length >= 6){
-			windowSize = Integer.parseInt(args[5]);
-		}
-		//Input file name & suffix, output file name, window size, use Frequency, Frequency min, Frequency max
-		Main.textToWeightedEdgelist(input, stopword, output, windowSize, frequency, freqMin, freqMax);
+        if(args.length >= 3){
+            frequency = Integer.parseInt(args[2]);
+        }
+        if(args.length >= 4){
+            freqMin = Double.parseDouble(args[3]);
+        }
+        if(args.length >= 5){
+            freqMax = Double.parseDouble(args[4]);
+        }
+        if(args.length >= 6){
+            windowSize = Integer.parseInt(args[5]);
+        }
+        //Input file name & suffix, output file name, window size, use Frequency, Frequency min, Frequency max
+        Main.textToWeightedEdgelist(input, stopword, output, windowSize, frequency, freqMin, freqMax);
     }
 }

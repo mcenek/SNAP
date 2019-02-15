@@ -6,7 +6,7 @@
 // Contributions from: 
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package threejsFileGen;
+//package threejsFileGen;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,10 +32,15 @@ public class Main {
 		boolean newFile = true;
 		
 		if(iGEXFPath != null){
-			try(Stream<Path> paths = Files.walk(Paths.get("./"+iGEXFPath))){
+			try(Stream<Path> paths = Files.walk(Paths.get(iGEXFPath))){
 			    paths.forEach(filePath -> {
 			        if (Files.isRegularFile(filePath)){
 			        	if(filePath.toString().endsWith(".gexf")){
+			        		tempLayers.add(reader.createLayer(filePath, fileCounter));
+			        		System.out.println("export successful\n");
+			        		fileCounter += 100;
+			        	}
+			        	if(filePath.toString().endsWith(".txt")){
 			        		tempLayers.add(reader.createLayer(filePath, fileCounter));
 			        		System.out.println("export successful\n");
 			        		fileCounter += 100;
@@ -44,6 +49,9 @@ public class Main {
 			    });
 			}
 		}
+		//else
+		//	tempLayers.add(reader.createLayer(filePath,200));
+		//}
 		
 		logic = new MeshLogic(tempLayers);
 		colorList = logic.getColorList(tempLayers);
@@ -51,7 +59,7 @@ public class Main {
 		layers = logic.setCentroids(tempLayers);
 		logic.printLayers(layers);
 		layers = logic.resetNodeValuesToCentroid(layers);
-		
+		System.out.println("about to write to files");
 		writer.writeCF(iGEXFPath, "fileName");
 		writer.writeCmap(colorList, iGEXFPath, "fileName");
 		

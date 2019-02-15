@@ -84,17 +84,17 @@ class Semantic_networks extends CI_Controller
         $this->index();
         $post = $this->input->post();
         if ($this->session->userdata('logged_in')) {
-            $gephi_path = $this->config->item('base_directory') . 'assets/AutoGephiPipe/AutoGephiPipeV3_1.jar';
+            $gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/AutoGephiPipeV3_1.jar';
             $output = '';
             $cmd = '';
             $file_path = $this->file_dir . '/semantic_networks';
 
             $layout = $this->session->userdata('layout');
             $mod_res = $this->session->userdata('mod_resolution');
-            $cmd = 'java' . ' -jar ' . $gephi_path . $file_path . " " . $layout . " " . $mod_res;
+            $cmd = 'java' . ' -jar ' . $gephi_path . " " . $file_path . " " . $layout . " " . $mod_res;
             //--------debug-----------//
             $message = "command: " . $cmd;
-            //echo "<script type='text/javascript'>alert('$message');</script>";
+            echo "<script type='text/javascript'>alert('$message');</script>";
             $output = shell_exec($cmd);
             if ($output == '') {
                 $output = "Netork Generation failed";
@@ -114,8 +114,8 @@ class Semantic_networks extends CI_Controller
         $this->index();
         $post = $this->input->post();
 
-        $gephi_path = $this->config->item('base_directory') . 'assets/AutoGephiPipe/AutoGephiPipeV3_1.jar';
-        $individual_gephi_path = $this->config->item('base_directory') . 'assets/AutoGephiPipe/individualGraphProcess.jar';
+        $gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/AutoGephiPipeV3_1.jar';
+        $individual_gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/individualGraphProcess.jar';
         $dir_path = $this->file_dir . '/semantic_networks/';
 
         // Generate .gexf file for each .dl file in preprocessed directory
@@ -127,9 +127,9 @@ class Semantic_networks extends CI_Controller
             $output2 = '';
 
             echo '<script type="text/javascript">alert("' . $file . '"); </script>';
-            $cmd2 = 'java' . ' -jar ' . $gephi_path . $dir_path . ' ' . $layout . ' ' . $mod_res;
+            $cmd2 = 'java' . ' -jar ' . $gephi_path ." ". $dir_path . ' ' . $layout . ' ' . $mod_res;
             //$message = "command: ".$cmd2;
-            //echo "<script type='text/javascript'>alert('$message');</script>";
+            echo "<script type='text/javascript'>alert('$message');</script>";
             $output2 = shell_exec($cmd2);
 
             /*foreach ($files as $file)
@@ -180,7 +180,7 @@ class Semantic_networks extends CI_Controller
     }
 
     public function download($files)
-    {
+    {   
         if (count($files) == 1) {
             foreach ($files as $file => $file_name) {
                 $file_path = $this->file_dir . '/semantic_networks/' . $file_name;

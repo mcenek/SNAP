@@ -6,7 +6,7 @@
 // Contributions from: 
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package partiviewGen;
+//package partiviewGen;
 
 import java.util.HashMap;
 

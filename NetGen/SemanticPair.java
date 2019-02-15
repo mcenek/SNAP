@@ -6,7 +6,7 @@
 // Contributions from: 
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package netgen;
+//package netgen;
 
 //Immutable type
 //Could break some methods if fields are modifiable

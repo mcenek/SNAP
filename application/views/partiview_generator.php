@@ -65,15 +65,13 @@
                     <?php
                         foreach ($files as $file => $file_name) {
                             $file_parts = pathinfo($file_name);
-
                             if ($file_parts['extension'] == 'gexf') {
                                 echo form_checkbox(array(
                                     'name' => 'checkbox[]',
                                     'value' => $file_name,
                                     'checked' => false,
                                 ));
-
-                                $url = site_url() . '/partiview_generator/display_file' . $file_name;
+                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
                                 echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
                             }
                         }
@@ -94,15 +92,13 @@
                     <?php
                         foreach ($files as $file => $file_name) {
                             $file_parts = pathinfo($file_name);
-
                             if ($file_parts['extension'] == "txt") {
                                 echo form_checkbox(array(
                                     'name' => 'checkbox[]',
                                     'value' => $file_name,
                                     'checked' => false,
                                 ));
-
-                                $url = site_url() . '/partiview_generator/display_file' . $file_name;
+                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
                                 echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
                             }
                         }
@@ -117,7 +113,6 @@
                     <?php
                         foreach ($files as $file => $file_name) {
                             $file_parts = pathinfo($file_name);
-
                             if ($file_parts['extension'] == 'speck'
                                 || $file_parts['extension'] == 'cf'
                                 || $file_parts['extension'] == 'cmap') {
@@ -126,8 +121,7 @@
                                     'value' => $file_name,
                                     'checked' => false,
                                 ));
-
-                                $url = site_url() . '/partiview_generator/display_file' . $file_name;
+                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
                                 echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
                             }
                         }
@@ -179,7 +173,6 @@
             // this is called from visualize.js
             document.getElementById("loadId").style.display = "none";
         }
-
         function fireVisualizer() {
             // just a local wrapper for the init function in visualize.js
             window.location.hash = "visPanel";
@@ -194,9 +187,7 @@
             closeScene();
             $('canvas:not(#placeholderCanvas)').remove();
         }
-
         var assetPath = "<?php echo asset_url(); ?>";
-
         // TODO: the threejs imports should be minified versions, if possible
     </script>
     <script type="text/javascript" src="<?php echo asset_url(); ?>js/three.js"></script>

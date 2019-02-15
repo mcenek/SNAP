@@ -54,13 +54,13 @@ class Register extends CI_Controller
 
                 $message = 'Welcome to UAA NLP, the Semantic Network Analysis Pipeline<br/>';
                 $message .= '<strong>Click the link below to finish registration</strong><br/>';
-                $message .= $link;
+                $message .= $link;	
 
                 // NOTE: the domain name here must match one of the FQDNs in the machine's hosts file
-                $this->email->from('register@uaanlp.org', 'UAA NLP - SNAP');
+                $this->email->from('register@up.edu', 'U of Portland NLP - SNAP registration');
                 $this->email->to($this->input->post('email'));
 
-                $this->email->subject('UAA NLP - Registration');
+                $this->email->subject('U of Portland NLP - Registration');
                 $this->email->message($message);
 
                 $this->email->send();

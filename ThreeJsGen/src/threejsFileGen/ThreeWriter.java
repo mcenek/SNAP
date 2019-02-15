@@ -6,7 +6,7 @@
 // Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package threejsFileGen;
+//package threejsFileGen;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -23,7 +23,12 @@ public class ThreeWriter {
 	// [color #2]
 	// [color #3]
 	public void writeMetaColors(int numLayers, ArrayList<NodeColor> colorList, String path, String projectName) {
-		String fullpath = path + "/" + projectName + "_meta-colors.three.txt";
+		String fullpath;
+		if(path == null)
+			fullpath = projectName + "_meta-colors.three.txt";
+		else
+			fullpath = path + "/" + projectName + "_meta-colors.three.txt";
+		
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));
 			writer.write("layercount " + numLayers + "\n");
@@ -48,7 +53,13 @@ public class ThreeWriter {
 	public void writeLayers(ArrayList<Layer> layers, ArrayList<NodeColor> colorList, String path, String projectName,
 			double xSkew, double ySkew, double zSkew, int lowestZ) {
 
-		String fullpath = path + "/" + projectName + "_layers.three.txt";
+		String fullpath;
+		if(path == null)
+			fullpath = projectName + "_layers.three.txt";
+		else
+			fullpath = path + "/" + projectName + "_layers.three.txt";
+
+		//String fullpath = path + "/" + projectName + "_layers.three.txt";
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));
 
@@ -87,7 +98,13 @@ public class ThreeWriter {
 	// [communityId] [nodeLabel] [communityId] [nodeLabel]
 	// [communityId] [nodeLabel] [communityId] [nodeLabel]
 	public void writeEdges(ArrayList<Layer> layers, String path, String projectName) {
-		String fullpath = path + "/" + projectName + "_edges.three.txt";
+		String fullpath;
+		if(path == null)
+			fullpath = projectName + "_edges.three.txt";
+		else
+			fullpath = path + "/" + projectName + "_edges.three.txt";
+
+		//String fullpath = path + "/" + projectName + "_edges.three.txt";
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));
 
@@ -130,7 +147,13 @@ public class ThreeWriter {
 	// -- PROJECTNAME_noodles.three.txt
 	// [srcLayerDate] [srcCommunityId] [tarLayerDate] [tarCommunityId] [weight]
 	public void writeNoodles(ArrayList<Link> links, String path, String projectName) {
-		String fullpath = path + "/" + projectName + "_noodles.three.txt";
+		String fullpath;
+		if(path == null)
+			fullpath = projectName + "_noodles.three.txt";
+		else
+			fullpath = path + "/" + projectName + "_noodles.three.txt";
+
+		//String fullpath = path + "/" + projectName + "_noodles.three.txt";
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));
 

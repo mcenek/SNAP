@@ -2,6 +2,16 @@ NetGen.jar Readme
 
 Place Network Generator (NetGen.jar) jar file into this directory
 
+To comile the source files located in the SNAP/NetGen
+1. make sure that the junit is installed and the shared resources are placed into
+   Linux: /usr/share/java/junit4.jar
+
+   "javac -cp .:/usr/share/java/junit4.jar *.java"
+   "jar cfmv NetGen.jar MANIFEST.MF *.class"
+   Finally, copy the NetGen.jar into the assets/NetGen/ directory and don't forget to change the
+   owner (and permissions if needed)
+   Linux: sudo chown www-data:www-data NetGen.jar
+
 Terminal command to run NetGen.jar:
 java -jar NetGen.jar input.txt stopword.txt frequency* freqMin* freqMax*
 

@@ -6,7 +6,7 @@
 // Contributions from:
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package netgen;
+//package netgen;
 
 import java.io.FileReader;
 import java.util.ArrayList;

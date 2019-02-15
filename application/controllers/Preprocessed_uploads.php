@@ -9,6 +9,7 @@ class Preprocessed_uploads extends CI_Controller
 
     public function __construct()
     {
+
         parent::__construct();
         $this->load->helper(array('form'));
         $this->load->library('form_validation');
@@ -45,7 +46,7 @@ class Preprocessed_uploads extends CI_Controller
         $source = $this->file_dir . '/preprocessed/';
         $destination = $this->file_dir . '/semantic_networks/';
         foreach ($files as $file => $file_name) {
-            $netgen_path = $this->config->item('base_directory') . 'assets/netgen/';
+            $netgen_path = $this->config->item('base_directory') . 'assets/NetGen/';
             $output = '';
             $cmd = '';
             $file_path = $this->file_dir . '/preprocessed/' . $file_name . ' ';
@@ -83,7 +84,7 @@ class Preprocessed_uploads extends CI_Controller
         $source = $this->file_dir . '/preprocessed/';
         $destination = $this->file_dir . '/semantic_networks/';
         foreach ($files as $file => $file_name) {
-            $netgen_path = $this->config->item('base_directory') . 'assets/netgen/';
+            $netgen_path = $this->config->item('base_directory') . 'assets/NetGen/';
             $output = '';
             $cmd = '';
             $file_path = $this->file_dir . '/preprocessed/' . $file_name . ' ';
@@ -121,7 +122,8 @@ class Preprocessed_uploads extends CI_Controller
             $source = $this->file_dir . '/preprocessed/';
             $destination = $this->file_dir . '/semantic_networks/';
             foreach ($files as $file => $file_name) {
-                $histGen_path = '/Applications/MAMP/htdocs/website_stuff/assets/HistGen/';
+                $histGen_path = 'assets/HistGen/';
+                #$histGen_path = '/Applications/MAMP/htdocs/website_stuff/assets/HistGen/';
                 $output = '';
                 $cmd = '';
                 $file_path = $this->file_dir . '/preprocessed/' . $file_name . ' ';

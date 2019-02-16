@@ -40,6 +40,7 @@ public class Generator {
 			paths.forEach(filePath -> {
 				if (Files.isRegularFile(filePath)) {
 					if (filePath.toString().endsWith(".gexf")) {
+						//System.out.println("getting to parse the gexf files" +filePath);
 						initialLayers.add(reader.createLayerFromFile(filePath, fileCounter));
 						fileCounter += 100;
 					}

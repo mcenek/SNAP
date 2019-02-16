@@ -27,27 +27,32 @@ public class GexfReader {
 
 	public Layer createLayerFromFile(Path filePath, int fileCounter) {
 		Layer layer;
-
+		int dateInt;
 		if (logging)
-			System.out.println("Path: " + filePath.toString());
+			System.out.println("CreateLayerFromFile Path: " + filePath.toString());
 
 		String dateString = findDate(filePath.toString());
-		int dateInt = convertDateToInt(0, dateString);
-		if (dateInt == 0)
-			dateInt = 20190101;
+		
+		if(dateString =="Date Not Found")
+			dateInt = 0;
+		else
+			dateInt = convertDateToInt(0, dateString);
+
+		//System.out.println("-----createLayesFromFile-----"+ dateInt);
 		if (logging)
 			System.out.println("Date string: " + dateString + " int: " + dateInt);
 		if (!dateStrings.add(dateString) || !dateInts.add(dateInt)) {
 			System.err.println("Error - Duplicate Date string: " + dateString + " int: " + dateInt);
 			System.exit(1);
 		}
-
+		
 		layer = readFile(filePath.toString(), dateInt, fileCounter);
 		return layer;
 	}
 
 	public Layer readFile(String path, int dateIn, int fileCounter) {
 		Layer layer = new Layer(dateIn);
+		System.out.println("reading gdxf nodes and edges");
 		try {
 			Scanner file = new Scanner(new File(path));
 			while (file.hasNext()) {

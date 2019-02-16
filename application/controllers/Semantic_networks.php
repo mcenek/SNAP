@@ -93,6 +93,7 @@ class Semantic_networks extends CI_Controller
             $mod_res = $this->session->userdata('mod_resolution');
             $cmd = 'java' . ' -jar ' . $gephi_path . " " . $file_path . " " . $layout . " " . $mod_res;
             //--------debug-----------//
+            echo "<script type='text/javascript'>alert('generateGlobalGEXF: $cmd');</script>";
             $message = "command: " . $cmd;
             echo "<script type='text/javascript'>alert('$message');</script>";
             $output = shell_exec($cmd);
@@ -174,7 +175,7 @@ class Semantic_networks extends CI_Controller
             } else {
                 $this->generateGlobalGEXF($this->input->post('checkbox'));
                 //Call below function to generate individual GEXFs from individual .dl files
-                //$this->generateIndividualGEXFs($this->input->post('checkbox'));
+                $this->generateIndividualGEXFs($this->input->post('checkbox'));
             }
         }
     }

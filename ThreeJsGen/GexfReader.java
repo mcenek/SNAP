@@ -33,6 +33,8 @@ public class GexfReader {
 
 		String dateString = findDate(filePath.toString());
 		int dateInt = convertDateToInt(0, dateString);
+		if (dateInt == 0)
+			dateInt = 20190101;
 		if (logging)
 			System.out.println("Date string: " + dateString + " int: " + dateInt);
 		if (!dateStrings.add(dateString) || !dateInts.add(dateInt)) {

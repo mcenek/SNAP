@@ -95,7 +95,6 @@ class Semantic_networks extends CI_Controller
             //--------debug-----------//
             echo "<script type='text/javascript'>alert('generateGlobalGEXF: $cmd');</script>";
             $message = "command: " . $cmd;
-            echo "<script type='text/javascript'>alert('$message');</script>";
             $output = shell_exec($cmd);
             if ($output == '') {
                 $output = "Netork Generation failed";
@@ -127,10 +126,9 @@ class Semantic_networks extends CI_Controller
             $cmd2 = '';
             $output2 = '';
 
-            echo '<script type="text/javascript">alert("' . $file . '"); </script>';
             $cmd2 = 'java' . ' -jar ' . $gephi_path ." ". $dir_path . ' ' . $layout . ' ' . $mod_res;
-            //$message = "command: ".$cmd2;
-            echo "<script type='text/javascript'>alert('$message');</script>";
+            $message = "command: ".$cmd2;
+            echo "<script type='text/javascript'>alert('Indv gexf Fileprocs $cmd2');</script>";
             $output2 = shell_exec($cmd2);
 
             /*foreach ($files as $file)

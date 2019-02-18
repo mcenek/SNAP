@@ -6,12 +6,14 @@
 // Contributions from: 
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package AutoGephi;
+//package AutoGephi;
 import java.util.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import static java.util.Arrays.sort;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +70,7 @@ import org.gephi.layout.plugin.forceAtlas.ForceAtlasLayout;
  *
  * @author motion411
  */
-public class AutoGephiPipeV3 
+public class AutoGephiPipe
 {
     private static ProjectController pc;
     private static Workspace workspace;
@@ -664,7 +666,7 @@ public class AutoGephiPipeV3
         
     }   
   
-    public static void exportGraph()//--- Exports a gexf file to be used in Gephi or Partiview, exports PDF for easy sample readability of entire graph.
+    public static void exportGraph(String dirName)//--- Exports a gexf file to be used in Gephi or Partiview, exports PDF for easy sample readability of entire graph.
     {
         
         //Set 'show labels' option in Preview - and disable node size influence on text size
@@ -675,9 +677,11 @@ public class AutoGephiPipeV3
         ExportController ec = Lookup.getDefault().lookup(ExportController.class);
         try
         {
+            Path path = ((Paths.get(dirName)).getParent()).getParent(); 
+            //System.out.println("writeGraphOut " + path.toString()); // processedFile +" "
             //ec.exportFile(new File("completeLayout.gexf"));
-            ec.exportFile(new File("completeLayout.pdf")); 
-            ec.exportFile(new File(processedFile+".gexf"));
+            ec.exportFile(new File(path.toString()+"/partiview_generator/"+processedFile+".pdf")); 
+            ec.exportFile(new File(path.toString()+"/partiview_generator/"+processedFile+".gexf"));
             //ec.exportFile(new File(processedFile+".pdf"));
         } 
         catch (IOException ex) 

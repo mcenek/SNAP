@@ -29,15 +29,15 @@ public class LayerUtilities {
 			for (Community c : layers.get(layerIndex).getCommunities().values()) {
 				for (Community nextC : layers.get(layerIndex + 1).getCommunities().values()) {
 					Link link = null;
-
 					for (Node n : c.getNodes()) {
 						for (Node nextN : nextC.getNodes()) {
-
 							if (n.getLabel().equals(nextN.getLabel())) {
 								if (link == null) {
-									link = new Link(layers.get(layerIndex).getDate(),
-											layers.get(layerIndex + 1).getDate(), c.getCommunityId(),
-											nextC.getCommunityId());
+									link = new Link(layers.get(layerIndex).getIndex(),
+													layers.get(layerIndex + 1).getIndex(), 
+													c.getCommunityId(),
+													nextC.getCommunityId());
+									//link = new Link(layers.get(layerIndex).getDate(),layers.get(layerIndex + 1).getDate(), c.getCommunityId(),nextC.getCommunityId());
 								} else {
 									link.addToWeight();
 								}
@@ -96,6 +96,9 @@ public class LayerUtilities {
 				}
 			}
 		}
+		//reindex the layers after sorting by date
+		for (int i = 0; i < layers.size(); i++)
+			layers.get(i).setIndex(i);
 		return layers;
 	}
 

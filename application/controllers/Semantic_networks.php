@@ -84,9 +84,7 @@ class Semantic_networks extends CI_Controller
         $this->index();
         $post = $this->input->post();
         if ($this->session->userdata('logged_in')) {
-            $gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/AutoGephiPipeV3_1.jar';
-            $output = '';
-            $cmd = '';
+            $gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/AutoGephiPipe.jar';
             $file_path = $this->file_dir . '/semantic_networks';
 
             $layout = $this->session->userdata('layout');
@@ -94,7 +92,6 @@ class Semantic_networks extends CI_Controller
             $cmd = 'java' . ' -jar ' . $gephi_path . " " . $file_path . " " . $layout . " " . $mod_res;
             //--------debug-----------//
             echo "<script type='text/javascript'>alert('generateGlobalGEXF: $cmd');</script>";
-            $message = "command: " . $cmd;
             $output = shell_exec($cmd);
             if ($output == '') {
                 $output = "Netork Generation failed";
@@ -109,41 +106,46 @@ class Semantic_networks extends CI_Controller
 
     // Use this function to generate one individual GEXF file for each .dl file process.  These individual files will hold the modularity class information
     // for each individual layer in time for Partiview which will be key for splitting noodles.
+
+    //TODO: fix this so it only generates individual GEXF files for selected .dl files
     public function generateIndividualGEXFs()
     {
         $this->index();
         $post = $this->input->post();
-
-        $gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/AutoGephiPipeV3_1.jar';
-        $individual_gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/individualGraphProcess.jar';
-        $dir_path = $this->file_dir . '/semantic_networks/';
-
         // Generate .gexf file for each .dl file in preprocessed directory
         if ($this->session->userdata('logged_in')) {
-            $file_path = $this->file_dir . '/semantic_networks';
+            //$gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/AutoGephiPipe.jar';
+            $individual_gephi_path = $this->config->item('base_directory') . 'assets/GephiPipe/individualGraphProcess.jar';
+            $dir_path = $this->file_dir . '/semantic_networks/';
+            //$file_path = $this->file_dir . '/semantic_networks';
             // For exporting individual .gexf for each .dl
-            $files = scandir($file_path);
-            $cmd2 = '';
-            $output2 = '';
+            $files = scandir($dir_path);
+            $layout = $this->session->userdata('layout');
+            $mod_res = $this->session->userdata('mod_resolution');
 
-            $cmd2 = 'java' . ' -jar ' . $gephi_path ." ". $dir_path . ' ' . $layout . ' ' . $mod_res;
-            $message = "command: ".$cmd2;
-            echo "<script type='text/javascript'>alert('Indv gexf Fileprocs $cmd2');</script>";
-            $output2 = shell_exec($cmd2);
+            //TODO: Right now, Java:AutoGephiPipeline walks though the files in directory to dl2gexf
+            // change that so the php below does that and java only processes one file at a time
+            // php should spawn multiple threads, keep track of them, and kill them on cancel 
+            //TODO: implement the cancel button 
+            if (!in_array($file, array(".", ".."))) { // skip . and .. directories
+                $cmd2 = 'java' . ' -jar ' . $individual_gephi_path . " " . $dir_path. " " . $layout . " " . $mod_res;
+                echo "<script type='text/javascript'>alert('Indiv gexf command: $cmd2');</script>";
+                $output2=shell_exec($cmd2);
+                if($output2==''){
+                    $output2="Netork Generation failed for individual file";
+                }
+            }
+            // foreach ($files as $file){
+            //     if (!in_array($file, array(".", ".."))) { // skip . and .. directories
+            //         $cmd2 = 'java' . ' -jar ' . $individual_gephi_path . " " . $dir_path. " " . $layout . " " . $mod_res;
+            //         echo "<script type='text/javascript'>alert('Indiv gexf command: $cmd2');</script>";
+            //         $output2=shell_exec($cmd2);
+            //         if($output2==''){
+            //             $output2="Netork Generation failed for individual file";
+            //         }
+            //     }
 
-            /*foreach ($files as $file)
-        {
-        echo '<script type="text/javascript">alert("' . $file . '"); </script>';
-        $cmd2='java'. ' -jar '. $individual_gephi_path. $dir_path .$file;
-        //$message = "command: ".$cmd2;
-        //echo "<script type='text/javascript'>alert('$message');</script>";
-        $output2=shell_exec($cmd2);
-        if($output2=='')
-        {
-        $output2="Netork Generation failed for individual file";
-        }
-
-        }*/
+            // }
         }
 
         $this->session->set_flashdata('flash_message', 'Saved to Partiview');
@@ -171,7 +173,7 @@ class Semantic_networks extends CI_Controller
             } else if ($this->input->post('file_action') == "download") {
                 $this->download($this->input->post('checkbox'));
             } else {
-                $this->generateGlobalGEXF($this->input->post('checkbox'));
+                //$this->generateGlobalGEXF($this->input->post('checkbox'));
                 //Call below function to generate individual GEXFs from individual .dl files
                 $this->generateIndividualGEXFs($this->input->post('checkbox'));
             }

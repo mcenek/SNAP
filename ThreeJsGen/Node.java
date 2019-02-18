@@ -14,6 +14,7 @@ public class Node {
 	private double size;
 	private double x;
 	private double y;
+	private int community;
 	private NodeColor color;
 
 	// id getter/setter
@@ -59,6 +60,15 @@ public class Node {
 
 	public void setY(double y) {
 		this.y = y;
+	}
+
+	// community getter/setter
+	public int getCommunity() {
+		return community;
+	}
+
+	public void setCommunity(int communityIn ) {
+		this.community = communityIn;
 	}
 
 	// color getter/setter

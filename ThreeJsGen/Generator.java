@@ -9,6 +9,7 @@
 //package threejsFileGen;
 
 import java.io.IOException;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,16 +37,30 @@ public class Generator {
 
 		// read files and create layers from them
 		ArrayList<Layer> initialLayers = new ArrayList<Layer>();
-		try (Stream<Path> paths = Files.walk(Paths.get(iGEXFPath))) {
-			paths.forEach(filePath -> {
-				if (Files.isRegularFile(filePath)) {
-					if (filePath.toString().endsWith(".gexf")) {
-						//System.out.println("getting to parse the gexf files" +filePath);
-						initialLayers.add(reader.createLayerFromFile(filePath, fileCounter));
-						fileCounter += 100;
-					}
-				}
-			});
+		try{
+			int index = 0;
+			File folder = new File(iGEXFPath);
+ 	        File[] files = folder.listFiles();
+ 	       	for (File file : files){	
+            	if (file.isFile()){
+                	if (file.getName().endsWith(".gexf")){
+                		System.out.println("reading GEXF: " + file.getAbsolutePath());
+            			initialLayers.add(reader.createLayerFromFile(file.getAbsolutePath(), fileCounter, index));
+			 			index +=1;
+			 			fileCounter += 100;
+            		}
+            	}
+        	}
+		//try (Stream<Path> paths = Files.walk(Paths.get(iGEXFPath))) {
+			//won't work, need a local counter/index variable			
+			// paths.forEach(filePath -> {
+			// 	if (Files.isRegularFile(filePath)) {
+			// 		if (filePath.toString().endsWith(".gexf")) {
+			// 			initialLayers.add(reader.createLayerFromFile(filePath, fileCounter));
+			// 			fileCounter += 100;
+			// 		}
+			// 	}
+			// });
 		} catch (Exception e) {
 			System.out.println("A problem occurred reading the files into layers.");
 			System.out.println(e.getMessage());

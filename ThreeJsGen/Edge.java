@@ -11,8 +11,8 @@
 // An Edge represents a link between two nodes in one layer -
 // two connected concepts within one piece of text
 public class Edge {
-	private String source;
-	private String target;
+	private Node source;
+	private Node target;
 	private double weight;
 	// TODO what exactly are start and end used for?
 	private int start;
@@ -21,7 +21,7 @@ public class Edge {
 	// constructors
 	public Edge() {
 	}
-	public Edge(String target, String source, int start, int end) {
+	public Edge(Node target, Node source, int start, int end) {
 		this.target = target;
 		this.source = source;
 		this.start = start;
@@ -29,18 +29,18 @@ public class Edge {
 	}
 
 	// source getter/setter
-	public String getSource() {
+	public Node getSource() {
 		return source;
 	}
-	public void setSource(String source) {
+	public void setSource(Node source) {
 		this.source = source;
 	}
 
 	// target getter/setter
-	public String getTarget() {
+	public Node getTarget() {
 		return target;
 	}
-	public void setTarget(String target) {
+	public void setTarget(Node target) {
 		this.target = target;
 	}
 

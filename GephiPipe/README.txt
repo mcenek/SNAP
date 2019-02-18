@@ -4,12 +4,16 @@ Implements node (token) layout for each document in the corpus.
 
 Must be in same folder as “lib” containing associated Gephi Toolkit Jars
 
-How to run:
+To Compile:
+javac -cp .:gephi-toolkit.jar:org-gephi-layout-plugin-circularlayout.jar *.java
 
+To package into jar:
+sudo jar cfmv ../assets/GephiPipe/individualGraphProcess.jar MANIFEST.MF *.class
+
+How to run:
 java -jar AutoGephiPipeV3_1.jar [Directory Path of files] [int for layout] [double for modularity resolution]
 
 For example
-
 java -jar AutoGephiPipeV3_1.jar ../KTUU 0 0.4
 
 

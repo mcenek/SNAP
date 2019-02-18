@@ -6,10 +6,11 @@
 // Contributions from: 
 // Eric Pak, Levi Oyster, Boyd Ching, Rowan Bulkow, Neal Logan, Mackenzie Bartlett
 //
-package AutoGephi;
+//package AutoGephi;
 
 import java.io.IOException;
 import java.nio.file.Files;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
@@ -22,55 +23,51 @@ public class Main
      */
     public static void main(String[] args) throws IOException 
     {
-        System.out.println("AutoGephiPipeV3_1");
+        System.out.println("AutoGephiPipe:");
         int individualGexfs = 1;
         if(args.length >= 4){
             System.err.println("Length: "+args.length);
             individualGexfs = Integer.parseInt(args[3]);
         }
         if(individualGexfs == 1){
-            System.out.println("HEReeee");
+            System.out.println("Ind dl2gexf: "+Paths.get(args[1]));
             try(Stream<Path> paths = Files.walk(Paths.get(args[0]))){
                 System.out.println("AFSF");
                 paths.forEach(filePath -> {
                     if(Files.isRegularFile(filePath)){
                         System.out.println(filePath.toString());
                         if(filePath.toString().endsWith(".dl")){
-                            AutoGephiPipeV3.initialize();
+                            AutoGephiPipe.initialize();
 
-                            AutoGephiPipeV3.importDirectory(filePath.toString());
+                            AutoGephiPipe.importDirectory(filePath.toString());
 
-                            AutoGephiPipeV3.setModResolution(Double.parseDouble( args[2]));
+                            AutoGephiPipe.setModResolution(Double.parseDouble( args[2]));
 
-                            AutoGephiPipeV3.setSizeNodesBy("Betweenness");
+                            AutoGephiPipe.setSizeNodesBy("Betweenness");
 
-                            AutoGephiPipeV3.sizeNodes();
+                            AutoGephiPipe.sizeNodes();
 
-                            AutoGephiPipeV3.colorByCommunity();
+                            AutoGephiPipe.colorByCommunity();
 
                             if(args[1].equals("0"))
                             {
-                                AutoGephiPipeV3.circularStarLayout();
+                                AutoGephiPipe.circularStarLayout();
                             }
                             else if(args[1].equals("1"))
                             {
-                                AutoGephiPipeV3.radialAxLayout();
+                                AutoGephiPipe.radialAxLayout();
                             }
                             else if(args[1].equals("2"))
                             {
-                                AutoGephiPipeV3.yifanHuLayout();
+                                AutoGephiPipe.yifanHuLayout();
                             }
                             else if(args[1].equals("3"))
                             {
-                                AutoGephiPipeV3.forceAtlasLayout();
+                                AutoGephiPipe.forceAtlasLayout();
                             }
 
-
-
-
-                            AutoGephiPipeV3.exportGraph();
-
-                            //AutoGephiPipeV3.exportDates();
+                            AutoGephiPipe.exportGraph(filePath.toString());
+                            //AutoGephiPipe.exportDates();
                         }
                     }
                 });

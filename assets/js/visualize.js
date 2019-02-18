@@ -9,7 +9,9 @@ var materials = [];
 var edgeMesh;
 
 var containerID = "visualizer";
-var projectName = "dummyTest";
+var projectName = "../cenek@up.edu/project_one/partiview_generator/project_one";
+//var containerID = "visualizer";
+//var projectName = "dummyTest";
 var metaColorFilename = assetPath + projectName + "_meta-colors.three.txt";
 var layerFilename = assetPath + projectName + "_layers.three.txt";
 var edgeFilename = assetPath + projectName + "_edges.three.txt";
@@ -261,6 +263,7 @@ function loadLayers() {
                                 scene.add(layer.mesh);
                                 layers.push( layer );
                             }
+                            console.log("Layer: "+line);
                             layer = {};
                             layer.init = true;
                             layer.index = parseInt( line[1] );
@@ -269,7 +272,8 @@ function loadLayers() {
                             layer.nodes = [];
                             layer.nodeLabels = [];
                             layer.clusterLabels = [];
-                            layer.z = parseFloat( line[2] )*100*zMult;
+                            //layer.z = parseFloat( line[2] )*100*zMult; -- "layer,0,736289,0.0" index, date, layerz
+                            layer.z = parseFloat( line[1] )*100*zMult; 
                             layer.r = 0; // used to indicate what state the layer is in - are labels loaded, etc
                             layer.geometry = new THREE.Geometry();
                             layer.mesh = null;
@@ -294,20 +298,26 @@ function loadLayers() {
                         }
                         else if( line[0] == "cluster" ) {
                             var cluster = {};
+                            //cluster: index, community, dominant concept, weighted center X, weighted ceneterY, color index
+                            //cluster,5,5,lance,0.3176634431919697,139.84600862406305,165
+                            console.log("Cluster: " + line); 
                             cluster.index = parseInt( line[1] );
-                            cluster.name = line[2];
-                            cluster.x = parseFloat( line[3] );
-                            cluster.y = parseFloat( line[4] );
-                            cluster.colorIndex = parseInt( line[5] );
+                            cluster.name = line[3];
+                            cluster.x = parseFloat( line[4] );  //used to be 3
+                            cluster.y = parseFloat( line[5] );  //used to be 4
+                            cluster.colorIndex = parseInt( line[6] );
                             cluster.nodes = [];
                             cluster.links = []; // names of clusters in next layer it is linked to
                             cluster.allTextShown = false; // are the individual concept labels shown?
                             layer.mats.push( new THREE.MeshLambertMaterial({
+                                //material: { color: new THREE.Color( 0xffffff ) },
                                 color: colors[cluster.colorIndex],
+                                //color: new THREE.Color(colors[cluster.colorIndex]),
                                 transparent: true,
                                 opacity: 0.7
                             }));
                             layer.labelMats.push( {
+                                //color: new THREE.Color(colors[cluster.colorIndex])
                                 color: colors[cluster.colorIndex]
                             })
                             var textSprite = new THREE.TextSprite({
@@ -330,7 +340,11 @@ function loadLayers() {
                         }
                         else {
                             // [conceptIndex(w/in layer)] [conceptName] [conceptRadius] [concept X,Y]
+                            //     36,agents,20.0,685.51666,2364.8718
                             var node = {};
+                            //19,gush,20.02694,1755.7834,-2462.2236
+                            //id, concept, size, x, y 
+                            console.log("Node "+ line);
                             node.index = parseInt( line[0] );
                             node.name = line[1];
                             node.radius = parseFloat( line[2] );
@@ -417,14 +431,21 @@ function loadEdges() {
                 for( var i=1; i<lines.length; i++ ) {
                     var line = lines[i].split( " " );
                     if( line[0] == "layer" ) {
+                        //Layer id
                         layerIndex = parseInt( line[1] );
                     }
                     else if( line[0] != "" ) {
-                        var startNode = layers[layerIndex].nodes[parseInt( line[0] )];
-                        var endNode = layers[layerIndex].nodes[parseInt( line[1] )];
-                        var startVector = new THREE.Vector3( startNode.x, startNode.y, layers[layerIndex].z );
-                        var endVector = new THREE.Vector3( endNode.x, endNode.y, layers[layerIndex].z );
-                        edgeGeom.vertices.push( startVector, endVector );
+                        //edge: writer.write(src:X,Y,Community,NodeLabel trg:X,Y,Community,NodeLabel
+                        console.log("Edge: "+line);
+                        if (layerIndex > layers.length-1){
+                            console.log("LoadingEdges: Bad layerIndex: "+layerIndex);
+                        }else{ 
+                            //var startNode = layers[layerIndex].nodes[parseInt( line[0] )];
+                            //var endNode = layers[layerIndex].nodes[parseInt( line[2] )];
+                            var startVector = new THREE.Vector3( line[0], line[1], layers[layerIndex].z );
+                            var endVector = new THREE.Vector3( line[4], line[5], layers[layerIndex].z );   
+                            edgeGeom.vertices.push( startVector, endVector );
+                        }
                     }
                 }
                 var allEdges = new THREE.LineSegments( edgeGeom, edgemat );
@@ -454,7 +475,7 @@ function loadNoodles() {
         var request = new XMLHttpRequest();
         request.onreadystatechange = function() {
             if( this.readyState == 4 && this.status == 200 ) {
-                console.log( "Loading file:"+noodleFilename );
+                console.log( "Loading file: "+noodleFilename );
                 var text = request.responseText;
                 var lines = text.split( "\n" );
 
@@ -462,6 +483,7 @@ function loadNoodles() {
                     if( lines[i] == "" )
                         continue;
                     var line = lines[i].split( " " );
+                    //console.log("Push Noodles: " + line);
                     var startLayerIndex = parseInt( line[0] );
                     var startConceptName = line[1];
                     var endLayerIndex = parseInt( line[2] );
@@ -472,22 +494,26 @@ function loadNoodles() {
                     var startLayer = layers[startLayerIndex];
                     for( var j=0; j<startLayer.clusters.length; j++ ) {
                         for( var n=0; n<startLayer.clusters[j].nodes.length; n++ ) {
-                            if( startLayer.clusters[j].nodes[n].name == startConceptName ) {
+                            //if( startLayer.clusters[j].nodes[n].name == startConceptName ) {
+                            if( j == startConceptName ) {
                                 noodle.startConcept = startLayer.clusters[j].nodes[n];
                                 noodle.startCluster = startLayer.clusters[j];
+                                //console.log("Found noodle start");
                             }
                         }
                     }
                     var endLayer = layers[endLayerIndex];
                     for( var j=0; j<endLayer.clusters.length; j++ ) {
                         for( var n=0; n<endLayer.clusters[j].nodes.length; n++ ) {
-                            if( endLayer.clusters[j].nodes[n].name == endConceptName ) {
+                            //if( endLayer.clusters[j].nodes[n].name == endConceptName ) {
+                            if( j == endConceptName ) {
                                 noodle.endConcept = endLayer.clusters[j].nodes[n];
                                 noodle.endCluster = endLayer.clusters[j];
+                                //console.log("Found noodle end");
                             }
                         }
                     }
-
+                    //TODO: THIS IS BROKEN HERE -- I think MC
                     // make the curve and geometry
                     noodle.top = new THREE.Vector3( noodle.startCluster.x, noodle.startCluster.y, startLayer.z );
                     noodle.bot = new THREE.Vector3( noodle.endCluster.x, noodle.endCluster.y, endLayer.z );

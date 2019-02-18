@@ -15,14 +15,17 @@ import java.util.Map;
 // Represents one piece of text, containing the semantic concepts (nodes),
 // communities of concepts, and links between concepts (edges) therein
 public class Layer {
-	private int date;
+	private int date, index;
 	private HashMap<Integer, Community> communities;
 	private ArrayList<Edge> edges;
+	private HashMap<String, Node> nodes;
 
-	public Layer(int date) {
+	public Layer(int date, int index) {
 		communities = new HashMap<Integer, Community>();
 		edges = new ArrayList<Edge>();
+		nodes = new HashMap<String, Node>();
 		this.date = date;
+		this.index = index;
 	}
 
 	// community getter/setter/add
@@ -46,9 +49,15 @@ public class Layer {
 	public int getDate() {
 		return date;
 	}
-
+	// date getter/setter
+	public int getIndex() {
+		return index;
+	}
 	public void setDate(int dateIn) {
 		date = dateIn;
+	}
+	public void setIndex(int indexIn) {
+		index = indexIn;
 	}
 
 	// EdgeList getter/setter/add
@@ -62,6 +71,14 @@ public class Layer {
 
 	public void addEdge(Edge edgeIn) {
 		edges.add(edgeIn);
+	}
+
+	public void addNode(String nodeNameIn, Node nodeIn){
+		this.nodes.put(nodeNameIn, nodeIn);
+	}
+
+	public Node getNode(String nodeName){
+		return nodes.get(nodeName);
 	}
 
 	// Checks if a modularity class / community id already exists
@@ -88,7 +105,7 @@ public class Layer {
 	@Override
 	public Layer clone() {
 		try {
-			Layer newLayer = new Layer(date);
+			Layer newLayer = new Layer(date,index);
 			newLayer.setCommunities(new HashMap<Integer, Community>(communities));
 			newLayer.setEdgeList(edges);
 			return newLayer;

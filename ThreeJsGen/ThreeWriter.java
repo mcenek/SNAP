@@ -109,33 +109,36 @@ public class ThreeWriter {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fullpath));
 
 			for (Layer layer : layers) {
-				writer.write("layer " + layer.getDate() + "\n");
+				writer.write("layer "+layer.getIndex() + " " + layer.getDate() + "\n");
 
 				for (Edge edge : layer.getEdgeList()) {
+					//print edge source x y dest x y
+					Node src = edge.getSource();
+					Node trg = edge.getTarget();
 
-					for (Community c : layer.getCommunities().values()) {
-						if (c.containsNodeWithLabel(edge.getSource())) {
-							for (Node node : c.getNodes()) {
-								if (node.getLabel().equals(edge.getSource())) {
-									writer.write(c.getCommunityId() + " " + node.getLabel() + " ");
-								}
-							}
-							break;
-						}
-					}
-					for (Community c : layer.getCommunities().values()) {
-						if (c.containsNodeWithLabel(edge.getTarget())) {
-							for (Node node : c.getNodes()) {
-								if (node.getLabel().equals(edge.getTarget())) {
-									writer.write(c.getCommunityId() + " " + node.getLabel() + "\n");
-								}
-							}
-							break;
-						}
-					}
+					writer.write(src.getX()+" "+src.getY()+" "+src.getCommunity()+" "+src.getLabel()+" "+trg.getX()+" "+trg.getY()+" "+trg.getCommunity()+" "+trg.getLabel()+"\n");
+
+				// 	for (Community c : layer.getCommunities().values()) {
+				// 		if (c.containsNodeWithLabel(edge.getSource())) {
+				// 			for (Node node : c.getNodes()) {
+				// 				if (node.getLabel().equals(edge.getSource())) {
+				// 					writer.write(c.getCommunityId() + " " + node.getLabel() + " ");
+				// 				}
+				// 			}
+				// 			break;
+				// 		}
+				// 	}
+				// 	for (Community c : layer.getCommunities().values()) {
+				// 		if (c.containsNodeWithLabel(edge.getTarget())) {
+				// 			for (Node node : c.getNodes()) {
+				// 				if (node.getLabel().equals(edge.getTarget())) {
+				// 					writer.write(c.getCommunityId() + " " + node.getLabel() + "\n");
+				// 				}
+				// 			}
+				// 			break;
+				// 		}
 				}
 			}
-
 			writer.close();
 		} catch (IOException e) {
 			System.err.println("Error writing edges.");

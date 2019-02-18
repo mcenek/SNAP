@@ -285,40 +285,39 @@ public class PartiWriter {
 				Layer currentLayer = layerList.get(i);
 
 				for (Edge e : edgeList) {
-					String sourceKey = e.getSource();
-					String targetKey = e.getTarget();
-					HashMap<Integer, Community> communities = currentLayer.getCommunities();
+					Node sourceKey = e.getSource();
+					Node targetKey = e.getTarget();
 					boolean sourceFound = false;
 					boolean targetFound = false;
-					Node s = null;
-					Node t = null;
+					Node s = e.getSource();
+					Node t = e.getTarget() ;
 					Centroid sAdjCentroid = null;
 					Centroid tAdjCentroid = null;
 
-					for (Map.Entry<Integer, Community> entry : communities.entrySet()) {
-						Community community = entry.getValue();
-						if (community.containsNodeWithLabel(sourceKey)) {
-							s = community.getNodeWithLabel(sourceKey);
-							sAdjCentroid = community.getWeightedCenter();
-							sourceFound = true;
-						}
-						if (community.containsNodeWithLabel(targetKey)) {
-							t = community.getNodeWithLabel(targetKey);
-							tAdjCentroid = community.getWeightedCenter();
-							targetFound = true;
-						}
-						if (sourceFound && targetFound) {
-							break;
-						}
-					}
+					// for (Map.Entry<Integer, Community> entry : communities.entrySet()) {
+					// 	Community community = entry.getValue();
+					// 	if (community.containsNodeWithLabel(sourceKey)) {
+					// 		s = community.getNodeWithLabel(sourceKey);
+					// 		sAdjCentroid = community.getWeightedCenter();
+					// 		sourceFound = true;
+					// 	}
+					// 	if (community.containsNodeWithLabel(targetKey)) {
+					// 		t = community.getNodeWithLabel(targetKey);
+					// 		tAdjCentroid = community.getWeightedCenter();
+					// 		targetFound = true;
+					// 	}
+					// 	if (sourceFound && targetFound) {
+					// 		break;
+					// 	}
+					// }
 
 					if (s != null && t != null) {
 						writer.write(mesh);
-						writer.write(((s.getX() + sAdjCentroid.getX()) * xSkew) + " "
-								+ ((s.getY() + sAdjCentroid.getY()) * ySkew) + " "
+						writer.write(((s.getX() + currentLayer.getCommunity(s.getCommunity()).getWeightedCenter().getX())* xSkew) + " "
+								+ ((s.getY() + currentLayer.getCommunity(s.getCommunity()).getWeightedCenter().getY()) * ySkew) + " "
 								+ ((currentLayer.getDate() - lowestZ) * zSkew) + "\n");
-						writer.write(((t.getX() + tAdjCentroid.getX()) * xSkew) + " "
-								+ ((t.getY() + tAdjCentroid.getY()) * ySkew) + " "
+						writer.write(((t.getX() + currentLayer.getCommunity(t.getCommunity()).getWeightedCenter().getX()) * xSkew) + " "
+								+ ((t.getY() + currentLayer.getCommunity(t.getCommunity()).getWeightedCenter().getY()) * ySkew) + " "
 								+ ((currentLayer.getDate() - lowestZ) * zSkew) + "\n}\n");
 					}
 				}

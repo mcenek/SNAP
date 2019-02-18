@@ -52,7 +52,7 @@
 
         <form id="checkbox_form" name="checkbox_form" method="post" action="semantic_networks/submit_files">
             <input type='checkbox' name='select_all' onClick='selectAll(this)' /> Select All
-            <br />
+            <br /> 
             <?php
                 foreach ($files as $file => $file_name) {
                     $file_parts = pathinfo($file_name);

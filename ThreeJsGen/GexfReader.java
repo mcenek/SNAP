@@ -25,13 +25,12 @@ public class GexfReader {
 	public static String edgeToken = "<edge";
 	public static String nodeToken = "<node";
 
-	public Layer createLayerFromFile(Path filePath, int fileCounter) {
+	public Layer createLayerFromFile(String filePath, int fileCounter, int index) {
 		Layer layer;
 		int dateInt;
 		if (logging)
-			System.out.println("CreateLayerFromFile Path: " + filePath.toString());
-
-		String dateString = findDate(filePath.toString());
+			System.out.println("CreateLayerFromFile Path: " + filePath);
+		String dateString = findDate(filePath);
 		
 		if(dateString =="Date Not Found")
 			dateInt = 0;
@@ -46,19 +45,19 @@ public class GexfReader {
 			System.exit(1);
 		}
 		
-		layer = readFile(filePath.toString(), dateInt, fileCounter);
+		layer = readFile(filePath, dateInt, index, fileCounter);
 		return layer;
 	}
 
-	public Layer readFile(String path, int dateIn, int fileCounter) {
-		Layer layer = new Layer(dateIn);
+	public Layer readFile(String path, int dateIn, int index, int fileCounter) {
+		Layer layer = new Layer(dateIn, index);
 		System.out.println("reading gdxf nodes and edges");
 		try {
 			Scanner file = new Scanner(new File(path));
 			while (file.hasNext()) {
 				String token = file.next();
 				if (token.equalsIgnoreCase(edgeToken)) {
-					layer.addEdge(readEdge(file));
+					readEdge(layer, file);
 				} else if (token.equalsIgnoreCase(nodeToken)) {
 					layer = readNode(layer, file, fileCounter);
 				}
@@ -85,6 +84,7 @@ public class GexfReader {
 			} else if (token.equalsIgnoreCase("for=\"modularity_class\"")) {
 				token = file.next();
 				communityId = Integer.parseInt(token.substring(7, findSecondQuote(7, token)));
+				node.setCommunity(communityId);
 			} else if (token.equalsIgnoreCase("<viz:size")) {
 				token = file.next();
 				node.setSize(Double.parseDouble(token.substring(7, findSecondQuote(7, token))));
@@ -106,6 +106,8 @@ public class GexfReader {
 			}
 		} while (!token.equalsIgnoreCase("</node>"));
 
+		layer.addNode(node.getLabel(), node);
+
 		if (layer.checkCommunityIdExists(communityId)) {
 			layer.getCommunity(communityId).addNode(node);
 		} else {
@@ -116,17 +118,19 @@ public class GexfReader {
 		return layer;
 	}
 
-	private Edge readEdge(Scanner file) throws IOException {
-		String token;
+	private Edge readEdge(Layer layer, Scanner file) throws IOException {
+		String token, src, trg;
 		Edge edge = new Edge();
 
 		do {
 			token = file.next();
 
 			if (token.startsWith("source=")) {
-				edge.setSource(token.substring(8, findSecondQuote(8, token)));
+				src = token.substring(8, findSecondQuote(8, token));
+				edge.setSource(layer.getNode(src));
 			} else if (token.startsWith("target=")) {
-				edge.setTarget(token.substring(8, findSecondQuote(8, token)));
+				trg = token.substring(8, findSecondQuote(8, token));
+				edge.setTarget(layer.getNode(trg));
 			} else if (token.startsWith("for=\"weight")) {
 				token = file.next();
 				if (token.startsWith("value=\"")) {
@@ -141,6 +145,7 @@ public class GexfReader {
 				edge.setEnd(convertDateToInt(9, token));
 			}
 		} while (!token.endsWith("</edge>"));
+		layer.addEdge(edge);
 		return edge;
 	}
 

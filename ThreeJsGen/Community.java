@@ -103,7 +103,7 @@ public class Community {
 		return true;
 	}
 
-	private void calculateTrueCenter() {
+	public void calculateTrueCenter() {
 		double x = 0, y = 0;
 
 		for (Node n : nodes) {
@@ -116,7 +116,7 @@ public class Community {
 		trueCenter = new Centroid(x, y);
 	}
 
-	private void calculateWeightedCenter() {
+	public void calculateWeightedCenter() {
 		double x = 0, y = 0, totalSize = 0;
 		for (Node n : nodes) {
 			totalSize += n.getSize();

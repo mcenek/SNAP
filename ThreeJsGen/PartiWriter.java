@@ -88,7 +88,7 @@ public class PartiWriter {
 				HashMap<Integer, Community> tempCommunities = layers.get(i).getCommunities();
 				for (Map.Entry<Integer, Community> communities : tempCommunities.entrySet()) {
 					Community tempCommunity = communities.getValue();
-					Centroid adjCentroid = tempCommunity.getWeightedCenter();
+					Centroid adjCentroid = tempCommunity.getTrueCenter();
 					ArrayList<Node> tempNodes = tempCommunity.getNodes();
 					if (adjCentroid == null) {
 						adjCentroid = tempCommunity.getTrueCenter();
@@ -132,7 +132,7 @@ public class PartiWriter {
 
 				for (Map.Entry<Integer, Community> communities : tempCommunities.entrySet()) {
 					Community tempCommunity = communities.getValue();
-					Centroid adjCentroid = tempCommunity.getWeightedCenter();
+					Centroid adjCentroid = tempCommunity.getTrueCenter();
 					ArrayList<Node> tempNodes = tempCommunity.getNodes();
 					int date = layers.get(i).getDate();
 					if (adjCentroid == null) {
@@ -180,8 +180,8 @@ public class PartiWriter {
 			int numCom, int layerDate1, int layerDate2) {
 		ArrayList<Node> nodeList1 = tempCommunity1.getNodes();
 		ArrayList<Node> nodeList2 = tempCommunity2.getNodes();
-		Centroid adjCentroid1 = tempCommunity1.getWeightedCenter();
-		Centroid adjCentroid2 = tempCommunity2.getWeightedCenter();
+		Centroid adjCentroid1 = tempCommunity1.getTrueCenter();
+		Centroid adjCentroid2 = tempCommunity2.getTrueCenter();
 
 		int endCount = 1;
 		boolean first = true;
@@ -298,12 +298,12 @@ public class PartiWriter {
 					// 	Community community = entry.getValue();
 					// 	if (community.containsNodeWithLabel(sourceKey)) {
 					// 		s = community.getNodeWithLabel(sourceKey);
-					// 		sAdjCentroid = community.getWeightedCenter();
+					// 		sAdjCentroid = community.getTrueCenter();
 					// 		sourceFound = true;
 					// 	}
 					// 	if (community.containsNodeWithLabel(targetKey)) {
 					// 		t = community.getNodeWithLabel(targetKey);
-					// 		tAdjCentroid = community.getWeightedCenter();
+					// 		tAdjCentroid = community.getTrueCenter();
 					// 		targetFound = true;
 					// 	}
 					// 	if (sourceFound && targetFound) {
@@ -313,11 +313,11 @@ public class PartiWriter {
 
 					if (s != null && t != null) {
 						writer.write(mesh);
-						writer.write(((s.getX() + currentLayer.getCommunity(s.getCommunity()).getWeightedCenter().getX())* xSkew) + " "
-								+ ((s.getY() + currentLayer.getCommunity(s.getCommunity()).getWeightedCenter().getY()) * ySkew) + " "
+						writer.write(((s.getX() + currentLayer.getCommunity(s.getCommunity()).getTrueCenter().getX())* xSkew) + " "
+								+ ((s.getY() + currentLayer.getCommunity(s.getCommunity()).getTrueCenter().getY()) * ySkew) + " "
 								+ ((currentLayer.getDate() - lowestZ) * zSkew) + "\n");
-						writer.write(((t.getX() + currentLayer.getCommunity(t.getCommunity()).getWeightedCenter().getX()) * xSkew) + " "
-								+ ((t.getY() + currentLayer.getCommunity(t.getCommunity()).getWeightedCenter().getY()) * ySkew) + " "
+						writer.write(((t.getX() + currentLayer.getCommunity(t.getCommunity()).getTrueCenter().getX()) * xSkew) + " "
+								+ ((t.getY() + currentLayer.getCommunity(t.getCommunity()).getTrueCenter().getY()) * ySkew) + " "
 								+ ((currentLayer.getDate() - lowestZ) * zSkew) + "\n}\n");
 					}
 				}

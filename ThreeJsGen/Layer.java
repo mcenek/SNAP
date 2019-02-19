@@ -77,6 +77,9 @@ public class Layer {
 		this.nodes.put(nodeNameIn, nodeIn);
 	}
 
+	public HashMap<String, Node> getNodes() {
+		return nodes;
+	}
 	public Node getNode(String nodeName){
 		return nodes.get(nodeName);
 	}

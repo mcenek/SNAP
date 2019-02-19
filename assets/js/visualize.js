@@ -263,7 +263,7 @@ function loadLayers() {
                                 scene.add(layer.mesh);
                                 layers.push( layer );
                             }
-                            console.log("Layer: "+line);
+                            //console.log("Layer: "+line);
                             layer = {};
                             layer.init = true;
                             layer.index = parseInt( line[1] );
@@ -300,7 +300,7 @@ function loadLayers() {
                             var cluster = {};
                             //cluster: index, community, dominant concept, weighted center X, weighted ceneterY, color index
                             //cluster,5,5,lance,0.3176634431919697,139.84600862406305,165
-                            console.log("Cluster: " + line); 
+                            //console.log("Cluster: " + line); 
                             cluster.index = parseInt( line[1] );
                             cluster.name = line[3];
                             cluster.x = parseFloat( line[4] );  //used to be 3
@@ -344,7 +344,7 @@ function loadLayers() {
                             var node = {};
                             //19,gush,20.02694,1755.7834,-2462.2236
                             //id, concept, size, x, y 
-                            console.log("Node "+ line);
+                            //console.log("Node "+ line);
                             node.index = parseInt( line[0] );
                             node.name = line[1];
                             node.radius = parseFloat( line[2] );
@@ -436,7 +436,7 @@ function loadEdges() {
                     }
                     else if( line[0] != "" ) {
                         //edge: writer.write(src:X,Y,Community,NodeLabel trg:X,Y,Community,NodeLabel
-                        console.log("Edge: "+line);
+                        //console.log("Edge: "+line);
                         if (layerIndex > layers.length-1){
                             console.log("LoadingEdges: Bad layerIndex: "+layerIndex);
                         }else{ 
@@ -483,19 +483,23 @@ function loadNoodles() {
                     if( lines[i] == "" )
                         continue;
                     var line = lines[i].split( " " );
-                    //console.log("Push Noodles: " + line);
+                    //Source: Source date, target date, source community, target community, weight
+                    console.log("Push Noodles: " + line);
                     var startLayerIndex = parseInt( line[0] );
-                    var startConceptName = line[1];
                     var endLayerIndex = parseInt( line[2] );
-                    var endConceptName = line[3];
+                    var startConceptName = line[1];  //communities
+                    var endConceptName = line[3];   //communities
 
                     // find the start and end clusters by conceptName
                     var noodle = {};
+
+
                     var startLayer = layers[startLayerIndex];
+                    var endLayer = layers[endLayerIndex];
                     for( var j=0; j<startLayer.clusters.length; j++ ) {
                         for( var n=0; n<startLayer.clusters[j].nodes.length; n++ ) {
                             //if( startLayer.clusters[j].nodes[n].name == startConceptName ) {
-                            if( j == startConceptName ) {
+                            if(startLayer.clusters[j].index == startConceptName) {
                                 noodle.startConcept = startLayer.clusters[j].nodes[n];
                                 noodle.startCluster = startLayer.clusters[j];
                                 //console.log("Found noodle start");
@@ -506,15 +510,22 @@ function loadNoodles() {
                     for( var j=0; j<endLayer.clusters.length; j++ ) {
                         for( var n=0; n<endLayer.clusters[j].nodes.length; n++ ) {
                             //if( endLayer.clusters[j].nodes[n].name == endConceptName ) {
-                            if( j == endConceptName ) {
+                            if( endLayer.clusters[j].index == endConceptName ) {
                                 noodle.endConcept = endLayer.clusters[j].nodes[n];
                                 noodle.endCluster = endLayer.clusters[j];
                                 //console.log("Found noodle end");
                             }
                         }
                     }
-                    //TODO: THIS IS BROKEN HERE -- I think MC
+
                     // make the curve and geometry
+                    // noodle.top = new THREE.Vector3( layers[startLayerIndex].clusters[startConceptName].x,
+                    //                                 layers[startLayerIndex].clusters[startConceptName].y,
+                    //                                 layers[startLayerIndex].z);
+                    // noodle.bot = new THREE.Vector3( layers[endLayerIndex].clusters[endConceptName].x,
+                    //                                 layers[endLayerIndex].clusters[endConceptName].y,
+                    //                                 layers[endLayerIndex].z);
+
                     noodle.top = new THREE.Vector3( noodle.startCluster.x, noodle.startCluster.y, startLayer.z );
                     noodle.bot = new THREE.Vector3( noodle.endCluster.x, noodle.endCluster.y, endLayer.z );
                     noodle.mid = new THREE.Vector3( (noodle.top.x+noodle.bot.x)/2,

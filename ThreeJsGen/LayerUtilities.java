@@ -25,7 +25,6 @@ public class LayerUtilities {
 		ArrayList<Link> links = new ArrayList<Link>();
 
 		for (int layerIndex = 0; layerIndex < layers.size() - 1; layerIndex++) {
-
 			for (Community c : layers.get(layerIndex).getCommunities().values()) {
 				for (Community nextC : layers.get(layerIndex + 1).getCommunities().values()) {
 					Link link = null;
@@ -33,10 +32,12 @@ public class LayerUtilities {
 						for (Node nextN : nextC.getNodes()) {
 							if (n.getLabel().equals(nextN.getLabel())) {
 								if (link == null) {
-									link = new Link(layers.get(layerIndex).getIndex(),
-													layers.get(layerIndex + 1).getIndex(), 
-													c.getCommunityId(),
-													nextC.getCommunityId());
+									link = new Link(layerIndex,layerIndex + 1, c.getCommunityId(),nextC.getCommunityId());
+
+									// link = new Link(layers.get(layerIndex).getIndex(),
+									// 				layers.get(layerIndex + 1).getIndex(), 
+									// 				c.getCommunityId(),
+									// 				nextC.getCommunityId());
 									//link = new Link(layers.get(layerIndex).getDate(),layers.get(layerIndex + 1).getDate(), c.getCommunityId(),nextC.getCommunityId());
 								} else {
 									link.addToWeight();

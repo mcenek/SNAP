@@ -70,9 +70,10 @@ public class ThreeWriter {
 
 				int clusterIndex = 0;
 				for (Community community : layer.getCommunities().values()) {
+					//community.calculateTrueCenter();
 					writer.write("cluster " + clusterIndex + " " + community.getCommunityId() + " "
-							+ community.dominantConcept() + " " + community.getWeightedCenter().getX() + " "
-							+ community.getWeightedCenter().getY() + " "
+							+ community.dominantConcept() + " " + community.getTrueCenter().getX() + " "
+							+ community.getTrueCenter().getY() + " "
 							+ findColorIndexNumber(colorList, community.getColor()) + "\n");
 
 					int nodeIndex = 0;

@@ -178,7 +178,9 @@
             window.location.hash = "visPanel";
             $('#placeholderCanvas').hide();
             showLoadingWheel();
-            init();
+            var project_path = "<?php echo $this->file_dir; ?>";
+            var project = "<?php echo $this->data['project_name']; ?>";
+            init(project_path, project);
             // loading wheel is hidden from visualize.js
         }
         function stopVisualizer() {

@@ -9,9 +9,7 @@ var materials = [];
 var edgeMesh;
 
 var containerID = "visualizer";
-var projectName = "../cenek@up.edu/project_one/partiview_generator/project_one";
-//var containerID = "visualizer";
-//var projectName = "dummyTest";
+var projectName = "../test@test.edu/project_one/partiview_generator/project_one";
 var metaColorFilename = assetPath + projectName + "_meta-colors.three.txt";
 var layerFilename = assetPath + projectName + "_layers.three.txt";
 var edgeFilename = assetPath + projectName + "_edges.three.txt";
@@ -20,7 +18,14 @@ var noodleFilename = assetPath + projectName + "_noodles.three.txt";
 // TODO probably shouldn't be such a magic number
 var zMult = 10;
 
-function init(){
+function init(path, project){
+    //overwrite the global variables with arguments passed in
+    projectName = path +"/"+project;
+    metaColorFilename = projectName + "_meta-colors.three.txt";
+    layerFilename =  projectName + "_layers.three.txt";
+    edgeFilename = projectName + "_edges.three.txt";
+    noodleFilename =  projectName + "_noodles.three.txt";
+
     visRunning = true;
 
     container = document.getElementById( containerID );
@@ -483,8 +488,10 @@ function loadNoodles() {
                     if( lines[i] == "" )
                         continue;
                     var line = lines[i].split( " " );
+                    //TODO: __________NOT SURE IF THIS IS THE RIGHT EXPORT ORDER
+                    //TODO: add weight as the noodle thickness
                     //Source: Source date, target date, source community, target community, weight
-                    console.log("Push Noodles: " + line);
+                    //console.log("Push Noodles: " + line);
                     var startLayerIndex = parseInt( line[0] );
                     var endLayerIndex = parseInt( line[2] );
                     var startConceptName = line[1];  //communities

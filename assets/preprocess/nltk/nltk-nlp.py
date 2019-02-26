@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 import os
 import sys
+import string
 
 import nltk
+from nltk.corpus import stopwords
+from nltk.corpus import wordnet as wn
+
 #nltk.download('punkt')
 #nltk.download('averaged_perceptron_tagger')
 #nltk.download('wordnet')
@@ -171,12 +175,29 @@ def main():
 		sys.stdout.write(" ".join(lemmas))
 
 	elif sys.argv[-1] == 'ner_tag':
+		stemmer = nltk.stem.PorterStemmer()
 		sents = nltk.sent_tokenize(uni_str)
 		tokens = [nltk.word_tokenize(s) for s in sents]
+		# tokens_out = [];
+		# for s in tokens:
+		# 	new_list=[];
+		# 	new_list = [new_list.append(stemmer.stem(w)) for w in s]
+		# 	tokens_out.append(new_list);
 		pos = [nltk.pos_tag(s) for s in tokens]
 		chunked = nltk.ne_chunk_sents(pos, binary=False)
 		ners = ner_process(chunked)	
-		sys.stdout.write(str(ners))
+		stop = stopwords.words('english') + list(string.punctuation)
+		out = [i for i in ners if i.lower().split('/')[0] not in stop]
+		for o in out:
+			stem = stemmer.stem(o.split('/')[0]);
+			if stem not in ['\'s','\'','\`','"','\'\'', '``', '\"\"']:
+				#stem = stemmer.stem(o.split('/')[0]);
+				#if len(stem)>2: 	#a hack to get rid of ''  and `` and "" strings
+				ot=stem+"/"+o.split('/')[1];
+				ot=ot.replace("-","");
+				ot=ot.replace(".","");
+				ot=ot.replace("'","");
+				sys.stdout.write(str(ot)+" " + str(len(stem))+ " "+ str(o)+" \n");
 
 		#words = nltk.word_tokenize(uni_str)
 		#tagged = nltk.pos_tag(words)

@@ -232,32 +232,33 @@ class Raw_uploads extends CI_Controller
                     $cmd .= $this->build_command('corenlp', $post);
                 } else if ($post['tokenize'] == 'nltk') {
                     $preprocess_path .= 'nltk/';
-                    $cmd .= '/usr/bin/python ' . $preprocess_path . 'nltk-nlp.py ' . $file_path;
+                    $cmd .= 'python ' . $preprocess_path . 'nltk-nlp.py ' . $file_path;
                     $cmd .= $this->build_command('nltk', $post);
                 } else if ($post['tokenize'] == 'spacy') {
                     $preprocess_path .= 'spacy/';
                     $cmd .= 'python ' . $preprocess_path . 'spacy-nlp.py ' . $file_path;
                     $cmd .= $this->build_command('spacy', $post);
                 }
-		$cmd .= ' > ' . $this->file_dir . '/preprocessed/' . $file_name . ' & echo $!';
-		exec($cmd,$op);
+
+        		$cmd .= ' > ' . $this->file_dir . '/preprocessed/' . $file_name . ' & echo $!';
+                echo "console.log('boom')";
+                //<script type='text/javascript'>alert('NLTK: $cmd');</script>"; //echo '<script> console.log($cmd)</script>';
+        		exec($cmd,$op);
 
                 $output = (int) $op[0];
-		$PIDArray .= '"' . $output . '", ';
-		#$PIDArray .= '"' . $cmd . '", ';
-		#$PIDArray .= '"' . $op . '", ';
-		#$output = popen( $cmd,"r");
-		#echo "$op";
+        		$PIDArray .= '"' . $output . '", ';
+        		#$PIDArray .= '"' . $cmd . '", ';
+        		#$PIDArray .= '"' . $op . '", ';
+        		#$output = popen( $cmd,"r");
+        		#echo "$op";
 
-		#while( !feof( $output ) ){
-		#	echo fread( $output, 256);
-		#	flush();
-		#	ob_flush();
-		#	#usleep(100000);
-		#}
-		#pclose($output);
-
-
+        		#while( !feof( $output ) ){
+        		#	echo fread( $output, 256);
+        		#	flush();
+        		#	ob_flush();
+        		#	#usleep(100000);
+        		#}
+        		#pclose($output);
             }
 
             $PIDArray = rtrim($PIDArray, ", ");

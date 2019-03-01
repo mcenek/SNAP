@@ -32,7 +32,6 @@ public class Main
         if(individualGexfs == 1){
             System.out.println("Ind dl2gexf: "+Paths.get(args[1]));
             try(Stream<Path> paths = Files.walk(Paths.get(args[0]))){
-                System.out.println("AFSF");
                 paths.forEach(filePath -> {
                     if(Files.isRegularFile(filePath)){
                         System.out.println(filePath.toString());

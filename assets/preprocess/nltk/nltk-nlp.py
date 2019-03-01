@@ -81,7 +81,7 @@ def ner_process(parent):
 	for node in parent:
 		if type(node) is nltk.Tree:
 			if node.label() == SENTENCE:
-				sys.stdout.write('')
+				_ners.append("#/#")   #insert sentence marker
 			else:
 				for leaf in node.leaves():
 					ner = '{}/{}/{}'.format(leaf[0].encode("ascii", "ignore"), leaf[1], node.label())
@@ -175,6 +175,12 @@ def main():
 		sys.stdout.write(" ".join(lemmas))
 
 	elif sys.argv[-1] == 'ner_tag':
+		# SENTENCE = 'S'
+		# _ners = []
+		# first = 1 
+		# current = ''
+		chars_to_remove = ['.', '!', '#','.',"'",'`','-']
+		sc = set(chars_to_remove)
 		stemmer = nltk.stem.PorterStemmer()
 		sents = nltk.sent_tokenize(uni_str)
 		tokens = [nltk.word_tokenize(s) for s in sents]
@@ -187,18 +193,18 @@ def main():
 		chunked = nltk.ne_chunk_sents(pos, binary=False)
 		ners = ner_process(chunked)	
 		stop = stopwords.words('english') + list(string.punctuation)
+		stop.remove('#')
 		out = [i for i in ners if i.lower().split('/')[0] not in stop]
 		for o in out:
-			stem = stemmer.stem(o.split('/')[0]);
-			if stem not in ['\'s','\'','\`','"','\'\'', '``', '\"\"']:
-				#stem = stemmer.stem(o.split('/')[0]);
-				#if len(stem)>2: 	#a hack to get rid of ''  and `` and "" strings
-				ot=stem+"/"+o.split('/')[1];
-				ot=ot.replace("-","");
-				ot=ot.replace(".","");
-				ot=ot.replace("'","");
-				sys.stdout.write(str(ot)+" " + str(len(stem))+ " "+ str(o)+" \n");
-
+			if o !="#/#": #leave the sentence markers alone
+				stem = stemmer.stem(o.split('/')[0]);
+				if stem not in ['\'s','\'','\`','"','\'\'', '``', '\"\"']:
+					ot=stem+"/"+o.split('/')[1];
+					ot = ''.join([c for c in ot if c not in sc]) #remove any remainding funny characters
+					sys.stdout.write(str(ot)+"\n");
+					#sys.stdout.write(str(ot)+" " + str(len(stem))+ " "+ str(o)+" \n");
+			else:
+				sys.stdout.write(str(o)+"\n");
 		#words = nltk.word_tokenize(uni_str)
 		#tagged = nltk.pos_tag(words)
 		#namedEnt = nltk.ne_chunk(tagged, binary=True)

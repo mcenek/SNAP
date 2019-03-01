@@ -213,7 +213,7 @@
                 id="histogramGeneration" name="file_action" value="HistoGram" type="button">
                 Generate Histogram
             </button>
-            <button class="btn btn-primary" data-toggle="tooltip" title="Generate Semantic Networks" id="NetGenButton" name="file_action" value="netgen2" type="button">Network Generation</button>
+            <button class="btn btn-primary" data-toggle="tooltip" title="Network Generation" id="NetGenButton" name="file_action" value="netgen2" type="button">Network Generation</button>
 
             <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
             <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>

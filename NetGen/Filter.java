@@ -196,7 +196,7 @@ public class Filter {
     	ArrayList<ArrayList<String>> sentences = new ArrayList<ArrayList<String>>();
 		ArrayList<String> sentence = new ArrayList<String>();
     	for(String s: tokens){
-    		if(s.equals(".")){
+    		if(s.equals("#/#")){
     			ArrayList<String> temp = (ArrayList<String>) sentence.clone();
     			sentences.add(temp);
     			sentence.clear();

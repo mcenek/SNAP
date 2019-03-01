@@ -365,7 +365,6 @@ function loadLayers() {
                             mesh.updateMatrix();
                             mesh.matrixAutoUpdate = false;
                             node.mesh = mesh;
-
                             layer.nodes.push( node );
                             layer.geometry.merge(mesh.geometry, mesh.matrix, thisClusterIndex);
 

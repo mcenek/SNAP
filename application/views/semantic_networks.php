@@ -52,24 +52,28 @@
 
         <form id="checkbox_form" name="checkbox_form" method="post" action="semantic_networks/submit_files">
             <input type='checkbox' name='select_all' onClick='selectAll(this)' /> Select All
-            <br /> 
+            <table><tr><td></td><td>File name</td><td>Time Stamp</td><td>Size</td></tr>
             <?php
                 foreach ($files as $file => $file_name) {
                     $file_parts = pathinfo($file_name);
+                    echo '<tr><td>';
                     if ($file_parts['extension'] == "dl") //Check File Extensions, display only produced files
-                    {
+                    {    
                         echo form_checkbox(array(
                             'name' => 'checkbox[]',
                             'id' => 'checkbox[]',
                             'value' => $file_name,
                             'checked' => FALSE,
                         ));
-
-                        $url = site_url() . '/semantic_networks/display_file/' . $file_name;
-                        echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+                        $url = site_url() . '/semantic_networks/display_file/' . $file;
+                        $file_stat = stat($this->file_dir.'/semantic_networks/'.$file_name);
+                        echo '</td><td><a href="' . $url . '">' . $file_name . '</a></td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).'</td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
                     }
                 }
             ?>
+            </table><br/>
+            <input type='checkbox' name='select_all' onClick='selectAll(this)' /> Select All
+            <br />
             <button class="btn btn-primary" name="file_action" value="netgen" type="submit">Semantic Network Generation</button>
             <br />
             <br />

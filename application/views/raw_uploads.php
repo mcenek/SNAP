@@ -106,17 +106,17 @@
         <br />
 
         <?php
-echo $error;
-$message = $this->session->flashdata();
-if (!empty($message['flash_message'])) {
-    $html = '<p id="warning">';
-    $html .= $message['flash_message'];
-    $html .= '</p>';
-    echo $html;
-}
+            echo $error;
+            $message = $this->session->flashdata();
+            if (!empty($message['flash_message'])) {
+                $html = '<p id="warning">';
+                $html .= $message['flash_message'];
+                $html .= '</p>';
+                echo $html;
+            }
 
-echo validation_errors();
-?>
+            echo validation_errors();
+            ?>
 
         <?php echo form_open_multipart('raw_uploads/upload_text'); ?>
             <div id="upload_area">
@@ -128,27 +128,30 @@ echo validation_errors();
         </form>
 
         <?php
-echo '<ul>';
-echo '<form id="checkbox_form" name="checkbox_form" method="post" action="raw_uploads/submit_files" >';
-//echo '<form id="checkbox_form" name="checkbox_form" method="post" action="/submit_files">';
-echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
-foreach ($files as $file => $file_name) {
-    $file_parts = pathinfo($file_name);
-    if ($file_parts['extension'] == "txt") //Check File Extensions, display only produced files
-    {
-        echo form_checkbox(array(
-            'name' => 'checkbox[]',
-            'id' => 'checkbox[]',
-            'value' => $file_name,
-            'checked' => FALSE,
-        ));
-
-        $url = site_url() . '/raw_uploads/display_file/' . $file_name;
-        echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
-    }
-}
-
-echo '<br/>';
+        echo '<ul>';
+        echo '<form id="checkbox_form" name="checkbox_form" method="post" action="raw_uploads/submit_files" >';
+        //echo '<form id="checkbox_form" name="checkbox_form" method="post" action="/submit_files">';
+        echo "<input type='checkbox' name='select_all' onClick='selectAll(this)' > Select All<br/>";
+        echo '<table><tr><td></td><td>File name</td><td>Time Stamp</td><td>Size</td></tr>';
+        foreach ($files as $file => $file_name) {
+            $file_parts = pathinfo($file_name);
+            echo '<tr><td>';
+            if ($file_parts['extension'] == "txt") //Check File Extensions, display only produced files
+            {
+                
+                echo form_checkbox(array(
+                    'name' => 'checkbox[]',
+                    'id' => 'checkbox[]',
+                    'value' => $file_name,
+                    'checked' => FALSE,
+                ));
+                $url = site_url() . '/raw_uploads/display_file/' . $file;
+                $file_stat = stat($this->file_dir.'/raw/'.$file_name);
+                echo '</td><td><a href="' . $url . '">' . $file_name . '</a></td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).'</td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
+            }
+        }
+        echo '</table>';
+        echo '<br/>';
 
 // <div>
 //     <ul>

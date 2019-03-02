@@ -50,20 +50,14 @@
             <form id="settings" name="settings" method="post" action="settings/save_settings">
                 <ul>
                     <li>
-                        If Use Frequency is set, then frequency of word usage is used to create the network in place of position.
-                        Frequency is the inverse usage of a word and is determined by 1/n where n is equal to word usage.
-                        So if a word is used 2 times it will have a frequency of 1/2 or 50%, for a word used 4 times it will
-                        have a frequency of 1/4 or 25%.
+                        If Use Frequency is set, then words are filtered based on how frequently they are used in each article. 
+                        You can set a frequency count for words to be filtered: lower bound and upper bound. The lower bound will
+                        delete any words that occur in the articles fewer than the lower bound count. The upper bound frequency count will
+                        delete all words used more than frequency count. 
                     </li>
                     <li>
-                        The Frequency Upper Bound is the maximum value a frequency should have.
-                        When set to 5 (5%) a word used more than 20 times will be removed from the network.
-                        Default set to 5 (5%).
-                    </li>
-                    <li>
-                        The Frequency Lower Bound is the minimum value a frequency should have.
-                        When set to 25 (25%) a word used less than 4 times will be removed from the network.
-                        Default set to 35 (35%).
+                        For example: lower bound frequency count = 5 and upper bound frequency = 35 means that any words used fewer than 
+                        5 time or more than 35 times in the article will be deleted. 
                     </li>
                 </ul>
                 <input type="checkbox" name="useFreq"
@@ -86,22 +80,22 @@
                     ?>
                 </p>
 
-                <p>Enter a number greater than 0 and less than the Lower bound </p>
+                <p>Enter a number greater than 0 and less than the Upper bound</p>
                 <input
                     type="number" min="0" name="freq_upper" 
                     value=<?php echo $this->session->userdata('freq_upper_bound'); ?>
                 />
-                Frequency Threshold Upper Bound 
-                <p class="current_val">Current Set Upper Bound: <?php echo $this->session->userdata('freq_upper_bound'); ?></p>
+                Frequency Threshold Lower Bound 
+                <p class="current_val">Current Set Lower Bound: <?php echo $this->session->userdata('freq_upper_bound'); ?></p>
                 <br />
                 <br />
-                <p>Enter a number greater than the Upper bound and less than or equal to 100 </p>
+                <p>Enter a number greater than the Lower bound and less than or equal to 100 </p>
                 <input
                     type="number" max="100" name="freq_lower"
                     value=<?php echo $this->session->userdata('freq_lower_bound'); ?>
                 />
-                Frequency Threshold Lower Bound
-                <p class="current_val">Current Set Lower Bound: <?php echo $this->session->userdata('freq_lower_bound'); ?></p>
+                Frequency Threshold Upper Bound
+                <p class="current_val">Current Set Upper Bound: <?php echo $this->session->userdata('freq_lower_bound'); ?></p>
 
                 <button class="btn btn-primary" name="file_action" value="net_gen_set" type="submit">Save</button>
             </form>

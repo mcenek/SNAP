@@ -150,7 +150,7 @@ public class Filter {
 
     	// retrieve a count of the number of times each token is seen
     	// as well as a min count, and a max count
-    	int minCount = 1;
+    	int minCount = 0x7fffffff;
     	int maxCount = 0;
     	for(ArrayList<String> sentence: sentences) {
 	        for(String s : sentence) {
@@ -217,7 +217,8 @@ public class Filter {
     	while(i.hasNext()) {
     		Map.Entry<String, Integer> m = i.next();
 			double normalCount = ((double)m.getValue() - minCount) / (maxCount - minCount);
-			if(normalCount < min || normalCount > max) {
+            double freqValue = m.getValue();
+			if(freqValue < max || freqValue > min) {
 				//System.out.println("Removing:\ttoken="+m.getKey()+"\trawCount="+m.getValue()+" minCount="+minCount+" maxCount="+maxCount+" normalCount="+normalCount);
 				i.remove();
 				removeCount++;

@@ -45,14 +45,18 @@ class Preprocessed_uploads extends CI_Controller
         $PIDArray = "{\"Pids\":[";
         $source = $this->file_dir . '/preprocessed/';
         $destination = $this->file_dir . '/semantic_networks/';
+        $use_freq = $this->session->userdata('use_freq');
+        $freq_lower = $this->session->userdata('freq_lower_bound');
+        $freq_upper = $this->session->userdata('freq_upper_bound');
+        $cmd = '';
         foreach ($files as $file => $file_name) {
             $netgen_path = $this->config->item('base_directory') . 'assets/NetGen/';
             $output = '';
-            $cmd = '';
             $file_path = $this->file_dir . '/preprocessed/' . $file_name . ' ';
             //-------------------Generate .dl files for every file in preprocessed directory----------------------------------//
             // run the java command, redirect the outputs to null so that doesn't block echo, the java does it's own file io to the dir, echo back the PID
-            $cmd = 'nice java' . ' -jar ' . $netgen_path . 'NetGenL4.jar ' . $file_path . $netgen_path . 'stopword.txt 2>&1 1> /dev/null & echo $!';
+            $cmd = 'nice java' . ' -jar ' . $netgen_path . 'NetGenL4.jar ' . $file_path . $netgen_path . 'stopword.txt' . ' ' . $use_freq . ' ' . $freq_lower . ' ' . $freq_upper . ' 2>&1 1> /dev/null & echo $!';
+            //$cmd = 'nice java' . ' -jar ' . $netgen_path . 'NetGenL4.jar ' . $file_path . $netgen_path . 'stopword.txt 2>&1 1> /dev/null & echo $!';
 
             //--------debug-----------//
             //$message = "command: ".$cmd;
@@ -63,6 +67,7 @@ class Preprocessed_uploads extends CI_Controller
             $PIDArray .= '"' . $output . '", ';
 
         }
+        //echo "<script type='text/javascript'>alert('NetGenL4: $cmd');</script>";
         // while the PID exists pause/sleep, when nothing returns the PID is dead so move the files that have been created by the java process
         $cmd2 = 'while kill -0 ' . $output . '
 				do
@@ -77,42 +82,43 @@ class Preprocessed_uploads extends CI_Controller
     }
 
     //function that is called to generate the .dl files for netword analysis
-    public function netgen2()
-    {
-        $files = $this->input->post('checkbox');
-        $PIDArray = "{\"Pids\":[";
-        $source = $this->file_dir . '/preprocessed/';
-        $destination = $this->file_dir . '/semantic_networks/';
-        foreach ($files as $file => $file_name) {
-            $netgen_path = $this->config->item('base_directory') . 'assets/NetGen/';
-            $output = '';
-            $cmd = '';
-            $file_path = $this->file_dir . '/preprocessed/' . $file_name . ' ';
-            //-------------------Generate .dl files for every file in preprocessed directory----------------------------------//
-            $use_freq = $this->session->userdata('use_freq');
+  //   public function netgen2()
+  //   {
+  //       $files = $this->input->post('checkbox');
+  //       $PIDArray = "{\"Pids\":[";
+  //       $source = $this->file_dir . '/preprocessed/';
+  //       $destination = $this->file_dir . '/semantic_networks/';
+  //       $cmd = '';
+  //       foreach ($files as $file => $file_name) {
+  //           $netgen_path = $this->config->item('base_directory') . 'assets/NetGen/';
+  //           $output = '';
 
-            $freq_lower = $this->session->userdata('freq_lower_bound');
-            $freq_upper = $this->session->userdata('freq_upper_bound'); //put this here to keep it the same with netgen
-            $cmd = 'java' . ' -jar ' . $netgen_path . 'NetGenL4.jar ' . $file_path . $netgen_path . 'stopword.txt' . ' ' . $use_freq . ' ' . $freq_lower . ' ' . $freq_upper . ' 2>&1 1> /dev/null & echo $!';
+  //           $file_path = $this->file_dir . '/preprocessed/' . $file_name . ' ';
+  //           //-------------------Generate .dl files for every file in preprocessed directory----------------------------------//
+  //           $use_freq = $this->session->userdata('use_freq');
 
-            //--------debug-----------//
-            //$message = "command: ".$cmd;
-            $output = trim(shell_exec($cmd));
-            //$output = (int)$op[0];
-            $PIDArray .= '"' . $output . '", ';
+  //           $freq_lower = $this->session->userdata('freq_lower_bound');
+  //           $freq_upper = $this->session->userdata('freq_upper_bound'); //put this here to keep it the same with netgen
+  //           $cmd = 'java' . ' -jar ' . $netgen_path . 'NetGenL4.jar ' . $file_path . $netgen_path . 'stopword.txt' . ' ' . $use_freq . ' ' . $freq_lower . ' ' . $freq_upper . ' 2>&1 1> /dev/null & echo $!';
+  //           //--------debug-----------//
+  //           //$message = "command: ".$cmd;
+  //           $output = trim(shell_exec($cmd));
+  //           //$output = (int)$op[0];
+  //           $PIDArray .= '"' . $output . '", ';
 
-        }
-        $cmd2 = 'while kill -0 ' . $output . '
-		do
-		sleep 1
-		done
-		mv ' . '/' . $source . '/*.dl ' . $destination . '';
+  //       }
 
-        exec($cmd2);
-        $PIDArray = rtrim($PIDArray, ", ");
-        $PIDArray .= ']}';
-        echo $PIDArray;
-    }
+  //       $cmd2 = 'while kill -0 ' . $output . '
+		// do
+		// sleep 1
+		// done
+		// mv ' . '/' . $source . '/*.dl ' . $destination . '';
+
+  //       exec($cmd2);
+  //       $PIDArray = rtrim($PIDArray, ", ");
+  //       $PIDArray .= ']}';
+  //       echo $PIDArray;
+  //   }
 
     public function HistoGen()
     {

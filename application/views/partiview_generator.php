@@ -62,21 +62,26 @@
         <div class="tab-content">
             <div id="networkFiles" class="tab-pane fade show active" role="tabpanel">
                 <form method="post" action="partiview_generator/submit_files">
+                    <table><tr><td></td><td>File name</td><td>Time Stamp</td><td>Size</td></tr>
                     <?php
                         foreach ($files as $file => $file_name) {
                             $file_parts = pathinfo($file_name);
-                            if ($file_parts['extension'] == 'gexf') {
+                            echo '<tr><td>';
+                            if ($file_parts['extension'] == "gexf") //Check File Extensions, display only produced files
+                            {    
                                 echo form_checkbox(array(
                                     'name' => 'checkbox[]',
+                                    'id' => 'checkbox[]',
                                     'value' => $file_name,
-                                    'checked' => false,
+                                    'checked' => FALSE,
                                 ));
-                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
-                                echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+                                $url = site_url() . '/partiview_generator/display_file/' . $file;
+                                $file_stat = stat($this->file_dir.'/partiview_generator/'.$file_name);
+                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a></td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).'</td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
                             }
                         }
                     ?>
-
+                    </table><br/>
                     <input type="checkbox" name="select_all" onClick="selectAll(this)">Select All</input>
                     <br/>
                     <br/>
@@ -89,30 +94,38 @@
             </div>
             <div id="visualization" class="tab-pane fade" role="tabpanel">
                 <form method="post" action="partiview_generator/submit_files">
+                    <table><tr><td></td><td>File name</td><td>Time Stamp</td><td>Size</td></tr>
                     <?php
                         foreach ($files as $file => $file_name) {
                             $file_parts = pathinfo($file_name);
-                            if ($file_parts['extension'] == "txt") {
+                            echo '<tr><td>';
+                            if ($file_parts['extension'] == "txt") //Check File Extensions, display only produced files
+                            {    
                                 echo form_checkbox(array(
                                     'name' => 'checkbox[]',
+                                    'id' => 'checkbox[]',
                                     'value' => $file_name,
-                                    'checked' => false,
+                                    'checked' => FALSE,
                                 ));
-                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
-                                echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+                                $url = site_url() . '/partiview_generator/display_file/' . $file;
+                                $file_stat = stat($this->file_dir.'/partiview_generator/'.$file_name);
+                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a></td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).'</td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
                             }
                         }
                     ?>
-                    <input type="checkbox" name="select_all" onClick="selectAll(this)"> Select All
+                    </table><br/>
+                    <input type="checkbox" name="select_all" onClick="selectAll(this)"> Select All<br />
                     <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
                     <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
                 </form>
             </div>
             <div id="partiviewFiles" class="tab-pane fade" role="tabpanel">
                 <form method="post" action="partiview_generator/submit_files">
+                    <table><tr><td></td><td>File name</td><td>Time Stamp</td><td>Size</td></tr>
                     <?php
                         foreach ($files as $file => $file_name) {
                             $file_parts = pathinfo($file_name);
+                            echo '<tr><td>';
                             if ($file_parts['extension'] == 'speck'
                                 || $file_parts['extension'] == 'cf'
                                 || $file_parts['extension'] == 'cmap') {
@@ -121,12 +134,14 @@
                                     'value' => $file_name,
                                     'checked' => false,
                                 ));
-                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
-                                echo '<a href="' . $url . '">' . $file_name . '</a><br/>';
+                                $url = site_url() . '/partiview_generator/display_file/' . $file;
+                                $file_stat = stat($this->file_dir.'/partiview_generator/'.$file_name);
+                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a></td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).'</td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
                             }
                         }
                     ?>
-                    <input type='checkbox' name='select_all' onClick='selectAll(this)'> Select All
+                    </table><br/>
+                    <input type="checkbox" name="select_all" onClick="selectAll(this)"> Select All<br />
                     <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
                     <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
                 </form>

@@ -241,8 +241,6 @@ class Raw_uploads extends CI_Controller
                 }
 
         		$cmd .= ' > ' . $this->file_dir . '/preprocessed/' . $file_name . ' & echo $!';
-                echo "console.log('boom')";
-                //<script type='text/javascript'>alert('NLTK: $cmd');</script>"; //echo '<script> console.log($cmd)</script>';
         		exec($cmd,$op);
 
                 $output = (int) $op[0];

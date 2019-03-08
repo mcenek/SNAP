@@ -7,13 +7,17 @@ To comile the source files located in the SNAP/NetGen
    Linux: /usr/share/java/junit4.jar
 
    "javac -cp .:/usr/share/java/junit4.jar *.java"
-   "jar cfmv NetGen.jar MANIFEST.MF *.class"
-   Finally, copy the NetGen.jar into the assets/NetGen/ directory and don't forget to change the
-   owner (and permissions if needed)
-   Linux: sudo chown www-data:www-data NetGen.jar
 
-Terminal command to run NetGen.jar:
-java -jar NetGen.jar input.txt stopword.txt frequency* freqMin* freqMax*
+   Alternatively if you don't have junit installed, you can compile, but leave out the NetGenTest.java
+   "javac Filter.java IO.java Main.java Network.java SemanticPair.java Tokenizer.java"
+
+   "sudo jar cfmv ../assets/NetGen/NetGenL4.jar MANIFEST.MF *.class"
+
+   Change the owner if needed (and permissions)
+   Linux: sudo chown www-data:www-data NetGenL4.jar
+
+Terminal command to run NetGenL4.jar:
+java -jar NetGenL4.jar input.txt stopword.txt frequency* freqMin* freqMax*
 
 input.txt: The path and name of the file you wish to create a network of.
 stopword.txt: The path and name of the file containing the stop words.

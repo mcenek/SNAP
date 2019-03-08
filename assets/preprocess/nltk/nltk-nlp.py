@@ -13,6 +13,9 @@ from nltk.corpus import wordnet as wn
 #nltk.download('maxent_ne_chunker')
 #nltk.download('words')
 
+from nltk import ne_chunk_sents, pos_tag, word_tokenize, sent_tokenize
+from nltk.tree import Tree
+
 from nltk.tree import ParentedTree
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
@@ -175,36 +178,49 @@ def main():
 		sys.stdout.write(" ".join(lemmas))
 
 	elif sys.argv[-1] == 'ner_tag':
-		# SENTENCE = 'S'
-		# _ners = []
-		# first = 1 
-		# current = ''
-		chars_to_remove = ['.', '!', '#','.',"'",'`','-']
-		sc = set(chars_to_remove)
-		stemmer = nltk.stem.PorterStemmer()
-		sents = nltk.sent_tokenize(uni_str)
-		tokens = [nltk.word_tokenize(s) for s in sents]
-		# tokens_out = [];
-		# for s in tokens:
-		# 	new_list=[];
-		# 	new_list = [new_list.append(stemmer.stem(w)) for w in s]
-		# 	tokens_out.append(new_list);
-		pos = [nltk.pos_tag(s) for s in tokens]
-		chunked = nltk.ne_chunk_sents(pos, binary=False)
-		ners = ner_process(chunked)	
+		#uni_str = "Forest Gump became our next president of the United States of America. Although he loved to run run run and then he ran some more, he non-less becase the much beloved 46th president. Forest Gump loved to govern like a box of chocolate, as you don't alwasy know what you gonna get. The Forestry Center made him the homorable president by paying a particular attention to the environment and environmental sustainability. And there you go America."
+		#uni_str = "Mr. Chairman, for the record, I would like to submit a Wall Street Journal editorial called, A Constitutional Tutorial for Obama, the President and EPA do not possess an heralded power to rewrite laws, and more recently, a Wall Street Journal op-ed from Harvard professor, Laurence Tribe, The Clean Power Act is Unconstitutional, where Laurence Tribe says, ``Frustration with congressional inaction cannot justify throwing the Constitution overboard to rescue this lawless EPA proposal.''"
 		stop = stopwords.words('english') + list(string.punctuation)
 		stop.remove('#')
-		out = [i for i in ners if i.lower().split('/')[0] not in stop]
+		chars_to_remove = ('.', '!', '#','.',"'",'`','-','=','_',' ','[',']')
+		stemmer = nltk.stem.PorterStemmer()
+
+		sents = sent_tokenize(uni_str)
+		tokens = [word_tokenize(s) for s in sents]
+		pos = [pos_tag(s) for s in tokens]
+		chunked = ne_chunk_sents(pos, binary=True)
+
+		chunk_out = []
+		for sent in chunked:
+			chunk_out.append("#/#")
+			#print(sent)
+			#make and joing NNP
+			current_chunk=[]
+			for i in sent:
+				if type(i) == Tree:
+					#make one token out of nultiple NNP
+					current_chunk.append("".join([token for token, pos in i.leaves()]))
+				elif current_chunk:  # the rest of NE tupes
+					named_entity = " ".join(current_chunk)
+					chunk_out.append(str(named_entity+"/"+"NNP"))
+					current_chunk = []
+				else:
+					chunk_out.append("/".join(i)) #tupe outside of NE tree
+		#print("Done Chunking: ")
+		out = [i for i in chunk_out if i.lower().split('/')[0] not in stop]
 		for o in out:
 			if o !="#/#": #leave the sentence markers alone
-				stem = stemmer.stem(o.split('/')[0]);
-				if stem not in ['\'s','\'','\`','"','\'\'', '``', '\"\"']:
-					ot=stem+"/"+o.split('/')[1];
-					ot = ''.join([c for c in ot if c not in sc]) #remove any remainding funny characters
-					sys.stdout.write(str(ot)+"\n");
-					#sys.stdout.write(str(ot)+" " + str(len(stem))+ " "+ str(o)+" \n");
+				tok = o.split('/')[0]
+				pos = o.split('/')[1]
+				stem=stemmer.stem(tok) if pos != 'NNP' else tok
+
+				if stem not in ['\'re','\'ve','\'d','\'t','\'s','\'','\`','"','\'\'', '``', '\"\"','/'] and len(stem) >2:
+					ot=stem+"/"+pos
+					ot = ''.join([c for c in ot if c not in chars_to_remove]) #remove any remainding funny characters
+					sys.stdout.write(str(ot)+"\n")
 			else:
-				sys.stdout.write(str(o)+"\n");
+				sys.stdout.write(str(o)+"\n")
+
 		#words = nltk.word_tokenize(uni_str)
 		#tagged = nltk.pos_tag(words)
 		#namedEnt = nltk.ne_chunk(tagged, binary=True)

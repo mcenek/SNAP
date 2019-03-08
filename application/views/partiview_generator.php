@@ -62,12 +62,23 @@
         <div class="tab-content">
             <div id="networkFiles" class="tab-pane fade show active" role="tabpanel">
                 <form method="post" action="partiview_generator/submit_files">
+
+                    <button class="btn btn-primary" name="file_action" value="vis_gen" type="submit">
+                        Make 3D Visualization files
+                    </button>
+                    <br/>
+                    <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
+                    <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
+                    <br/>
+                    <input type="checkbox" name="select_all" onClick="selectAll(this)">Select All</input>
+                    <br/>
+                    
                     <table><tr><td></td><td>File name</td><td>Time Stamp</td><td>Size</td></tr>
                     <?php
                         foreach ($files as $file => $file_name) {
                             $file_parts = pathinfo($file_name);
                             echo '<tr><td>';
-                            if ($file_parts['extension'] == "gexf") //Check File Extensions, display only produced files
+                            if ($file_parts['extension'] == "gexf"||$file_parts['extension'] == "pdf") //Check File Extensions, display only produced files
                             {    
                                 echo form_checkbox(array(
                                     'name' => 'checkbox[]',
@@ -75,21 +86,19 @@
                                     'value' => $file_name,
                                     'checked' => FALSE,
                                 ));
-                                $url = site_url() . '/partiview_generator/display_file/' . $file;
+                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
                                 $file_stat = stat($this->file_dir.'/partiview_generator/'.$file_name);
-                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a></td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).'</td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
+                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a> | </td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).' | </td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
                             }
                         }
                     ?>
-                    </table><br/>
+                    </table>
                     <input type="checkbox" name="select_all" onClick="selectAll(this)">Select All</input>
                     <br/>
+<!--                     <button class="btn btn-primary" name="file_action" value="vis_gen" type="submit">Make 3D Visualization files</button>
                     <br/>
-                    <button class="btn btn-primary" name="file_action" value="vis_gen" type="submit">
-                        Make 3D Visualization files
-                    </button>
                     <button class="btn btn-danger" name="file_action" value="delete" type="submit">Delete</button>
-                    <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button>
+                    <button class="btn btn-primary" name="file_action" value="download" type="submit">Download</button> -->
                 </form>
             </div>
             <div id="visualization" class="tab-pane fade" role="tabpanel">
@@ -107,9 +116,9 @@
                                     'value' => $file_name,
                                     'checked' => FALSE,
                                 ));
-                                $url = site_url() . '/partiview_generator/display_file/' . $file;
+                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
                                 $file_stat = stat($this->file_dir.'/partiview_generator/'.$file_name);
-                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a></td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).'</td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
+                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a> | </td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).' | </td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
                             }
                         }
                     ?>
@@ -134,9 +143,9 @@
                                     'value' => $file_name,
                                     'checked' => false,
                                 ));
-                                $url = site_url() . '/partiview_generator/display_file/' . $file;
+                                $url = site_url() . '/partiview_generator/display_file/' . $file_name;
                                 $file_stat = stat($this->file_dir.'/partiview_generator/'.$file_name);
-                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a></td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).'</td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
+                                echo '</td><td><a href="' . $url . '">' . $file_name . '</a> | </td><td>'.date("F d Y H:i:s.",$file_stat['mtime']).' | </td><td>'.round(pow(1024, ((log($file_stat['size']) / log(1024)) - floor(log($file_stat['size']) / log(1024)))),2).array("", "k", "M", "G", "T")[floor(log($file_stat['size']) / log(1024))].'</td></tr>';
                             }
                         }
                     ?>

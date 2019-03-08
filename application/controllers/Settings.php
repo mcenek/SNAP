@@ -44,6 +44,7 @@ class settings extends CI_Controller
                 $this->save_use_freq($input->post('useFreq'));
                 $this->save_low_freq($input->post('freq_lower'), $input->post('freq_upper'));
                 $this->save_high_freq($input->post('freq_upper'), $input->post('freq_lower'));
+                $this->save_sliding_window($input->post('sliding_window'));
                 break;
             case 'net_ana_set':
                 $this->save_layout($input->post('layout'));
@@ -87,7 +88,7 @@ class settings extends CI_Controller
     public function save_low_freq($low_freq, $high_freq)
     {
         $id = $this->session->userdata('id');
-        if ($low_freq <= 100 && $low_freq > $high_freq) {
+        if ($low_freq >= 0 && $low_freq < $high_freq) {
             $data = array(
                 'freq_lower_bound' => $low_freq,
             );
@@ -101,7 +102,7 @@ class settings extends CI_Controller
     public function save_high_freq($high_freq, $low_freq)
     {
         $id = $this->session->userdata('id');
-        if ($high_freq < $low_freq && $high_freq >= 0) {
+        if ($high_freq > $low_freq && $high_freq <= 1) {
             $data = array(
                 'freq_upper_bound' => $high_freq,
             );
@@ -112,6 +113,19 @@ class settings extends CI_Controller
         }
     }
 
+    public function save_sliding_window($sliding_window)
+    {
+        $id = $this->session->userdata('id');
+        if ($sliding_window > 1 && $sliding_window < 6) {
+            $data = array(
+                'sliding_window' => $sliding_window,
+            );
+
+            $this->db->where('id', $id);
+            $this->db->update('users', $data);
+            $this->session->set_userdata('sliding_window', $sliding_window);
+        }
+    }
     /*
     Set the layout that network analysis should use when creating the graph of concepts
     
@@ -289,10 +303,10 @@ class settings extends CI_Controller
             $error = error_get_last();
             echo $error['message'];
         }
-        if (!@mkdir($dir . '/partiview_generator/individual_gexfs', 0777)) {
-            $error = error_get_last();
-            echo $error['message'];
-        }
+        // if (!@mkdir($dir . '/partiview_generator/individual_gexfs', 0777)) {
+        //     $error = error_get_last();
+        //     echo $error['message'];
+        // }
         if (!@mkdir($dir . '/parti_output', 0777)) {
             $error = error_get_last();
             echo $error['message'];

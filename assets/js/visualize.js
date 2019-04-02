@@ -311,9 +311,10 @@ function loadLayers() {
                             cluster.x = parseFloat( line[4] );  //used to be 3
                             cluster.y = parseFloat( line[5] );  //used to be 4
                             cluster.colorIndex = parseInt( line[6] );
+                            cluster.labels= [];
                             cluster.nodes = [];
                             cluster.links = []; // names of clusters in next layer it is linked to
-                            cluster.allTextShown = false; // are the individual concept labels shown?
+                            cluster.allTextShown = true; // are the individual concept labels shown?
                             layer.mats.push( new THREE.MeshLambertMaterial({
                                 //material: { color: new THREE.Color( 0xffffff ) },
                                 color: colors[cluster.colorIndex],
@@ -353,8 +354,8 @@ function loadLayers() {
                             node.index = parseInt( line[0] );
                             node.name = line[1];
                             node.radius = parseFloat( line[2] );
-                            node.x = parseFloat( line[3] )+layer.clusters[thisClusterIndex].x;
-                            node.y = parseFloat( line[4] )+layer.clusters[thisClusterIndex].y;
+                            node.x = parseFloat( line[3] ); //+layer.clusters[thisClusterIndex].x;
+                            node.y = parseFloat( line[4] ); //+layer.clusters[thisClusterIndex].y;
 
                             var geometry = new THREE.SphereGeometry( node.radius );
                             var material = layer.mats[thisClusterIndex];
@@ -368,21 +369,23 @@ function loadLayers() {
                             layer.nodes.push( node );
                             layer.geometry.merge(mesh.geometry, mesh.matrix, thisClusterIndex);
 
-                            var textSprite = new THREE.TextSprite({
-                                textSize: 10, // TODO needs to be set from max radius or something
+							var textSprite = new THREE.TextSprite({
+                                textSize: node.radius, // TODO needs to be set from max radius or something
                                 redrawInterval: 1,
-                                material: layer.labelMats[thisClusterIndex],
+                                material: layer.labelMats[layer.clusters[thisClusterIndex].index],
                                 texture: {
                                     text: node.name,
                                     fontFamily: 'Arial, Helvetica, sans-serif',
                                     autoRedraw: true
                                 }
                             });
-                            textSprite.position.set( node.x, node.y, layer.z-20 );
-                            textSprite.visile = true;
-                            layer.nodeLabels.push( textSprite );
-
+                            textSprite.position.set( node.x, node.y, layer.z-50 );
+                            textSprite.visible = true;
                             node.textSprite = textSprite;
+                            layer.nodeLabels.push( node.textSprite );
+                            scene.add(node.textSprite);
+                            layer.nodeLabels.push(node)
+
                             layer.clusters[thisClusterIndex].nodes.push( node );
 
                             if( i == lines.length-1 ) {

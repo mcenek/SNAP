@@ -4,60 +4,78 @@
 
 This file is a guide on setting up the SNAP on a new server.
 
-Clone the repository. If you are a new developer contributing to SNAP, you
-should fork the repository from mcenek/SNAP, unless Dr. Cenek has told you
-otherwise.
-
+Tested Compatibility:
+Linux Ubuntu 18.04, 16.10
+Mac OsX
+==========================================
+1. System prerequisites:
 Simple setup:
   Install WAMP,MAMP, or LAMP.
   Install phpMyAdmin in the www/ directory
   Install SNAP in the www/ director
-  Install CodeIgnighter in you snap Program
-  ///flip \ to / on mac/Linux
-  Create C:\Users\jessgrunblatt\users-uaa\ddonnally@alaska.edu\project_one\-partiview_generator\    
-                                                                         -preprocessed\
-                                                                         -raw\
-                                                                         -semantic_networks\
-  ///where each of the directories under project_one are their own directories
-  ///following these plus the steps above and below should get you a succesful install
-  Create an account on the production database
-  download the production database
-  Create your databases on your local machine
-  
-  
-In repository, install Code Igniter. This basically means downloading the
-latest version, unzipping it, and migrating its contents into the repository.
- - You may want to rename the application folder in the repository before you do
-this, or, alternatively, do not migrate the application folder from the
-Code Igniter download.
- - You should NOT replace the existing .gitignore in the
-SNAP repo with the one from CI.
- - It is not necessary to migrate the user_guide directory, but it also won't
-hurt anything, and may contain some useful resources.
+  Create a SNAP folder on your Web server
+      linux: sudo mkdir /var/www/html/SNAP
+      MAC: htdocs/SNAP
+  Download CodeIgnighter from https://codeigniter.com/ and put unpacked files into your SNAP folder
 
-If you renamed the application folder in the SNAP repo before moving the CI
-contents, delete the default CI application folder, and rename the SNAP
-application folder back to application.
+==========================================
+2. SNAP installation and configuration
+
+a. Clone the repository. If you are a new developer contributing to SNAP, you
+should fork the repository from mcenek/SNAP:
+git clone https://github.com/mcenek/SNAP.git
+Notes:
+ - You may want to rename the application folder in the repository before your SNAP repo installation, or alternatively, do not migrate the application folder from the
+Code Igniter download.
+ - You should NOT replace the existing .gitignore in the SNAP repo with the one from CI.
+ - It is not necessary to migrate the user_guide directory, but it also won't hurt anything, and may contain some useful resources.
+
+b. Place the files from cloned repo's SNAP to your local SNAP folder that currently has the codeigniter base
+Make sure you merge the folders and overwrite the codeigniter files with the SNAP's repo files
+
+c. In your database.php file, update the username and password fields to whatever
+database account you want the site to use. If you haven't set up the mysql db
+yet, do so now: There are lots of tutorials online for setting up a mysql db
+locally. You'll also need an apache server set up, if you're on a linux machine,
+follow a guide on setting up a LAMP Server, if you're on a mac, just use MAMP, and if you're on windows use WAMP.
+
+In your web browser navigate to localhost/phpmyadmin lo g in with your credentials
+  go to ->import the SNAP's sql database and select the sql_db.sql file that came with the project's repo (file is in the SNAP folder) 
+  select nlp_db database then add a user:
+     ->privilages -> new user -> add new user 
+       as an example: 
+        username:nlpuser password:nlppassword
+        privileged: 'global privileges' "check all" -- a very generous and dangerous option
+                    'data' select all options for data manipulation -- better/safer option
 
 At this point you must change some machine specific config files.
-Go to application/config/ and you should see two _TEMPLATE files,
-config and database.
+Go to application/config/ and you should see two _TEMPLATE files, config and database.
 
-Copy these files, and rename them - removing the _TEMPLATE from their names.
-    config_TEMPLATE.php -> config.php
+d. configure SNAP's database with your installation
+delete SNAP/application/config/database.php
+rename SNAP/application/config/database_TEMPLATE.php -> SNAP/application/config/database.php
+replace Line 79 and 80 with "nlpuser" and "nlppassword" that you just created
+
+e. configure SNAP's site with your configuration
+delete SNAP/application/config/config.php
+rename SNAP/application/config/config_TEMPLATE.php -> SNAP/application/config/config.php
+Edit lines 26, 29, 32 with the spefici location of the SNAP folder on your system 
+On Linux, this is most likely /var/www/html/SNAP
+On Mac, this is most likely htdocs/SNAP
+unless the SNAP application files and user uploaded documents are in different locations, the line entries 29 and 32 are the same path          
 
 In your new config.php file, change the value for line:
     $config['base_url'] = "YOUR_BASE_URL";
 to whatever your base url is. For running locally, this should just be:
     $config['base_url'] = "http://localhost/SNAP";
-with SNAP replaced by whatever the path to the git repo is from your server
-root.
+with SNAP replaced by whatever the path to the git repo is from your server root.
 
-In your database.php file, update the username and password fields to whatever
-database account you want the site to use. If you haven't set up the mysql db
-yet, do so now: There are lots of tutorials online for setting up a mysql db
-locally. You'll also need an apache server set up, if you're on a linux machine,
-follow a guide on setting up a LAMP Server, if you're on a mac, just use MAMP, and if you're on windows use WAMP.
+==========================================
+3. Additional Package installation.
+
+The first step of text processing requires NLTK toolkit that uses prebuilt models and dictionaries.
+Install the NLTK from command line:
+
 
 
                             

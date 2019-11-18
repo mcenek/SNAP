@@ -1,0 +1,25 @@
+
+Flaws in a digital image, caused by dust on the optics or natural variation between pixels, can be used to say whether a particular camera took a particular image
+A new technique matches a digital image to the camera that snapped it, scientists say, just like matching a bullet to the gun that fired it.
+The method could help bolster investigations that need reliable evidence to tie a suspect's illegal digital photos to their camera, such as in child pornography cases.
+"When a suspect is caught with images on the computer and the suspect has a digital camera in possession, the standard defence is that the images are computer-generated or downloaded from the internet," says Dr Jessica Fridrich, an associate professor of electrical and computer engineering at the State University of New York in Binghamton.
+"Imagine now that you can tie them unmistakably to the camera that is in possession of the suspect."
+Fridich and her colleagues report their method in the June issue of IEEE Transactions on Information Security and Forensics.
+In the past, forensic scientists could link print photographs to analog cameras. For example, they could match unique scratches on the negative film to the mechanical part of the camera that advances the film.
+But until now, scientists have been unable to find a cheap, reliable and robust method for locating subtle flaws in digital images and video created unintentionally by a specific camera.
+It turns out that those flaws - created by such things as dust specks on the optics, interference in optical elements and natural variations between pixels - are captured on the camera's image sensor as a unique pattern of noise.
+Capturing noise
+To isolate the 'pattern noise' created by an individual camera, Fridrich and her team took 320 images with each of nine different cameras.
+They uploaded the images to a computer and, using software they developed, analysed the images pixel by pixel.
+By assigning values to the variations found between pixels, the pattern noise, they came up with a numerical fingerprint unique to each camera.
+Once they had the numerical fingerprint, they used the mathematical process of correlation to compare the numerical fingerprints to the pattern noise from thousands of other images taken with the cameras.
+The higher the correlation number, the more likely an image came from a particular camera.
+In the forensics lab
+When using this method in a real-life situation, forensic scientists would take a bunch of digital images with the camera in question to come up with a numerical fingerprint.
+Next, they would isolate the digital fingerprint extracted from the illegal images and correlate that number with the one from the camera.
+The higher the number, the more likely a conviction.
+In laboratory experiments, Fridrich and her team matched several thousand different images to the correct camera without a single misclassification, even when images were compressed or resized.
+Dr Hany Farid, associate professor of computer science at Dartmouth College in the US, is an expert in digital image forensics.
+"This is one of the first papers out there to have what I think is a realisable, robust and effect technique for doing it," he says. 
+But Farid questions whether the method will work to distinguish a few images from the millions of potential cameras on the market.
+For now, Fridrich's technique works with digital still images, but she is hoping to soon move to scanners and digital video.

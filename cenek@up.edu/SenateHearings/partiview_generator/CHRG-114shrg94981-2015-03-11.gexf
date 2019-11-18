@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" version="1.2" xmlns:viz="http://www.gexf.net/1.2draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd">
+  <meta lastmodifieddate="2019-03-07">
+    <creator>Gephi 0.8.1</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="eccentricity" title="Eccentricity" type="double">
+        <default>0.0</default>
+      </attribute>
+      <attribute id="closnesscentrality" title="Closeness Centrality" type="double">
+        <default>0.0</default>
+      </attribute>
+      <attribute id="betweenesscentrality" title="Betweenness Centrality" type="double">
+        <default>0.0</default>
+      </attribute>
+      <attribute id="modularity_class" title="Modularity Class" type="integer">
+        <default>0</default>
+      </attribute>
+    </attributes>
+    <nodes>
+      <node id="unitedstatessenate" label="unitedstatessenate">
+        <attvalues>
+          <attvalue for="eccentricity" value="15.0"></attvalue>
+          <attvalue for="closnesscentrality" value="6.794871794871795"></attvalue>
+          <attvalue for="betweenesscentrality" value="125.85762529524138"></attvalue>
+          <attvalue for="modularity_class" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="73.86978"></viz:size>
+        <viz:position x="2086.4956" y="-1785.1317" z="0.0"></viz:position>
+        <viz:color r="205" g="238" b="76"></viz:color>
+      </node>
+      <node id="public" label="public">
+        <attvalues>
+          <attvalue for="eccentricity" value="15.0"></attvalue>
+          <attvalue for="closnesscentrality" value="6.538461538461538"></attvalue>
+          <attvalue for="betweenesscentrality" value="144.9070662825307"></attvalue>
+          <attvalue for="modularity_class" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="82.023346"></viz:size>
+        <viz:position x="2215.0635" y="-1913.991" z="0.0"></viz:position>
+        <viz:color r="205" g="238" b="76"></viz:color>
+      </node>
+      <node id="wide" label="wide">
+        <attvalues>
+          <attvalue for="eccentricity" value="11.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.410256410256411"></attvalue>
+          <attvalue for="betweenesscentrality" value="186.18771403175427"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="99.69235"></viz:size>
+        <viz:position x="-2208.9626" y="-2266.5708" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="web" label="web">
+        <attvalues>
+          <attvalue for="eccentricity" value="10.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.384615384615385"></attvalue>
+          <attvalue for="betweenesscentrality" value="186.9064854349297"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="100.0"></viz:size>
+        <viz:position x="-2117.5054" y="-1682.3242" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="perspectives" label="perspectives">
+        <attvalues>
+          <attvalue for="eccentricity" value="15.0"></attvalue>
+          <attvalue for="closnesscentrality" value="6.794871794871795"></attvalue>
+          <attvalue for="betweenesscentrality" value="126.61820894963307"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="74.19533"></viz:size>
+        <viz:position x="1914.3077" y="165.6953" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="committee" label="committee">
+        <attvalues>
+          <attvalue for="eccentricity" value="16.0"></attvalue>
+          <attvalue for="closnesscentrality" value="7.076923076923077"></attvalue>
+          <attvalue for="betweenesscentrality" value="123.44265995872034"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="72.83612"></viz:size>
+        <viz:position x="1815.4879" y="27.448109" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="via" label="via">
+        <attvalues>
+          <attvalue for="eccentricity" value="12.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.538461538461538"></attvalue>
+          <attvalue for="betweenesscentrality" value="181.80648543492967"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="97.81709"></viz:size>
+        <viz:position x="-1711.4675" y="-1822.5897" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="format" label="format">
+        <attvalues>
+          <attvalue for="eccentricity" value="13.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.769230769230769"></attvalue>
+          <attvalue for="betweenesscentrality" value="173.334347747196"></attvalue>
+          <attvalue for="modularity_class" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="94.190834"></viz:size>
+        <viz:position x="1895.3966" y="2130.2903" z="0.0"></viz:position>
+        <viz:color r="205" g="76" b="238"></viz:color>
+      </node>
+      <node id="clean" label="clean">
+        <attvalues>
+          <attvalue for="eccentricity" value="14.0"></attvalue>
+          <attvalue for="closnesscentrality" value="6.102564102564102"></attvalue>
+          <attvalue for="betweenesscentrality" value="160.77887672612903"></attvalue>
+          <attvalue for="modularity_class" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="88.81682"></viz:size>
+        <viz:position x="2023.2239" y="1834.5369" z="0.0"></viz:position>
+        <viz:color r="205" g="76" b="238"></viz:color>
+      </node>
+      <node id="use" label="use">
+        <attvalues>
+          <attvalue for="eccentricity" value="16.0"></attvalue>
+          <attvalue for="closnesscentrality" value="7.384615384615385"></attvalue>
+          <attvalue for="betweenesscentrality" value="102.08713595915607"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="63.69549"></viz:size>
+        <viz:position x="1861.0692" y="-124.48429" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="world" label="world">
+        <attvalues>
+          <attvalue for="eccentricity" value="11.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.461538461538462"></attvalue>
+          <attvalue for="betweenesscentrality" value="183.08771403175427"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="98.365486"></viz:size>
+        <viz:position x="-1987.5228" y="-2338.4814" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="hrg" label="hrg">
+        <attvalues>
+          <attvalue for="eccentricity" value="12.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.538461538461538"></attvalue>
+          <attvalue for="betweenesscentrality" value="182.2892302614826"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="98.02372"></viz:size>
+        <viz:position x="-1664.7241" y="-2048.1199" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="NN" label="NN">
+        <attvalues>
+          <attvalue for="eccentricity" value="13.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.769230769230769"></attvalue>
+          <attvalue for="betweenesscentrality" value="173.87661638327273"></attvalue>
+          <attvalue for="modularity_class" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="94.422935"></viz:size>
+        <viz:position x="1769.5248" y="-1976.9554" z="0.0"></viz:position>
+        <viz:color r="205" g="238" b="76"></viz:color>
+      </node>
+      <node id="http" label="http">
+        <attvalues>
+          <attvalue for="eccentricity" value="19.0"></attvalue>
+          <attvalue for="closnesscentrality" value="9.76923076923077"></attvalue>
+          <attvalue for="betweenesscentrality" value="2.6003712360910503"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="21.113014"></viz:size>
+        <viz:position x="2071.4612" y="172.31195" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="NNP" label="NNP">
+        <attvalues>
+          <attvalue for="eccentricity" value="20.0"></attvalue>
+          <attvalue for="closnesscentrality" value="10.256410256410257"></attvalue>
+          <attvalue for="betweenesscentrality" value="0.0"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="20.0"></viz:size>
+        <viz:position x="2023.9338" y="185.00073" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="fourteenth" label="fourteenth">
+        <attvalues>
+          <attvalue for="eccentricity" value="16.0"></attvalue>
+          <attvalue for="closnesscentrality" value="7.384615384615385"></attvalue>
+          <attvalue for="betweenesscentrality" value="101.14321897143104"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="63.291477"></viz:size>
+        <viz:position x="-2158.3376" y="1997.0339" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="contact" label="contact">
+        <attvalues>
+          <attvalue for="eccentricity" value="17.0"></attvalue>
+          <attvalue for="closnesscentrality" value="8.076923076923077"></attvalue>
+          <attvalue for="betweenesscentrality" value="72.09547931428736"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="50.85842"></viz:size>
+        <viz:position x="-1958.6882" y="1847.1178" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="congress" label="congress">
+        <attvalues>
+          <attvalue for="eccentricity" value="18.0"></attvalue>
+          <attvalue for="closnesscentrality" value="8.871794871794872"></attvalue>
+          <attvalue for="betweenesscentrality" value="38.54773965714368"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="36.499264"></viz:size>
+        <viz:position x="-1877.6633" y="2100.5652" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="superintendent" label="superintendent">
+        <attvalues>
+          <attvalue for="eccentricity" value="14.0"></attvalue>
+          <attvalue for="closnesscentrality" value="6.102564102564102"></attvalue>
+          <attvalue for="betweenesscentrality" value="161.4108889519493"></attvalue>
+          <attvalue for="modularity_class" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="89.08734"></viz:size>
+        <viz:position x="2047.9624" y="-2226.6042" z="0.0"></viz:position>
+        <viz:color r="205" g="238" b="76"></viz:color>
+      </node>
+      <node id="documents" label="documents">
+        <attvalues>
+          <attvalue for="eccentricity" value="14.0"></attvalue>
+          <attvalue for="closnesscentrality" value="6.3076923076923075"></attvalue>
+          <attvalue for="betweenesscentrality" value="146.32203161905176"></attvalue>
+          <attvalue for="modularity_class" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="82.62898"></viz:size>
+        <viz:position x="2206.2366" y="-2105.434" z="0.0"></viz:position>
+        <viz:color r="205" g="238" b="76"></viz:color>
+      </node>
+      <node id="regulators" label="regulators">
+        <attvalues>
+          <attvalue for="eccentricity" value="17.0"></attvalue>
+          <attvalue for="closnesscentrality" value="7.717948717948718"></attvalue>
+          <attvalue for="betweenesscentrality" value="98.67217062263501"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="62.233814"></viz:size>
+        <viz:position x="1994.3855" y="-186.45798" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="march" label="march">
+        <attvalues>
+          <attvalue for="eccentricity" value="17.0"></attvalue>
+          <attvalue for="closnesscentrality" value="8.076923076923077"></attvalue>
+          <attvalue for="betweenesscentrality" value="73.3102296353457"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="51.378357"></viz:size>
+        <viz:position x="2120.2808" y="-142.58562" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="plant" label="plant">
+        <attvalues>
+          <attvalue for="eccentricity" value="12.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.641025641025641"></attvalue>
+          <attvalue for="betweenesscentrality" value="175.16692242655864"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="94.97521"></viz:size>
+        <viz:position x="-1888.1682" y="-1680.2828" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="thecommittee" label="thecommittee">
+        <attvalues>
+          <attvalue for="eccentricity" value="11.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.461538461538462"></attvalue>
+          <attvalue for="betweenesscentrality" value="182.63906011429225"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="98.173454"></viz:size>
+        <viz:position x="-1773.3293" y="-2251.686" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="senate" label="senate">
+        <attvalues>
+          <attvalue for="eccentricity" value="10.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.384615384615385"></attvalue>
+          <attvalue for="betweenesscentrality" value="186.46894262857887"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="99.81273"></viz:size>
+        <viz:position x="-2332.0176" y="-2067.006" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="hearing" label="hearing">
+        <attvalues>
+          <attvalue for="eccentricity" value="11.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.410256410256411"></attvalue>
+          <attvalue for="betweenesscentrality" value="186.63636794921626"></attvalue>
+          <attvalue for="modularity_class" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="99.884384"></viz:size>
+        <viz:position x="-2295.8804" y="-1835.1355" z="0.0"></viz:position>
+        <viz:color r="238" g="76" b="76"></viz:color>
+      </node>
+      <node id="state" label="state">
+        <attvalues>
+          <attvalue for="eccentricity" value="18.0"></attvalue>
+          <attvalue for="closnesscentrality" value="8.461538461538462"></attvalue>
+          <attvalue for="betweenesscentrality" value="69.83918128654972"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="49.892673"></viz:size>
+        <viz:position x="2182.1038" y="-40.451775" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="environment" label="environment">
+        <attvalues>
+          <attvalue for="eccentricity" value="19.0"></attvalue>
+          <attvalue for="closnesscentrality" value="9.307692307692308"></attvalue>
+          <attvalue for="betweenesscentrality" value="36.94736842105264"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="35.81427"></viz:size>
+        <viz:position x="2128.4233" y="135.29807" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="graphic" label="graphic">
+        <attvalues>
+          <attvalue for="eccentricity" value="14.0"></attvalue>
+          <attvalue for="closnesscentrality" value="6.3076923076923075"></attvalue>
+          <attvalue for="betweenesscentrality" value="146.954043844872"></attvalue>
+          <attvalue for="modularity_class" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="82.89949"></viz:size>
+        <viz:position x="2163.8176" y="1967.1184" z="0.0"></viz:position>
+        <viz:color r="205" g="76" b="238"></viz:color>
+      </node>
+      <node id="tiff" label="tiff">
+        <attvalues>
+          <attvalue for="eccentricity" value="13.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.923076923076923"></attvalue>
+          <attvalue for="betweenesscentrality" value="163.12870657893882"></attvalue>
+          <attvalue for="modularity_class" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="89.8226"></viz:size>
+        <viz:position x="1847.935" y="1930.7637" z="0.0"></viz:position>
+        <viz:color r="205" g="76" b="238"></viz:color>
+      </node>
+      <node id="pdfwashington" label="pdfwashington">
+        <attvalues>
+          <attvalue for="eccentricity" value="12.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.641025641025641"></attvalue>
+          <attvalue for="betweenesscentrality" value="174.68417760000577"></attvalue>
+          <attvalue for="modularity_class" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="94.76859"></viz:size>
+        <viz:position x="1890.7919" y="-1795.7367" z="0.0"></viz:position>
+        <viz:color r="205" g="238" b="76"></viz:color>
+      </node>
+      <node id="hundred" label="hundred">
+        <attvalues>
+          <attvalue for="eccentricity" value="16.0"></attvalue>
+          <attvalue for="closnesscentrality" value="7.076923076923077"></attvalue>
+          <attvalue for="betweenesscentrality" value="124.38657694644537"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="73.24013"></viz:size>
+        <viz:position x="-2083.4456" y="2134.5974" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="sale" label="sale">
+        <attvalues>
+          <attvalue for="eccentricity" value="13.0"></attvalue>
+          <attvalue for="closnesscentrality" value="5.923076923076923"></attvalue>
+          <attvalue for="betweenesscentrality" value="162.58643794286206"></attvalue>
+          <attvalue for="modularity_class" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="89.5905"></viz:size>
+        <viz:position x="1847.7733" y="-2174.5764" z="0.0"></viz:position>
+        <viz:color r="205" g="238" b="76"></viz:color>
+      </node>
+      <node id="session" label="session">
+        <attvalues>
+          <attvalue for="eccentricity" value="19.0"></attvalue>
+          <attvalue for="closnesscentrality" value="9.794871794871796"></attvalue>
+          <attvalue for="betweenesscentrality" value="0.0"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="20.0"></viz:size>
+        <viz:position x="-1930.455" y="2142.2783" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="phone" label="phone">
+        <attvalues>
+          <attvalue for="eccentricity" value="20.0"></attvalue>
+          <attvalue for="closnesscentrality" value="10.282051282051283"></attvalue>
+          <attvalue for="betweenesscentrality" value="0.0"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="20.0"></viz:size>
+        <viz:position x="-1976.0918" y="2156.5503" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="first" label="first">
+        <attvalues>
+          <attvalue for="eccentricity" value="19.0"></attvalue>
+          <attvalue for="closnesscentrality" value="9.307692307692308"></attvalue>
+          <attvalue for="betweenesscentrality" value="40.54773965714368"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="37.35531"></viz:size>
+        <viz:position x="-1842.9384" y="2020.2794" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="gpocustomercontactcenter" label="gpocustomercontactcenter">
+        <attvalues>
+          <attvalue for="eccentricity" value="18.0"></attvalue>
+          <attvalue for="closnesscentrality" value="8.461538461538462"></attvalue>
+          <attvalue for="betweenesscentrality" value="71.49510807819631"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="50.601448"></viz:size>
+        <viz:position x="-1864.0122" y="1918.84" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="available" label="available">
+        <attvalues>
+          <attvalue for="eccentricity" value="18.0"></attvalue>
+          <attvalue for="closnesscentrality" value="8.871794871794872"></attvalue>
+          <attvalue for="betweenesscentrality" value="40.20366644879029"></attvalue>
+          <attvalue for="modularity_class" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="37.208035"></viz:size>
+        <viz:position x="2175.7566" y="62.511753" z="0.0"></viz:position>
+        <viz:color r="76" g="140" b="238"></viz:color>
+      </node>
+      <node id="inform" label="inform">
+        <attvalues>
+          <attvalue for="eccentricity" value="17.0"></attvalue>
+          <attvalue for="closnesscentrality" value="7.717948717948718"></attvalue>
+          <attvalue for="betweenesscentrality" value="99.88692094369338"></attvalue>
+          <attvalue for="modularity_class" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="62.753754"></viz:size>
+        <viz:position x="-2089.0234" y="1869.025" z="0.0"></viz:position>
+        <viz:color r="76" g="238" b="140"></viz:color>
+      </node>
+      <node id="publicworks" label="publicworks">
+        <attvalues>
+          <attvalue for="eccentricity" value="15.0"></attvalue>
+          <attvalue for="closnesscentrality" value="6.538461538461538"></attvalue>
+          <attvalue for="betweenesscentrality" value="144.14648262813898"></attvalue>
+          <attvalue for="modularity_class" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="81.6978"></viz:size>
+        <viz:position x="2092.508" y="2139.139" z="0.0"></viz:position>
+        <viz:color r="205" g="76" b="238"></viz:color>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="unitedstatessenate" target="public">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="unitedstatessenate" target="fourteenth">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="unitedstatessenate" target="documents">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="unitedstatessenate" target="hundred">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="public" target="documents">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="public" target="hundred">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="wide" target="web">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="wide" target="via">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="wide" target="senate">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="senate">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="hearing">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="perspectives" target="committee">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="perspectives" target="graphic">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="via" target="format">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="via" target="plant">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="format" target="clean">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="use" target="perspectives">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="use" target="committee">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="use" target="regulators">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="use" target="march">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="world" target="wide">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="world" target="web">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="world" target="via">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="world" target="plant">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="hrg" target="NN">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="hrg" target="hearing">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="http" target="NNP">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="http" target="environment">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="http" target="available">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="fourteenth" target="contact">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="contact" target="congress">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="superintendent" target="public">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="superintendent" target="NN">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="superintendent" target="documents">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="superintendent" target="sale">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="regulators" target="committee">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="regulators" target="march">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="march" target="available">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="plant" target="format">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="thecommittee" target="hrg">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="thecommittee" target="senate">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="thecommittee" target="hearing">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="thecommittee" target="pdfwashington">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="senate" target="hearing">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="state" target="regulators">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="state" target="march">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="state" target="environment">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="state" target="available">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="environment" target="NNP">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="environment" target="available">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="graphic" target="clean">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="tiff" target="format">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="tiff" target="clean">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="tiff" target="plant">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="tiff" target="graphic">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="pdfwashington" target="hrg">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="pdfwashington" target="NN">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="hundred" target="fourteenth">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="sale" target="NN">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="sale" target="documents">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="sale" target="pdfwashington">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="session" target="congress">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="session" target="first">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="phone" target="first">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="first" target="congress">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="gpocustomercontactcenter" target="contact">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="gpocustomercontactcenter" target="congress">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="gpocustomercontactcenter" target="first">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="inform" target="fourteenth">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="inform" target="contact">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="inform" target="hundred">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="inform" target="gpocustomercontactcenter">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="publicworks" target="perspectives">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="publicworks" target="committee">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="publicworks" target="clean">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="publicworks" target="graphic">
+        <attvalues></attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

@@ -1,0 +1,15 @@
+eval clip 1 1000000
+object g1=noodles
+include fileName_mesh.speck
+cment 0 1 1 1
+eval alpha .1
+object g2=nodes
+include fileName_nodes.speck
+object g3=edges
+include fileName_edges.speck
+eval alpha .2
+include fileName.label
+textcment 1 1 0 0
+eval lsize 25
+eval laxes off
+eval label on

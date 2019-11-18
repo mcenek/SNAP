@@ -1,0 +1,24 @@
+
+The robot can adapt to changes in both terrain and itself - walking on three legs, for example, if the fourth is lost
+A star-shaped robot that senses and responds to changes in the environment and damage to its own body has been developed by US researchers.
+Because the robot continually refines its built-in software to move efficiently - wherever it is, and whatever its condition - it could help shape the future of mobile robotics.
+The four-legged Starfish robot is reported by Dr Josh Bongard and team from Cornell University in today's issue of the journal Science.
+The robot can adapt to changes in both terrain and itself - walking on three legs, for example, if the fourth is lost. 
+The Starfish could lead the way for a new generation of autonomous robots that can quickly adjust to unpredictable environments and circumstances, much the same way people and other animals do. 
+The technology is "very powerful," says Professor Dario Floreano, director of the Institute of Systems Engineering in Lausanne, Switzerland.
+"It's a major advance in the field," says Floreano, who is not associated with the research. 
+The software in conventional robots typically doesn't account for unpredictable changes in the environment, or to the robot itself, that could restrict its movement. 
+But the Starfish can explore its own abilities and limitations, taking them into account before planning a move. 
+Robot sensing
+The robot begins by getting a sense of itself, testing each of its joints with random motions. Sensors on the joints capture each joint's range of motion and feed that information to the 15 mathematical models built into its controlling software. 
+Each model figures out one possible mode of locomotion. For example, one model might find how the robot is capable of scurrying scorpion-like on three legs, using the fourth like a tail for balance. Another might offer a way for the robot to scuttle sideways like a crab.
+Every model may be accurate on some level, but not all are efficient.
+To refine the results, a computer program searches through the models, looking for areas of disagreement among their results.
+"This is the key element of the entire process," says team member Dr Hod Lipson, director of the Computational Synthesis Laboratory at Cornell University.
+The most common disagreements represent the biggest flaws, he says. 
+To work out potential kinks in those areas, the robot performs each possible motion where the models disagree, feeding more data about the efficiency of each option back to models. 
+The cycle is repeated 16 times, and in the end, the last model standing is the one that instructs the robot where to go, and how. 
+Challenges ahead
+At the moment, all of the computations are run on a desktop computer. If the robot is to work autonomously, it will need that computing power onboard. 
+"That could be a potential challenge," says Floreano, especially if the robot is equipped with many sensors. 
+But he feels certain that the Cornell team has a solution and expressed confidence in the flexibility of the approach, which "can be applied to any type of robot."

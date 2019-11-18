@@ -1,0 +1,17 @@
+
+With the new system, individual sensors in a network detect an environmental condition, like temperature, and tell their neighbouring sensors about it. This creates 'clones' that perform tasks based on what their neighbours are doing or sensing
+It has the classic elements of a good spy story: secret agents that infiltrate a network and clone themselves to do the work of many. But this story has a happy ending.
+The agents in question are mobile, self-contained pieces of software that can take over sensors in a wireless network and direct them to accomplish specific tasks.
+The technology could help fight fires, monitor environmental conditions, or even help blind people navigate buildings.
+"Our software is the first to allow this flexible sharing of a sensor network infrastructure," says Professor Gruia-Catalin Roman, chair of the department of computer science and engineering at Washington University in St Louis.
+Most existing wireless sensor networks are built with small devices called motes.
+Each mote includes a battery, a computer, a radio and a sensor that monitors variables such as light, vibration and temperature, takes pictures, or listens for sounds.
+Such networks can consist of hundreds or even thousands of motes, and they can be placed just about anywhere it might be useful to pick up information from the environment.
+Most of them perform a single task, for example monitoring temperature or vibrations in the air. Re-tasking generally requires configuring each sensor anew.
+"This is a major problem. Since these systems exist in the real world, the dynamics and unpredictability often require new solutions," says Professor Jack Stankovic of the University of Virginia in Charlottesville, who is not associated with the research.
+To overcome that limitation, Roman, colleague Assistant Professor Chenyang Lu and their doctoral student Chien-Liang Fok have developed a software system called Agilla.
+Once equipped with the software, individual sensors in a network can detect an environmental condition and communicate with the neighbouring sensors.
+This creates 'clones' that perform tasks based on what their neighbours are doing or sensing.
+In laboratory experiments, Roman and his colleagues used the agents to monitor simulated fires and help robots navigate around them.
+In a real-life situation, a firefighter could potentially tap into the network with a PDA and learn where the fire is and how intense it is.
+"Agilla is small enough to fit on motes, general enough to support many kinds of functionality. I think it is also efficient enough to be viable," says Stankovic.
